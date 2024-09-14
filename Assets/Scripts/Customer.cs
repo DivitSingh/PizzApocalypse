@@ -21,7 +21,6 @@ public class Customer : MonoBehaviour
     private CustomerState _state = CustomerState.Patrolling;
     #endregion
 
-
     private void Start()
     {
         _enemyPatrol = GetComponent<EnemyPatrol>();
@@ -52,7 +51,7 @@ public class Customer : MonoBehaviour
     private void ChangeState(CustomerState newState)
     {
         if (newState == _state) return;
-
+        _state = newState;
         switch (newState)
         {
             case CustomerState.Chasing:
