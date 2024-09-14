@@ -3,15 +3,16 @@ using UnityEngine;
 
 public class Customer : MonoBehaviour
 {
+    private int _health;
     private EnemyPatrol _enemyPatrol;
     private EnemyFollow _enemyFollow;
 
     #region State
     private enum CustomerState
     {
-        Chasing,
+        Chasing, //chasing => angry customer
         Patrolling,
-        Waiting
+        Waiting  //waiting => hungry customer
     }
 
     private CustomerState _state = CustomerState.Chasing;
@@ -37,5 +38,23 @@ public class Customer : MonoBehaviour
         _state = CustomerState.Chasing;
         _enemyPatrol.enabled = false;
         _enemyFollow.enabled = true;
+    }
+
+    // called by a pizzaSlice collision
+    public void ReceivePizza(int damage)
+    {
+        if (_state == CustomerState.Chasing)
+        {
+            _health -= damage;
+            if (_health <= 0)
+            {
+                Destroy(gameObject);
+            }
+        }
+        else if (_state == CustomerState.Waiting)
+        {
+            Destroy(gameObject);
+            //TODO Trigger customer eating a pizza slice animation.
+        }
     }
 }
