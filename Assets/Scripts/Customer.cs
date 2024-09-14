@@ -29,8 +29,6 @@ public class Customer : MonoBehaviour
         _enemyFollow.enabled = true;
     }
 
-
-
     private void HandlePlayerDetected()
     {
         if (_state != CustomerState.Patrolling) return;
