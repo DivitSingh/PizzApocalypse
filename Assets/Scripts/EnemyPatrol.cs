@@ -6,7 +6,7 @@ public class EnemyPatrol : MonoBehaviour
 {
     public Transform player;
     public Transform[] points;
-    public NavMeshAgent agent;
+    private NavMeshAgent _agent;
 
     public delegate void PlayerDetectedHandler();
 
@@ -17,7 +17,8 @@ public class EnemyPatrol : MonoBehaviour
 
     private void Start()
     {
-        agent.autoBraking = false;
+        _agent = GetComponent<NavMeshAgent>();
+        _agent.autoBraking = false;
         GoToNextPoint();
     }
 
@@ -25,21 +26,19 @@ public class EnemyPatrol : MonoBehaviour
     {
         if (points.Length == 0) return;
 
-        agent.destination = points[_curPoint].position;
+        _agent.destination = points[_curPoint].position;
         _curPoint = (_curPoint + 1) % points.Length;
     }
 
     private void Update()
     {
-        var distance = Vector3.Distance(agent.transform.position, player.position);
+        var distance = Vector3.Distance(_agent.transform.position, player.position);
         if (distance < MaxDetectionDistance)
         {
             onPlayerDetected?.Invoke();
-        } else if (!agent.pathPending && agent.remainingDistance < 0.5f)
+        } else if (!_agent.pathPending && _agent.remainingDistance < 0.5f)
         {
             GoToNextPoint();
         }
-        
-        
     }
 }

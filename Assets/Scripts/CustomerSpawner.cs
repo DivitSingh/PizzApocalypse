@@ -9,16 +9,16 @@ public class CustomerSpawner : MonoBehaviour
     public float spawnInterval = 1f;
     public float checkRadius = 0.5f;
 
-    private Transform[] spawnPoints;
-    private bool isFirstEnemy = true;
+    private Transform[] _spawnPoints;
+    // TODO: Set up later?
+    // private bool isFirstEnemy = true;
 
     private void Start()
     {
-        spawnPoints = GameObject.FindObjectsOfType<Transform>()
-            .Where(t => t.name == "SpawnPoint")
+        _spawnPoints = GameObject.FindObjectsOfType<Transform>()
+            .Where(t => t.CompareTag("SpawnPoint"))
             .ToArray();
-
-        Debug.Log($"Found {spawnPoints.Length} spawn points");
+        
         StartCoroutine(SpawnEnemies());
     }
 
@@ -33,8 +33,7 @@ public class CustomerSpawner : MonoBehaviour
 
     private void SpawnEnemy()
     {
-        List<Transform> availableSpawnPoints = new List<Transform>(spawnPoints);
-
+        List<Transform> availableSpawnPoints = new List<Transform>(_spawnPoints);
         while (availableSpawnPoints.Count > 0)
         {
             int randomIndex = Random.Range(0, availableSpawnPoints.Count);
@@ -42,24 +41,8 @@ public class CustomerSpawner : MonoBehaviour
 
             if (!Physics.CheckSphere(spawnPoint.position, checkRadius))
             {
-                GameObject newEnemy = Instantiate(enemyPrefab, spawnPoint.position, Quaternion.identity);
-                EnemyBehavior enemyBehavior = newEnemy.GetComponent<EnemyBehavior>();
-                
-                if (enemyBehavior != null)
-                {
-                    if (isFirstEnemy)
-                    {
-                        enemyBehavior.SetAngryImmediately();
-                        isFirstEnemy = false;
-                        Debug.Log("First enemy set to angry immediately");
-                    }
-                }
-                
+                Instantiate(enemyPrefab, spawnPoint.position, Quaternion.identity);
                 break;
-            }
-            else
-            {
-                availableSpawnPoints.RemoveAt(randomIndex);
             }
         }
     }
