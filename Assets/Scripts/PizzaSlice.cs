@@ -6,11 +6,8 @@ public class PizzaSlice : MonoBehaviour
 {
 
     // How much damage the pizzaSlice does
-    private int damage = 1;
+    public int damage;
     private Rigidbody rb_pizzaSlice;
-
-    private bool targetHit;
-
 
     // Start is called before the first frame update
     private void Start()
@@ -18,24 +15,14 @@ public class PizzaSlice : MonoBehaviour
         rb_pizzaSlice = GetComponent<Rigidbody>();
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        // check if target was already hit by the slice
-        if(targetHit)
-            return;
-        else
-            targetHit = true;
-
-        // check if you hit an customer
-        if (collision.gameObject.GetComponent<Customer>() != null)
+        if (other.gameObject.GetComponent<Customer>() != null)
         {
-            Customer currentCustomer = collision.gameObject.GetComponent<Customer>();
-
+            Customer currentCustomer = other.gameObject.GetComponent<Customer>();
             currentCustomer.ReceivePizza(damage);
+            Destroy(gameObject);
         }
-
-        // Pizza slices destroys itself 
-        Destroy(gameObject);
     }
 
     // Update is called once per frame

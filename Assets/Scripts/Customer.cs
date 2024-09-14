@@ -17,7 +17,7 @@ public class Customer : MonoBehaviour
 
     private CustomerState _state = CustomerState.Chasing;
     #endregion
-    
+
 
     private void Start()
     {
@@ -29,12 +29,12 @@ public class Customer : MonoBehaviour
         _enemyFollow.enabled = true;
     }
 
-   
+
 
     private void HandlePlayerDetected()
     {
         if (_state != CustomerState.Patrolling) return;
-        
+
         _state = CustomerState.Chasing;
         _enemyPatrol.enabled = false;
         _enemyFollow.enabled = true;
