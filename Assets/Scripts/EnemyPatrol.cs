@@ -4,21 +4,22 @@ using UnityEngine.AI;
 
 public class EnemyPatrol : MonoBehaviour
 {
-    public Transform player;
+    private Transform player;
     public Transform[] points;
-    private NavMeshAgent _agent;
+    private NavMeshAgent agent;
 
     public delegate void PlayerDetectedHandler();
 
     public event PlayerDetectedHandler onPlayerDetected;
     private const float MaxDetectionDistance = 3f;
-    
-    private int _curPoint;
+
+    private int curPoint;
 
     private void Start()
     {
-        _agent = GetComponent<NavMeshAgent>();
-        _agent.autoBraking = false;
+        player = GameObject.Find("Player").transform;
+        agent = GetComponent<NavMeshAgent>();
+        agent.autoBraking = false;
         GoToNextPoint();
     }
 
@@ -26,17 +27,18 @@ public class EnemyPatrol : MonoBehaviour
     {
         if (points.Length == 0) return;
 
-        _agent.destination = points[_curPoint].position;
-        _curPoint = (_curPoint + 1) % points.Length;
+        agent.destination = points[curPoint].position;
+        curPoint = (curPoint + 1) % points.Length;
     }
 
     private void Update()
     {
-        var distance = Vector3.Distance(_agent.transform.position, player.position);
+        var distance = Vector3.Distance(agent.transform.position, player.position);
         if (distance < MaxDetectionDistance)
         {
             onPlayerDetected?.Invoke();
-        } else if (!_agent.pathPending && _agent.remainingDistance < 0.5f)
+        }
+        else if (!agent.pathPending && agent.remainingDistance < 0.5f)
         {
             GoToNextPoint();
         }

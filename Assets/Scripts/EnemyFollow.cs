@@ -3,18 +3,19 @@ using UnityEngine.AI;
 
 public class EnemyFollow : MonoBehaviour
 {
-    public Transform player;
-    
-    private NavMeshAgent _agent;
+    private Transform player;
+
+    private NavMeshAgent agent;
 
     private void Start()
     {
-        _agent = GetComponent<NavMeshAgent>();
-        _agent.destination = player.position;
+        player = GameObject.Find("Player").transform;
+        agent = GetComponent<NavMeshAgent>();
+        agent.destination = player.position;
     }
 
     private void Update()
     {
-        _agent.destination = player.position;
+        agent.destination = player.position;
     }
 }

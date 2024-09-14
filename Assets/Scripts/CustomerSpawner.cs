@@ -18,7 +18,7 @@ public class CustomerSpawner : MonoBehaviour
         _spawnPoints = GameObject.FindObjectsOfType<Transform>()
             .Where(t => t.CompareTag("SpawnPoint"))
             .ToArray();
-        
+        Debug.Log(_spawnPoints.Length);
         StartCoroutine(SpawnEnemies());
     }
 
@@ -38,12 +38,8 @@ public class CustomerSpawner : MonoBehaviour
         {
             int randomIndex = Random.Range(0, availableSpawnPoints.Count);
             Transform spawnPoint = availableSpawnPoints[randomIndex];
-
-            if (!Physics.CheckSphere(spawnPoint.position, checkRadius))
-            {
-                Instantiate(enemyPrefab, spawnPoint.position, Quaternion.identity);
-                break;
-            }
+            Instantiate(enemyPrefab, spawnPoint.position, Quaternion.identity);
+            availableSpawnPoints.RemoveAt(randomIndex);
         }
     }
 }
