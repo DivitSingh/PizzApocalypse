@@ -1,6 +1,4 @@
-using System;
 using System.Collections;
-using UnityEditor.Profiling;
 using UnityEngine;
 
 public class Customer : MonoBehaviour
