@@ -1067,7 +1067,7 @@ MonoBehaviour:
   m_VoxelSize: 0.16666667
   m_MinRegionArea: 2
   m_NavMeshData: {fileID: 23800000, guid: d622019502ed7d34cbb1fd7139bffd62, type: 2}
-  m_BuildHeightMesh: 0
+  m_BuildHeightMesh: 1
 --- !u!1 &1130916313
 GameObject:
   m_ObjectHideFlags: 0
@@ -1128,9 +1128,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddbd359b9d76407699134185d43f72ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyPrefab: {fileID: 5178905307659722026, guid: 8bc5d364a692d4223b849aa03eea6119,
+  enemyPrefab: {fileID: 3027856184760074827, guid: 2167ba38fc7de2e4db39401077ecd353,
     type: 3}
-  spawnInterval: 3
+  spawnInterval: 5
   checkRadius: 0.5
 --- !u!4 &1852365126
 Transform:
@@ -1237,7 +1237,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1904746549
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1399,15 +1399,12 @@ MonoBehaviour:
   orientation: {fileID: 2087841442}
   moveSpeed: 4500
   maxSpeed: 20
+  counterMovement: 0.175
+  maxSlopeAngle: 35
   grounded: 0
   whatIsGround:
     serializedVersion: 2
     m_Bits: 8
-  counterMovement: 0.175
-  maxSlopeAngle: 35
-  slideForce: 400
-  slideCounterMovement: 0.2
-  jumpForce: 550
 --- !u!54 &1917263820
 Rigidbody:
   m_ObjectHideFlags: 0

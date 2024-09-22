@@ -4,20 +4,20 @@ using UnityEngine;
 public class PlayerThrow : MonoBehaviour
 {
     [Header("References")]
-    public Transform cam;
-    public Transform attackPoint;
-    public List<GameObject> pizzas;
+    [SerializeField] private Transform cam;
+    [SerializeField] private Transform attackPoint;
+    [SerializeField] private List<GameObject> pizzas;
 
     [Header("Settings")]
-    public int maxThrows;
-    public float throwCooldown;
+    [SerializeField] private int maxThrows;
+    [SerializeField] private float throwCooldown;
 
     [Header("Throwing")]
-    public KeyCode throwKey = KeyCode.Mouse0;
-    public float throwForce;
-    public float throwUpwardForce;
+    [SerializeField] private KeyCode throwKey = KeyCode.Mouse0;
+    [SerializeField] private float throwForce;
+    [SerializeField] private float throwUpwardForce;
 
-    bool readyToThrow;
+    private bool readyToThrow;
     private int currentThrows;
     private float timer = 0.00f;
 

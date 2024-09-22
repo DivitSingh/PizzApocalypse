@@ -4,7 +4,7 @@ public class PizzaSlice : MonoBehaviour
 {
 
     // How much damage the pizzaSlice does
-    public int damage;
+    [SerializeField] private int damage;
     private float time;
 
     // Start is called before the first frame update
