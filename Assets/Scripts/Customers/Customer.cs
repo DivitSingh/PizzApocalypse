@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
@@ -6,9 +5,7 @@ using UnityEngine.AI;
 [RequireComponent(typeof(NavMeshAgent))]
 public class Customer : MonoBehaviour
 {
-    private int health;
-    private EnemyPatrol enemyPatrol;
-    private EnemyFollow enemyFollow;
+    public int health;
     private CustomerAnimator _customerAnimator;
 
     private Transform _player;
@@ -25,9 +22,8 @@ public class Customer : MonoBehaviour
     #region State
     public enum CustomerState
     {
-        Chasing, //chasing => angry customer
-        Patrolling,
-        Waiting  //waiting => hungry customer
+        Chasing,
+        Waiting
     }
 
     private CustomerState state = CustomerState.Patrolling;
@@ -37,12 +33,6 @@ public class Customer : MonoBehaviour
     {
         _agent = GetComponent<NavMeshAgent>();
         _customerAnimator = GetComponent<CustomerAnimator>();
-        enemyPatrol = GetComponent<EnemyPatrol>();
-        enemyPatrol.enabled = false;
-        enemyPatrol.onPlayerDetected += HandlePlayerDetected;
-
-        enemyFollow = GetComponent<EnemyFollow>();
-        enemyFollow.enabled = true;
 
         _player = GameObject.Find("Player").transform;
         ChangeState(CustomerState.Waiting);
@@ -50,20 +40,16 @@ public class Customer : MonoBehaviour
 
     private void Update()
     {
+        if (state == CustomerState.Chasing)
+        {
+            _agent.destination = _player.position;
+        }
+        
         if (state == CustomerState.Chasing && Physics.CheckSphere(transform.position, attackRange, playerLayer))
         {
             Debug.Log("Player detected");
             Attack();
         }
-    }
-
-    private void HandlePlayerDetected()
-    {
-        if (state != CustomerState.Patrolling) return;
-
-        state = CustomerState.Chasing;
-        enemyPatrol.enabled = false;
-        enemyFollow.enabled = false;
     }
 
     private IEnumerator WaitForFood()
@@ -79,23 +65,14 @@ public class Customer : MonoBehaviour
         switch (newState)
         {
             case CustomerState.Chasing:
-                enemyPatrol.enabled = false;
-                enemyFollow.enabled = true;
-                
-                // TODO: Deal with changing color
-                // GetComponent<Renderer>().material.color = Color.red;
+                GetComponent<Renderer>().material.color = Color.red;
                 GameObject.Find("Audio Source").GetComponent<AudioSource>().PlayOneShot(rageSound);
                 _agent.SetDestination(_player.position);
                 _customerAnimator.SetChasing();
                 break;
             case CustomerState.Waiting:
                 StartCoroutine(WaitForFood());
-                enemyFollow.enabled = false;
-                enemyFollow.enabled = false;
-                break;
-            case CustomerState.Patrolling:
-                enemyFollow.enabled = false;
-                enemyPatrol.enabled = true;
+                GetComponent<NavMeshAgent>().ResetPath();
                 break;
             default:
                 break;
@@ -108,6 +85,7 @@ public class Customer : MonoBehaviour
         if (state == CustomerState.Chasing)
         {
             health -= damage;
+
             if (health <= 0)
             {
                 GameObject.Find("Audio Source").GetComponent<AudioSource>().PlayOneShot(dieSound);
