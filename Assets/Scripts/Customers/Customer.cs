@@ -26,7 +26,7 @@ public class Customer : MonoBehaviour
         Waiting
     }
 
-    private CustomerState state = CustomerState.Patrolling;
+    private CustomerState state = CustomerState.Waiting;
     #endregion
 
     private void Start()
