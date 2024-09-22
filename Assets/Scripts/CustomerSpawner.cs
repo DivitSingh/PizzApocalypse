@@ -7,18 +7,13 @@ public class CustomerSpawner : MonoBehaviour
 {
     public GameObject enemyPrefab;
     public float spawnInterval = 1f;
-    public float checkRadius = 0.5f;
-
     private Transform[] _spawnPoints;
-    // TODO: Set up later?
-    // private bool isFirstEnemy = true;
 
     private void Start()
     {
-        _spawnPoints = GameObject.FindObjectsOfType<Transform>()
+        _spawnPoints = FindObjectsOfType<Transform>()
             .Where(t => t.CompareTag("SpawnPoint"))
             .ToArray();
-        Debug.Log(_spawnPoints.Length);
         StartCoroutine(SpawnEnemies());
     }
 

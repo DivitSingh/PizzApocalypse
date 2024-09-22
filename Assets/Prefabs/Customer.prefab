@@ -13,8 +13,6 @@ GameObject:
   - component: {fileID: 6320423672122113782}
   - component: {fileID: 8637889268879233358}
   - component: {fileID: 3052894712373345635}
-  - component: {fileID: 7741098775682169488}
-  - component: {fileID: 6721489921788521686}
   - component: {fileID: 5312526063177050707}
   m_Layer: 0
   m_Name: Customer
@@ -123,36 +121,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c806839d6cf495cacdc212c4bafec04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  health: 25
+  waitingTime: 5
   rageSound: {fileID: 8300000, guid: 2e70929357ae5a44185acb72b8a38f7e, type: 3}
   hurtSound: {fileID: 8300000, guid: 862d377a35144ef43b16223999c0b77a, type: 3}
   dieSound: {fileID: 8300000, guid: 8351b97ebe1bcbb45a96319a4972d94a, type: 3}
   happySound: {fileID: 8300000, guid: ee9844507f8b84f43b04023b39a983d9, type: 3}
-  waitingTime: 3
---- !u!114 &7741098775682169488
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 672100977270408830}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 101b35c5f23b3433a8893f58f572dc76, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &6721489921788521686
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 672100977270408830}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e8f5ffb8c2c84098a0303d4c0f8f7d0c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  points: []
 --- !u!195 &5312526063177050707
 NavMeshAgent:
   m_ObjectHideFlags: 0

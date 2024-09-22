@@ -1,48 +1,34 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Customer : MonoBehaviour
 {
-    private int health;
-    private EnemyPatrol enemyPatrol;
-    private EnemyFollow enemyFollow;
-
+    public int health;
+    public float waitingTime;
     public AudioClip rageSound;
     public AudioClip hurtSound;
     public AudioClip dieSound;
     public AudioClip happySound;
-    public float waitingTime = 3f;
+    private CustomerState state;
 
     #region State
     public enum CustomerState
     {
-        Chasing, //chasing => angry customer
-        Patrolling,
-        Waiting  //waiting => hungry customer
+        Chasing,
+        Waiting
     }
-
-    private CustomerState state = CustomerState.Patrolling;
     #endregion
 
     private void Start()
     {
-        enemyPatrol = GetComponent<EnemyPatrol>();
-        enemyPatrol.enabled = false;
-        enemyPatrol.onPlayerDetected += HandlePlayerDetected;
-
-        enemyFollow = GetComponent<EnemyFollow>();
-        enemyFollow.enabled = false;
-
         ChangeState(CustomerState.Waiting);
     }
 
-    private void HandlePlayerDetected()
+    private void Update()
     {
-        if (state != CustomerState.Patrolling) return;
-
-        state = CustomerState.Chasing;
-        enemyPatrol.enabled = false;
-        enemyFollow.enabled = true;
+        if (state == CustomerState.Chasing)
+            GetComponent<NavMeshAgent>().destination = GameObject.Find("Player").transform.position;
     }
 
     private IEnumerator WaitForFood()
@@ -58,31 +44,24 @@ public class Customer : MonoBehaviour
         switch (newState)
         {
             case CustomerState.Chasing:
-                enemyPatrol.enabled = false;
-                enemyFollow.enabled = true;
                 GetComponent<Renderer>().material.color = Color.red;
                 GameObject.Find("Audio Source").GetComponent<AudioSource>().PlayOneShot(rageSound);
                 break;
             case CustomerState.Waiting:
                 StartCoroutine(WaitForFood());
-                enemyFollow.enabled = false;
-                enemyFollow.enabled = false;
-                break;
-            case CustomerState.Patrolling:
-                enemyFollow.enabled = false;
-                enemyPatrol.enabled = true;
+                GetComponent<NavMeshAgent>().ResetPath();
                 break;
             default:
                 break;
         }
     }
 
-    // called by a pizzaSlice collision
     public void ReceivePizza(int damage)
     {
         if (state == CustomerState.Chasing)
         {
             health -= damage;
+
             if (health <= 0)
             {
                 GameObject.Find("Audio Source").GetComponent<AudioSource>().PlayOneShot(dieSound);
@@ -98,7 +77,6 @@ public class Customer : MonoBehaviour
             GameObject.Find("Audio Source").GetComponent<AudioSource>().PlayOneShot(happySound);
             StopCoroutine(WaitForFood());
             Destroy(gameObject);
-            //TODO Trigger customer eating a pizza slice animation.
         }
     }
 }

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PizzaSlice : MonoBehaviour
@@ -7,12 +5,12 @@ public class PizzaSlice : MonoBehaviour
 
     // How much damage the pizzaSlice does
     public int damage;
-    private Rigidbody rb_pizzaSlice;
+    private float time;
 
     // Start is called before the first frame update
     private void Start()
     {
-        rb_pizzaSlice = GetComponent<Rigidbody>();
+        time = Time.time;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -28,7 +26,8 @@ public class PizzaSlice : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        if (Time.time - time > 2.5f)
+            Destroy(gameObject);
     }
 
 }
