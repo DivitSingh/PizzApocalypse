@@ -1,14 +1,20 @@
+using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.AI;
 
-[RequireComponent(typeof(EnemyFollow))]
-[RequireComponent(typeof(EnemyPatrol))]
+[RequireComponent(typeof(NavMeshAgent))]
 public class Customer : MonoBehaviour
 {
     private int health;
     private EnemyPatrol enemyPatrol;
     private EnemyFollow enemyFollow;
     private CustomerAnimator _customerAnimator;
+
+    private Transform _player;
+    private NavMeshAgent _agent;
+    [SerializeField] private LayerMask playerLayer;
+    [SerializeField] private float attackRange = 2f;
 
     public AudioClip rageSound;
     public AudioClip hurtSound;
@@ -29,15 +35,26 @@ public class Customer : MonoBehaviour
 
     private void Start()
     {
+        _agent = GetComponent<NavMeshAgent>();
         _customerAnimator = GetComponent<CustomerAnimator>();
         enemyPatrol = GetComponent<EnemyPatrol>();
         enemyPatrol.enabled = false;
         enemyPatrol.onPlayerDetected += HandlePlayerDetected;
 
         enemyFollow = GetComponent<EnemyFollow>();
-        enemyFollow.enabled = false;
+        enemyFollow.enabled = true;
 
+        _player = GameObject.Find("Player").transform;
         ChangeState(CustomerState.Waiting);
+    }
+
+    private void Update()
+    {
+        if (state == CustomerState.Chasing && Physics.CheckSphere(transform.position, attackRange, playerLayer))
+        {
+            Debug.Log("Player detected");
+            Attack();
+        }
     }
 
     private void HandlePlayerDetected()
@@ -46,7 +63,7 @@ public class Customer : MonoBehaviour
 
         state = CustomerState.Chasing;
         enemyPatrol.enabled = false;
-        enemyFollow.enabled = true;
+        enemyFollow.enabled = false;
     }
 
     private IEnumerator WaitForFood()
@@ -68,6 +85,7 @@ public class Customer : MonoBehaviour
                 // TODO: Deal with changing color
                 // GetComponent<Renderer>().material.color = Color.red;
                 GameObject.Find("Audio Source").GetComponent<AudioSource>().PlayOneShot(rageSound);
+                _agent.SetDestination(_player.position);
                 _customerAnimator.SetChasing();
                 break;
             case CustomerState.Waiting:
@@ -106,6 +124,15 @@ public class Customer : MonoBehaviour
             StopCoroutine(WaitForFood());
             Destroy(gameObject);
             //TODO Trigger customer eating a pizza slice animation.
+        }
+    }
+
+    private void Attack()
+    {
+        if (!_customerAnimator.IsAttacking())
+        {
+            _customerAnimator.Attack();
+            _agent.SetDestination(transform.position);
         }
     }
 }
