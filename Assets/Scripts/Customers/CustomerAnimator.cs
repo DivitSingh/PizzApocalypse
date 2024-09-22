@@ -21,7 +21,6 @@ public class CustomerAnimator : MonoBehaviour
 
     public void Attack()
     {
-        Debug.Log("Called trigger");
         _animator.SetTrigger(AttackTrigger);
     }
 

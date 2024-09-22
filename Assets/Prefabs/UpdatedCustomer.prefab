@@ -2011,11 +2011,9 @@ GameObject:
   m_Component:
   - component: {fileID: 5518310719411521424}
   - component: {fileID: 968095267650787206}
-  - component: {fileID: 289826470160068939}
   - component: {fileID: 7201818144714822359}
   - component: {fileID: 3873511645084760715}
   - component: {fileID: 7672954289488514807}
-  - component: {fileID: 5541733271903831032}
   - component: {fileID: 2574763197431032093}
   m_Layer: 0
   m_Name: UpdatedCustomer
@@ -2062,18 +2060,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &289826470160068939
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5178905307659722026}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 101b35c5f23b3433a8893f58f572dc76, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!195 &7201818144714822359
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -2088,7 +2074,7 @@ NavMeshAgent:
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
-  m_StoppingDistance: 1.5
+  m_StoppingDistance: 1
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
@@ -2108,15 +2094,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c806839d6cf495cacdc212c4bafec04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerLayer:
-    serializedVersion: 2
-    m_Bits: 64
-  attackRange: 1.5
   rageSound: {fileID: 8300000, guid: 2e70929357ae5a44185acb72b8a38f7e, type: 3}
   hurtSound: {fileID: 8300000, guid: 862d377a35144ef43b16223999c0b77a, type: 3}
   dieSound: {fileID: 8300000, guid: 8351b97ebe1bcbb45a96319a4972d94a, type: 3}
   happySound: {fileID: 8300000, guid: ee9844507f8b84f43b04023b39a983d9, type: 3}
+  health: 0
+  attackRange: 1.5
   waitingTime: 5
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!114 &7672954289488514807
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2129,19 +2116,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 668a513b7365442378eeb52b255e8a64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &5541733271903831032
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5178905307659722026}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e8f5ffb8c2c84098a0303d4c0f8f7d0c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  points: []
 --- !u!65 &2574763197431032093
 BoxCollider:
   m_ObjectHideFlags: 0

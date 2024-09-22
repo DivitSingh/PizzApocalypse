@@ -6,6 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="fe648da1-4e18-4187-bf7f-b948f2246c1d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.PizzApocalypse/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.PizzApocalypse/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/UpdatedCustomer.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/UpdatedCustomer.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Customers/Customer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Customers/Customer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Customers/CustomerAnimator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Customers/CustomerAnimator.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Customers/EnemyFollow.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Customers/EnemyFollow.cs.meta" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -107,7 +112,7 @@
       <workItem from="1726538349961" duration="2416000" />
       <workItem from="1726872756939" duration="15087000" />
       <workItem from="1726956443673" duration="609000" />
-      <workItem from="1727026811484" duration="4881000" />
+      <workItem from="1727026811484" duration="6133000" />
     </task>
     <servers />
   </component>

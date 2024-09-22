@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
@@ -5,84 +6,80 @@ using UnityEngine.AI;
 [RequireComponent(typeof(NavMeshAgent))]
 public class Customer : MonoBehaviour
 {
-    public int health;
-    private CustomerAnimator _customerAnimator;
-
-    private Transform _player;
-    private NavMeshAgent _agent;
-    [SerializeField] private LayerMask playerLayer;
-    [SerializeField] private float attackRange = 2f;
-
+    [Header("Audio")]
     public AudioClip rageSound;
     public AudioClip hurtSound;
     public AudioClip dieSound;
     public AudioClip happySound;
-    public float waitingTime = 3f;
+    
+    [Header("Stats")]
+    [SerializeField] private int health;
+    [SerializeField] private float attackRange = 2f;
+    [SerializeField] private float waitingTime = 3f;
+    
+    private NavMeshAgent _agent;
+    private CustomerAnimator _animator;
+    
+    private Transform _player;
+    [SerializeField] private LayerMask playerLayer;
 
-    #region State
-    public enum CustomerState
+    private enum State
     {
         Chasing,
         Waiting
     }
 
-    private CustomerState state = CustomerState.Waiting;
-    #endregion
+    private State _state = State.Waiting;
 
     private void Start()
     {
         _agent = GetComponent<NavMeshAgent>();
-        _customerAnimator = GetComponent<CustomerAnimator>();
-
+        _animator = GetComponent<CustomerAnimator>();
         _player = GameObject.Find("Player").transform;
-        ChangeState(CustomerState.Waiting);
+        StartCoroutine(WaitForFood());
     }
 
     private void Update()
     {
-        if (state == CustomerState.Chasing)
-        {
-            _agent.destination = _player.position;
-        }
+        if (_state != State.Chasing) return;
         
-        if (state == CustomerState.Chasing && Physics.CheckSphere(transform.position, attackRange, playerLayer))
+        if (Physics.CheckSphere(transform.position, attackRange, playerLayer))
         {
-            Debug.Log("Player detected");
             Attack();
+        }
+        else if (!_animator.IsAttacking())
+        {
+            // Don't move character while attacking
+            _agent.destination = _player.position;
         }
     }
 
     private IEnumerator WaitForFood()
     {
         yield return new WaitForSeconds(waitingTime);
-        ChangeState(CustomerState.Chasing);
+        StartChasing();
     }
 
-    private void ChangeState(CustomerState newState)
+    private void StartChasing()
     {
-        if (newState == state) return;
-        state = newState;
-        switch (newState)
+        _state = State.Chasing;
+        GameObject.Find("Audio Source").GetComponent<AudioSource>().PlayOneShot(rageSound);
+        _agent.SetDestination(_player.position);
+        _animator.SetChasing();
+    }
+
+    private void Attack()
+    {
+        if (!_animator.IsAttacking())
         {
-            case CustomerState.Chasing:
-                GetComponent<Renderer>().material.color = Color.red;
-                GameObject.Find("Audio Source").GetComponent<AudioSource>().PlayOneShot(rageSound);
-                _agent.SetDestination(_player.position);
-                _customerAnimator.SetChasing();
-                break;
-            case CustomerState.Waiting:
-                StartCoroutine(WaitForFood());
-                GetComponent<NavMeshAgent>().ResetPath();
-                break;
-            default:
-                break;
+            _animator.Attack();
+            _agent.SetDestination(transform.position);
         }
     }
-
-    // called by a pizzaSlice collision
+    
     public void ReceivePizza(int damage)
     {
-        if (state == CustomerState.Chasing)
+        if (_state == State.Chasing)
         {
             health -= damage;
 
@@ -96,21 +93,12 @@ public class Customer : MonoBehaviour
                 GameObject.Find("Audio Source").GetComponent<AudioSource>().PlayOneShot(hurtSound);
             }
         }
-        else if (state == CustomerState.Waiting)
+        else if (_state == State.Waiting)
         {
             GameObject.Find("Audio Source").GetComponent<AudioSource>().PlayOneShot(happySound);
             StopCoroutine(WaitForFood());
             Destroy(gameObject);
             //TODO Trigger customer eating a pizza slice animation.
-        }
-    }
-
-    private void Attack()
-    {
-        if (!_customerAnimator.IsAttacking())
-        {
-            _customerAnimator.Attack();
-            _agent.SetDestination(transform.position);
         }
     }
 }
