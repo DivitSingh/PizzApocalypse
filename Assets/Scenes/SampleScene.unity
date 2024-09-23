@@ -1375,7 +1375,6 @@ GameObject:
   - component: {fileID: 1917263821}
   - component: {fileID: 1917263820}
   - component: {fileID: 1917263819}
-  - component: {fileID: 1917263825}
   - component: {fileID: 1917263826}
   m_Layer: 0
   m_Name: Player
@@ -1398,6 +1397,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerCam: {fileID: 1102723691}
   orientation: {fileID: 2087841442}
+  attackPoint: {fileID: 1002041975}
+  pizzas:
+  - {fileID: 7595248782288383234, guid: 89deb7310d061e4499bfe60e86f83656, type: 3}
+  - {fileID: 7381785348282878827, guid: 5232de6fa82056642989b44326b2a89c, type: 3}
   moveSpeed: 4500
   maxSpeed: 20
   counterMovement: 0.175
@@ -1406,6 +1409,11 @@ MonoBehaviour:
   whatIsGround:
     serializedVersion: 2
     m_Bits: 8
+  throwKey: 323
+  throwForce: 50
+  throwUpwardForce: 0
+  maxThrows: 8
+  throwCooldown: 0.5
 --- !u!54 &1917263820
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1523,28 +1531,6 @@ Transform:
   - {fileID: 1002041975}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1917263825
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1917263818}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e31c6372dc4e59648a5407315aa1a889, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cam: {fileID: 330585546}
-  attackPoint: {fileID: 1002041975}
-  pizzas:
-  - {fileID: 7595248782288383234, guid: 89deb7310d061e4499bfe60e86f83656, type: 3}
-  - {fileID: 7381785348282878827, guid: 5232de6fa82056642989b44326b2a89c, type: 3}
-  maxThrows: 10
-  throwCooldown: 0.5
-  throwKey: 323
-  throwForce: 50
-  throwUpwardForce: 0
 --- !u!114 &1917263826
 MonoBehaviour:
   m_ObjectHideFlags: 0

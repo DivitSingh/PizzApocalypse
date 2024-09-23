@@ -8,7 +8,7 @@ public class PlayerHealth : MonoBehaviour
 
     public event Action<float> OnHpPctChanged; // Notifier for health percentage change
     public event Action OnDeath;
-    
+
     private void Start()
     {
         currentHealth = startingHealth;

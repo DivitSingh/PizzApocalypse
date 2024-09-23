@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -6,6 +7,8 @@ public class PlayerMovement : MonoBehaviour
     [Header("References")]
     [SerializeField] private Transform playerCam;
     [SerializeField] private Transform orientation;
+    [SerializeField] private Transform attackPoint;
+    [SerializeField] private List<GameObject> pizzas;
 
     [Header("Movement")]
     [SerializeField] private float moveSpeed = 4500;
@@ -15,12 +18,23 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private bool grounded;
     [SerializeField] private LayerMask whatIsGround;
 
+    [Header("Throwing")]
+    [SerializeField] private KeyCode throwKey = KeyCode.Mouse0;
+    [SerializeField] private float throwForce;
+    [SerializeField] private float throwUpwardForce;
+    [SerializeField] private int maxThrows;
+    [SerializeField] private float throwCooldown;
+
+
     private float xRotation;
     private float sensitivity = 50f;
     private float sensMultiplier = 1f;
     private float threshold = 0.01f;
-    private Vector3 normalVector = Vector3.up;
+    private float timer = 0.00f;
     private float x, y;
+    private int currentThrows;
+    private Vector3 normalVector = Vector3.up;
+    private bool readyToThrow;
     private Rigidbody rb;
 
     void Awake()
@@ -32,6 +46,8 @@ public class PlayerMovement : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        readyToThrow = true;
+        currentThrows = maxThrows;
     }
 
 
@@ -44,6 +60,20 @@ public class PlayerMovement : MonoBehaviour
     {
         MyInput();
         Look();
+
+        if (Input.GetKeyDown(throwKey) && readyToThrow && maxThrows > 0)
+        {
+            timer = Time.time;
+        }
+
+        if (Input.GetKeyUp(throwKey))
+        {
+            if (Time.time - timer < 1.00f)
+                Throw(pizzas[0]);
+            else
+                Throw(pizzas[1]);
+
+        }
     }
 
     /// <summary>
@@ -196,6 +226,31 @@ public class PlayerMovement : MonoBehaviour
     private void StopGrounded()
     {
         grounded = false;
+    }
+
+    private void Throw(GameObject objectToThrow)
+    {
+        readyToThrow = false;
+
+        GameObject projectile = Instantiate(objectToThrow, attackPoint.position, playerCam.GetChild(0).rotation);
+        Rigidbody projectileRb = projectile.GetComponent<Rigidbody>();
+        Vector3 forceDirection = playerCam.GetChild(0).transform.forward;
+        RaycastHit hit;
+        if (Physics.Raycast(playerCam.GetChild(0).position, playerCam.GetChild(0).forward, out hit, 500f))
+        {
+            forceDirection = (hit.point - attackPoint.position).normalized;
+        }
+
+        Vector3 forceToAdd = forceDirection * throwForce + transform.up * throwUpwardForce;
+        projectileRb.AddForce(forceToAdd, ForceMode.Impulse);
+        currentThrows--;
+        Invoke(nameof(ResetThrow), throwCooldown);
+    }
+
+    private void ResetThrow()
+    {
+        currentThrows = maxThrows;
+        readyToThrow = true;
     }
 
 }
