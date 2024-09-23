@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
@@ -8,6 +9,7 @@ public class Customer : MonoBehaviour
     [Header("Stats")]
     [SerializeField] private int health;
     [SerializeField] private float waitingTime = 3f;
+    [SerializeField] private float attackDamage = 20f;
 
     [Header("Audio")]
     [SerializeField] private AudioClip rageSound;
@@ -17,6 +19,7 @@ public class Customer : MonoBehaviour
 
     private NavMeshAgent agent;
     private Animator animator;
+    private BoxCollider boxCollider;
     private Transform player;
     private State state = State.Hungry;
 
@@ -30,6 +33,7 @@ public class Customer : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
+        boxCollider = GetComponentInChildren<BoxCollider>();
         player = GameObject.Find("Player").transform;
         StartCoroutine(Waiting());
     }
@@ -62,13 +66,29 @@ public class Customer : MonoBehaviour
 
     private void Attack()
     {
-        if (!animator.GetCurrentAnimatorStateInfo(0).IsName("Attack"))
+        if (!animator.GetCurrentAnimatorStateInfo(0).IsName("Attack") && !animator.IsInTransition(0))
         {
             animator.SetTrigger("isAttacking");
-            // Vector3 currentPosition = transform.position;
-            // transform.LookAt(player);
-            // transform.position.Set(currentPosition.x, transform.position.y, currentPosition.z);
             agent.isStopped = true;
+        }
+    }
+
+    public void EnableAttack()
+    {
+        boxCollider.enabled = true;
+    }
+
+    public void DisableAttack()
+    {
+        boxCollider.enabled = false;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        var playerHealth = other.GetComponent<PlayerHealth>();
+        if (playerHealth != null)
+        {
+            playerHealth.TakeDamage(attackDamage);
         }
     }
 
