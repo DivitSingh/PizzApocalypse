@@ -15,7 +15,7 @@ public class CustomerSpawner : MonoBehaviour
 
     private void Start()
     {
-        spawnPoints = GameObject.FindObjectsOfType<Transform>()
+        spawnPoints = FindObjectsOfType<Transform>()
             .Where(t => t.CompareTag("SpawnPoint"))
             .ToArray();
         StartCoroutine(SpawnEnemies());

@@ -42,6 +42,10 @@ public class Customer : MonoBehaviour
     {
         if (state != State.Angry) return;
 
+        Vector3 direction = (player.position - transform.position).normalized;
+        Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
+        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f);
+
         if (Vector3.Distance(transform.position, player.position) <= agent.stoppingDistance * 1.5)
             Attack();
         else
