@@ -284,7 +284,7 @@ public class PlayerMovement : MonoBehaviour
         return currentPizzaAmo;
     }
 
-    public void Restocking(int count)
+    public void Restocking()
     {
         // Restocking pizzas to max order amount
         currentPizzaAmo = maxPizzaAmo;
