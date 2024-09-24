@@ -121,15 +121,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c806839d6cf495cacdc212c4bafec04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
   health: 25
   waitingTime: 5
-  attackDamage: 20
-  healthBarPrefab: {fileID: 7480779103554865661, guid: a174c445767032e44ad8770c812d1e7d,
-    type: 3}
-  healthBarOffset: {x: 0, y: 1.82, z: 0}
-  circularTimerPrefab: {fileID: 909041272218718913, guid: 0665f1ab5b8e7944bb57c4258b3c8731,
-    type: 3}
   rageSound: {fileID: 8300000, guid: 2e70929357ae5a44185acb72b8a38f7e, type: 3}
   hurtSound: {fileID: 8300000, guid: 862d377a35144ef43b16223999c0b77a, type: 3}
   dieSound: {fileID: 8300000, guid: 8351b97ebe1bcbb45a96319a4972d94a, type: 3}
