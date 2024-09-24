@@ -4,27 +4,15 @@ using UnityEngine;
 
 public class PizzaPlace : MonoBehaviour
 {
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
+    [SerializeField] private AudioClip restockSound;
     private void OnTriggerEnter(Collider other)
     {
         Debug.Log(other);
-        if (other.gameObject.GetComponent<PlayerMovement>() != null)
+        if (other.gameObject.tag == "Player")
         {
             PlayerMovement thePlayer = other.gameObject.GetComponent<PlayerMovement>();
             thePlayer.Restocking();
-            GetComponent<AudioSource>().Play(0);
+            GameObject.Find("Audio Source").GetComponent<AudioSource>().PlayOneShot(restockSound);
         }
     }
 }

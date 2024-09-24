@@ -1217,6 +1217,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8119e28e1cd3f1e4a9ad0a8b6619f83b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  restockSound: {fileID: 8300000, guid: cf677e4e991e10e419264395793d4a73, type: 3}
 --- !u!1001 &548422520
 PrefabInstance:
   m_ObjectHideFlags: 0
