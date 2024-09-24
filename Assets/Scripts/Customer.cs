@@ -110,6 +110,7 @@ public class Customer : MonoBehaviour
         {
             GameObject.Find("Audio Source").GetComponent<AudioSource>().PlayOneShot(happySound);
             StopCoroutine(Waiting());
+            GameManager.Instance.HandleFedCustomerScoring(this);
             Destroy(gameObject);
         }
     }
