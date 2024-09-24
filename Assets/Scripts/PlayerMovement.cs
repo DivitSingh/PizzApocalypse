@@ -25,6 +25,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private int maxThrows;
     [SerializeField] private float throwCooldown;
 
+    [Header("PizzaAmo")]
+    [SerializeField] private int maxPizzaAmo = 40;
 
     private float xRotation;
     private float sensitivity = 50f;
@@ -33,6 +35,7 @@ public class PlayerMovement : MonoBehaviour
     private float timer = 0.00f;
     private float x, y;
     private int currentThrows;
+    private int currentPizzaAmo;
     private Vector3 normalVector = Vector3.up;
     private bool readyToThrow;
     private Rigidbody rb;
@@ -48,6 +51,7 @@ public class PlayerMovement : MonoBehaviour
         Cursor.visible = false;
         readyToThrow = true;
         currentThrows = maxThrows;
+        currentPizzaAmo = maxPizzaAmo;
     }
 
 
@@ -71,10 +75,13 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetKeyUp(throwKey))
         {
             if (Time.time - timer < 1.00f)
-                Throw(pizzas[0]);
+            {
+                Throw(pizzas[0]);// Slice Pizza
+            }
             else
-                Throw(pizzas[1]);
-
+            {
+                Throw(pizzas[1]);// Full Pizza
+            }
         }
     }
 
@@ -232,21 +239,55 @@ public class PlayerMovement : MonoBehaviour
 
     private void Throw(GameObject objectToThrow)
     {
-        readyToThrow = false;
-
-        GameObject projectile = Instantiate(objectToThrow, attackPoint.position, playerCam.GetChild(0).rotation);
-        Rigidbody projectileRb = projectile.GetComponent<Rigidbody>();
-        Vector3 forceDirection = playerCam.GetChild(0).transform.forward;
-        RaycastHit hit;
-        if (Physics.Raycast(playerCam.GetChild(0).position, playerCam.GetChild(0).forward, out hit, 500f))
+        // Check if pizzas stocked
+        if (currentPizzaAmo > 0)
         {
-            forceDirection = (hit.point - attackPoint.position).normalized;
-        }
+            readyToThrow = false;
 
-        Vector3 forceToAdd = forceDirection * throwForce + transform.up * throwUpwardForce;
-        projectileRb.AddForce(forceToAdd, ForceMode.Impulse);
-        currentThrows--;
-        Invoke(nameof(ResetThrow), throwCooldown);
+            GameObject projectile = Instantiate(objectToThrow, attackPoint.position, playerCam.GetChild(0).rotation);
+            Rigidbody projectileRb = projectile.GetComponent<Rigidbody>();
+            Vector3 forceDirection = playerCam.GetChild(0).transform.forward;
+            RaycastHit hit;
+            if (Physics.Raycast(playerCam.GetChild(0).position, playerCam.GetChild(0).forward, out hit, 500f))
+            {
+                forceDirection = (hit.point - attackPoint.position).normalized;
+            }
+
+            Vector3 forceToAdd = forceDirection * throwForce + transform.up * throwUpwardForce;
+            projectileRb.AddForce(forceToAdd, ForceMode.Impulse);
+            currentThrows--;
+            Invoke(nameof(ResetThrow), throwCooldown);
+
+            // TODO: Call pizza deduct method
+            LosingPizzas(objectToThrow);
+            // If pizza count < 0 you can't throw
+        }
+        // TODO? - Else, if Amo is empty, display text?
+    }
+
+    
+    public void LosingPizzas(GameObject objectThrown)
+    {
+        bool fullPizzaShot = false;
+        if (objectThrown.name == "Pizza (Whole)") // Check if full pizza was thrown
+            fullPizzaShot = true;
+        
+        // Deduct pizzas while shooting
+        if (fullPizzaShot)
+            currentPizzaAmo -= 8; // Full Pizza thrown: 8 slices lost   
+        else
+            currentPizzaAmo -= 1; // Only a slice thrown: 1 slice lost
+    }
+
+    public int GetCurrentPizzaAmo()
+    {
+        return currentPizzaAmo;
+    }
+
+    public void Restocking(int count)
+    {
+        // Restocking pizzas to max order amount
+        currentPizzaAmo = maxPizzaAmo;
     }
 
     private void ResetThrow()
