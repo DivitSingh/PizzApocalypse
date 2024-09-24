@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PizzaPlace : MonoBehaviour
 {
+
     // Start is called before the first frame update
     void Start()
     {
@@ -23,6 +24,7 @@ public class PizzaPlace : MonoBehaviour
         {
             PlayerMovement thePlayer = other.gameObject.GetComponent<PlayerMovement>();
             thePlayer.Restocking();
+            GetComponent<AudioSource>().Play(0);
         }
     }
 }
