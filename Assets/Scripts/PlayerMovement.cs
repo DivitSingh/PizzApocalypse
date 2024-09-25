@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -52,6 +53,7 @@ public class PlayerMovement : MonoBehaviour
         readyToThrow = true;
         currentThrows = maxThrows;
         currentPizzaAmo = maxPizzaAmo;
+        GameObject.Find("Canvas").GetComponentInChildren<TextMeshProUGUI>().text = currentPizzaAmo.ToString(); // Setting initial PizzaAmmo
     }
 
 
@@ -80,7 +82,10 @@ public class PlayerMovement : MonoBehaviour
             }
             else
             {
-                Throw(pizzas[1]);// Full Pizza
+                if(currentPizzaAmo >= 8)
+                    Throw(pizzas[1]);// Full Pizza, only thrown, when there are 8 or more pieces left.
+                else
+                    Throw(pizzas[0]);// Slice Pizza thrown instead when 7 or less slices are left.
             }
         }
     }
@@ -260,9 +265,12 @@ public class PlayerMovement : MonoBehaviour
 
             // TODO: Call pizza deduct method
             LosingPizzas(objectToThrow);
+            // GameObject.Find("Canvas").GetComponentInChildren<TextMeshProUGUI>().text = "Hi";
+
             // If pizza count < 0 you can't throw
         }
         // TODO? - Else, if Amo is empty, display text?
+
     }
 
     
@@ -274,20 +282,29 @@ public class PlayerMovement : MonoBehaviour
         
         // Deduct pizzas while shooting
         if (fullPizzaShot)
-            currentPizzaAmo -= 8; // Full Pizza thrown: 8 slices lost   
+            SetCurrentPizzaAmo(-8); // Full Pizza thrown: 8 slices lost
+            
         else
-            currentPizzaAmo -= 1; // Only a slice thrown: 1 slice lost
+            SetCurrentPizzaAmo(-1); // Only a slice thrown: 1 slice lost
     }
 
-    public int GetCurrentPizzaAmo()
+    public int GetCurrentPizzaAmo() 
+        {return currentPizzaAmo;}
+    public void SetCurrentPizzaAmo(int change)
     {
-        return currentPizzaAmo;
+        if (currentPizzaAmo + change > 40)
+            currentPizzaAmo = 40;
+        else if (currentPizzaAmo + change < 0)
+            currentPizzaAmo = 0;
+        else
+            currentPizzaAmo = currentPizzaAmo + change;
+        GameObject.Find("Canvas").GetComponentInChildren<TextMeshProUGUI>().text = currentPizzaAmo.ToString();
     }
 
     public void Restocking()
     {
         // Restocking pizzas to max order amount
-        currentPizzaAmo = maxPizzaAmo;
+        SetCurrentPizzaAmo(maxPizzaAmo);
     }
 
     private void ResetThrow()
