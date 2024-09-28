@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -20,7 +21,6 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private LayerMask whatIsGround;
 
     [Header("Throwing")]
-    [SerializeField] private KeyCode throwKey = KeyCode.Mouse0;
     [SerializeField] private float throwForce;
     [SerializeField] private float throwUpwardForce;
     [SerializeField] private int maxThrows;
@@ -64,17 +64,19 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+        playerCam.position = transform.position + new Vector3(0, 0.5f, 0);
+
         if (Time.timeScale == 0) return;
-        
+
         MyInput();
         Look();
 
-        if (Input.GetKeyDown(throwKey) && readyToThrow && maxThrows > 0)
+        if (Input.GetButtonDown("Fire1") && readyToThrow && maxThrows > 0)
         {
             timer = Time.time;
         }
 
-        if (Input.GetKeyUp(throwKey))
+        if (Input.GetButtonUp("Fire1"))
         {
             if (Time.time - timer < 1.00f)
             {
@@ -82,7 +84,7 @@ public class PlayerMovement : MonoBehaviour
             }
             else
             {
-                if(currentPizzaAmo >= 8)
+                if (currentPizzaAmo >= 8)
                     Throw(pizzas[1]);// Full Pizza, only thrown, when there are 8 or more pieces left.
                 else
                     Throw(pizzas[0]);// Slice Pizza thrown instead when 7 or less slices are left.
@@ -140,17 +142,15 @@ public class PlayerMovement : MonoBehaviour
     {
         float mouseX = Input.GetAxis("Mouse X") * sensitivity * Time.fixedDeltaTime * sensMultiplier;
         float mouseY = Input.GetAxis("Mouse Y") * sensitivity * Time.fixedDeltaTime * sensMultiplier;
-
-        //Find current look rotation
         Vector3 rot = playerCam.transform.localRotation.eulerAngles;
         desiredX = rot.y + mouseX;
-
-        //Rotate, and also make sure we dont over- or under-rotate.
         xRotation -= mouseY;
         xRotation = Mathf.Clamp(xRotation, -90f, 90f);
 
-        //Perform the rotations
-        playerCam.transform.localRotation = Quaternion.Euler(xRotation, desiredX, 0);
+        if (Gamepad.current == null)
+            playerCam.transform.localRotation = Quaternion.Euler(xRotation, desiredX, 0);
+        else
+            playerCam.transform.Rotate(Input.GetAxis("Joystick X") * Vector3.up * Time.fixedDeltaTime * sensitivity);
         orientation.transform.localRotation = Quaternion.Euler(0, desiredX, 0);
     }
 
@@ -158,7 +158,6 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!grounded) return;
 
-        //Counter movement
         if (Math.Abs(mag.x) > threshold && Math.Abs(x) < 0.05f || (mag.x < -threshold && x > 0) || (mag.x > threshold && x < 0))
         {
             rb.AddForce(moveSpeed * orientation.transform.right * Time.deltaTime * -mag.x * counterMovement);
@@ -168,7 +167,6 @@ public class PlayerMovement : MonoBehaviour
             rb.AddForce(moveSpeed * orientation.transform.forward * Time.deltaTime * -mag.y * counterMovement);
         }
 
-        //Limit diagonal running. This will also cause a full stop if sliding fast and un-crouching, so not optimal.
         if (Mathf.Sqrt(Mathf.Pow(rb.velocity.x, 2) + Mathf.Pow(rb.velocity.z, 2)) > maxSpeed)
         {
             float fallspeed = rb.velocity.y;
@@ -253,10 +251,9 @@ public class PlayerMovement : MonoBehaviour
             Rigidbody projectileRb = projectile.GetComponent<Rigidbody>();
             Vector3 forceDirection = playerCam.GetChild(0).transform.forward;
             RaycastHit hit;
+
             if (Physics.Raycast(playerCam.GetChild(0).position, playerCam.GetChild(0).forward, out hit, 500f))
-            {
                 forceDirection = (hit.point - attackPoint.position).normalized;
-            }
 
             Vector3 forceToAdd = forceDirection * throwForce + transform.up * throwUpwardForce;
             projectileRb.AddForce(forceToAdd, ForceMode.Impulse);
@@ -273,23 +270,23 @@ public class PlayerMovement : MonoBehaviour
 
     }
 
-    
+
     public void LosingPizzas(GameObject objectThrown)
     {
         bool fullPizzaShot = false;
         if (objectThrown.name == "Pizza (Whole)") // Check if full pizza was thrown
             fullPizzaShot = true;
-        
+
         // Deduct pizzas while shooting
         if (fullPizzaShot)
             SetCurrentPizzaAmo(-8); // Full Pizza thrown: 8 slices lost
-            
+
         else
             SetCurrentPizzaAmo(-1); // Only a slice thrown: 1 slice lost
     }
 
-    public int GetCurrentPizzaAmo() 
-        {return currentPizzaAmo;}
+    public int GetCurrentPizzaAmo()
+    { return currentPizzaAmo; }
     public void SetCurrentPizzaAmo(int change)
     {
         if (currentPizzaAmo + change > 40)
