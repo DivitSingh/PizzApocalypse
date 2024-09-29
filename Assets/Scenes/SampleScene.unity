@@ -2446,6 +2446,10 @@ MonoBehaviour:
   pizzas:
   - {fileID: 7595248782288383234, guid: 89deb7310d061e4499bfe60e86f83656, type: 3}
   - {fileID: 7381785348282878827, guid: 5232de6fa82056642989b44326b2a89c, type: 3}
+  pizzaSlicePrefab: {fileID: 7595248782288383234, guid: 89deb7310d061e4499bfe60e86f83656,
+    type: 3}
+  pizzaBoxPrefab: {fileID: 7381785348282878827, guid: 5232de6fa82056642989b44326b2a89c,
+    type: 3}
   moveSpeed: 4500
   maxSpeed: 20
   counterMovement: 0.175
@@ -2454,7 +2458,6 @@ MonoBehaviour:
   whatIsGround:
     serializedVersion: 2
     m_Bits: 8
-  throwKey: 323
   throwForce: 50
   throwUpwardForce: 0
   maxThrows: 2

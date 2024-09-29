@@ -209,6 +209,7 @@ public class Customer : MonoBehaviour
 
     public void ReceivePizza(int damage)
     {
+        return;
         if (state == State.Angry)
         {
             health -= damage;
@@ -238,6 +239,42 @@ public class Customer : MonoBehaviour
             }
 
             Destroy(gameObject);
+        }
+    }
+
+    public void ReceivePizza(IPizza pizza)
+    {
+        Debug.Log("Called");
+        // TODO: Implement logic here
+        if (state == State.Hungry)
+        {
+            // TODO: Check if pizza type matches order
+            GameObject.Find("Audio Source").GetComponent<AudioSource>().PlayOneShot(happySound);
+            StopCoroutine(Waiting());
+            GameManager.Instance.HandleFedCustomerScoring(this);
+
+            if (circularTimer != null)
+            {
+                Destroy(circularTimer.gameObject);
+            }
+
+            Destroy(gameObject);
+        }
+        else
+        {
+            // TODO: Should health not be float?
+            health -= (int) pizza.Damage;
+            UpdateHealthBar();
+            if (health <= 0)
+            {
+                GameObject.Find("Audio Source").GetComponent<AudioSource>().PlayOneShot(dieSound);
+                Destroy(healthBar.gameObject);
+                if (circularTimer != null)
+                {
+                    Destroy(circularTimer.gameObject);
+                }
+                Destroy(gameObject);
+            }
         }
     }
 

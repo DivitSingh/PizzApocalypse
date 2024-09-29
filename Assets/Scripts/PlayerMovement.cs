@@ -12,6 +12,10 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Transform attackPoint;
     [SerializeField] private List<GameObject> pizzas;
 
+    // TODO: Should perhaps be replaced if we have different textures to map PizzaType to Prefab
+    [SerializeField] private GameObject pizzaSlicePrefab;
+    [SerializeField] private GameObject pizzaBoxPrefab;
+
     [Header("Movement")]
     [SerializeField] private float moveSpeed = 4500;
     [SerializeField] private float maxSpeed = 20;
@@ -80,14 +84,19 @@ public class PlayerMovement : MonoBehaviour
         {
             if (Time.time - timer < 1.00f)
             {
-                Throw(pizzas[0]);// Slice Pizza
+                // Throw(pizzas[0]);// Slice Pizza
+                Throw(PizzaType.Cheese, false);
             }
             else
             {
                 if (currentPizzaAmo >= 8)
-                    Throw(pizzas[1]);// Full Pizza, only thrown, when there are 8 or more pieces left.
+                    // Throw(pizzas[1]);// Full Pizza, only thrown, when there are 8 or more pieces left.
+                    Throw(PizzaType.Cheese, true);
+                // TODO: Should probably refactor to only pass in whether thrown pizza is box or not
+                // TODO: Let Throw method handle which type of Pizza is thrown
                 else
-                    Throw(pizzas[0]);// Slice Pizza thrown instead when 7 or less slices are left.
+                    // Throw(pizzas[0]);// Slice Pizza thrown instead when 7 or less slices are left.
+                    Throw(PizzaType.Cheese, false);
             }
         }
     }
@@ -270,6 +279,35 @@ public class PlayerMovement : MonoBehaviour
 
     }
 
+    private void Throw(PizzaType pizzaType, bool isBox)
+    {
+        // TODO: Needs to check ammo for specific type of pizza
+        // TODO: Pizza creation logic could be moved to factory
+        if (pizzaType == PizzaType.Cheese)
+        {
+            readyToThrow = false;
+            
+            var prefab = isBox ? pizzaBoxPrefab : pizzaSlicePrefab;
+            var quantity = isBox ? 8 : 1;
+            var cheesePizza = new CheesePizza(quantity);
+
+            var projectile = Instantiate(prefab, attackPoint.position, playerCam.GetChild(0).rotation);
+            projectile.GetComponent<ThrowablePizza>().Initialize(cheesePizza);
+            var projectileRb = projectile.GetComponent<Rigidbody>();
+            var forceDirection = playerCam.GetChild(0).transform.forward;
+            RaycastHit hit;
+            
+            if (Physics.Raycast(playerCam.GetChild(0).position, playerCam.GetChild(0).forward, out hit, 500f))
+                forceDirection = (hit.point - attackPoint.position).normalized;
+
+            Vector3 forceToAdd = forceDirection * throwForce + transform.up * throwUpwardForce;
+            projectileRb.AddForce(forceToAdd, ForceMode.Impulse);
+            currentThrows--;
+            Invoke(nameof(ResetThrow), throwCooldown);
+
+            // TODO: Remove from appropriate PizzaType ammi
+        }
+    }
 
     public void LosingPizzas(GameObject objectThrown)
     {

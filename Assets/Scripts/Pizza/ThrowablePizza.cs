@@ -1,16 +1,20 @@
+using System;
 using UnityEngine;
 
-public class PizzaSlice : MonoBehaviour
+// NOTE: I added this script temporarily instead of refactoring PizzaSlice, but eventually we should remove one of them
+public class ThrowablePizza : MonoBehaviour
 {
-
-    // How much damage the pizzaSlice does
-    [SerializeField] private int damage;
     private float time;
+    public IPizza Pizza { get; private set; }
 
-    // Start is called before the first frame update
     private void Start()
     {
         time = Time.time;
+    }
+
+    public void Initialize(IPizza pizza)
+    {
+        Pizza = pizza;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -18,16 +22,14 @@ public class PizzaSlice : MonoBehaviour
         if (other.gameObject.GetComponent<Customer>() != null)
         {
             Customer currentCustomer = other.gameObject.GetComponent<Customer>();
-            currentCustomer.ReceivePizza(damage);
+            currentCustomer.ReceivePizza(Pizza);
             Destroy(gameObject);
         }
     }
-
-    // Update is called once per frame
-    void Update()
+    
+    private void Update()
     {
         if (Time.time - time > 2.5f)
             Destroy(gameObject);
     }
-
 }
