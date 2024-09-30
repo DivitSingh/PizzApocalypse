@@ -1231,7 +1231,7 @@ GameObject:
   - component: {fileID: 505862211}
   - component: {fileID: 505862210}
   m_Layer: 5
-  m_Name: PizzaAmmo
+  m_Name: PizzaInventar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2421,6 +2421,7 @@ GameObject:
   - component: {fileID: 1917263820}
   - component: {fileID: 1917263819}
   - component: {fileID: 1917263826}
+  - component: {fileID: 1917263827}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -2594,6 +2595,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startingHealth: 100
   debugText: {fileID: 0}
+--- !u!114 &1917263827
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1917263818}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d15d834923a844141bab55187733a752, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pizzaIcon: {fileID: 505862210}
+  ammoText: {fileID: 1644222396}
+  cheeseIcon: {fileID: 21300000, guid: 739d2ee61d718394ab1171dcdccde287, type: 3}
+  pineappleIcon: {fileID: 21300000, guid: b6c3c5c8734a27c4bb88b8f2802f2f11, type: 3}
+  mushroomIcon: {fileID: 21300000, guid: 3b002ac7df0071e43aa900aecbb90132, type: 3}
 --- !u!1 &1969978817
 GameObject:
   m_ObjectHideFlags: 0

@@ -32,6 +32,8 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("PizzaAmo")]
     [SerializeField] private int maxPizzaAmo = 40;
+    private PizzaInventar pizzaInventar;
+
 
     private float xRotation;
     private float sensitivity = 50f;
@@ -40,7 +42,6 @@ public class PlayerMovement : MonoBehaviour
     private float timer = 0.00f;
     private float x, y;
     private int currentThrows;
-    private int currentPizzaAmo;
     private Vector3 normalVector = Vector3.up;
     private bool readyToThrow;
     private Rigidbody rb;
@@ -56,8 +57,8 @@ public class PlayerMovement : MonoBehaviour
         Cursor.visible = false;
         readyToThrow = true;
         currentThrows = maxThrows;
-        currentPizzaAmo = maxPizzaAmo;
-        GameObject.Find("Canvas").GetComponentInChildren<TextMeshProUGUI>().text = currentPizzaAmo.ToString(); // Setting initial PizzaAmmo
+        pizzaInventar = GetComponent<PizzaInventar>();
+        pizzaInventar.InitializeInventory();
     }
 
 
@@ -82,22 +83,34 @@ public class PlayerMovement : MonoBehaviour
 
         if (Input.GetButtonUp("Fire1"))
         {
+            Debug.Log("Start throw with: " + pizzaInventar.GetEquippedPizza() + "Current ammo: " + pizzaInventar.GetPizzaAmmo(pizzaInventar.GetEquippedPizza()));
+
             if (Time.time - timer < 1.00f)
             {
                 // Throw(pizzas[0]);// Slice Pizza
-                Throw(PizzaType.Cheese, false);
+                Throw(pizzaInventar.GetEquippedPizza(), false);
             }
             else
             {
-                if (currentPizzaAmo >= 8)
+                if (pizzaInventar.GetPizzaAmmo(pizzaInventar.GetEquippedPizza()) >= 8)
                     // Throw(pizzas[1]);// Full Pizza, only thrown, when there are 8 or more pieces left.
-                    Throw(PizzaType.Cheese, true);
+                    Throw(pizzaInventar.GetEquippedPizza(), true);
                 // TODO: Should probably refactor to only pass in whether thrown pizza is box or not
                 // TODO: Let Throw method handle which type of Pizza is thrown
                 else
                     // Throw(pizzas[0]);// Slice Pizza thrown instead when 7 or less slices are left.
-                    Throw(PizzaType.Cheese, false);
+                    Throw(pizzaInventar.GetEquippedPizza(), false);
             }
+        }
+
+        // Check for key inputs to switch pizza types
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            pizzaInventar.SwitchPizzaForward(); // Switch to the next pizza
+        }
+        else if (Input.GetKeyDown(KeyCode.Q))
+        {
+            pizzaInventar.SwitchPizzaBackward(); // Switch to the previous pizza
         }
     }
 
@@ -249,50 +262,22 @@ public class PlayerMovement : MonoBehaviour
         grounded = false;
     }
 
-    private void Throw(GameObject objectToThrow)
-    {
-        // Check if pizzas stocked
-        if (currentPizzaAmo > 0)
-        {
-            readyToThrow = false;
-
-            GameObject projectile = Instantiate(objectToThrow, attackPoint.position, playerCam.GetChild(0).rotation);
-            Rigidbody projectileRb = projectile.GetComponent<Rigidbody>();
-            Vector3 forceDirection = playerCam.GetChild(0).transform.forward;
-            RaycastHit hit;
-
-            if (Physics.Raycast(playerCam.GetChild(0).position, playerCam.GetChild(0).forward, out hit, 500f))
-                forceDirection = (hit.point - attackPoint.position).normalized;
-
-            Vector3 forceToAdd = forceDirection * throwForce + transform.up * throwUpwardForce;
-            projectileRb.AddForce(forceToAdd, ForceMode.Impulse);
-            currentThrows--;
-            Invoke(nameof(ResetThrow), throwCooldown);
-
-            // TODO: Call pizza deduct method
-            LosingPizzas(objectToThrow);
-            // GameObject.Find("Canvas").GetComponentInChildren<TextMeshProUGUI>().text = "Hi";
-
-            // If pizza count < 0 you can't throw
-        }
-        // TODO? - Else, if Amo is empty, display text?
-
-    }
-
     private void Throw(PizzaType pizzaType, bool isBox)
     {
-        // TODO: Needs to check ammo for specific type of pizza
         // TODO: Pizza creation logic could be moved to factory
-        if (pizzaType == PizzaType.Cheese)
+        Debug.Log("Pizza type to throw: " + pizzaType + "Current ammo: " + pizzaInventar.GetPizzaAmmo(pizzaInventar.GetEquippedPizza()));
+
+        if (pizzaInventar.GetPizzaAmmo(pizzaInventar.GetEquippedPizza()) > 0)
         {
             readyToThrow = false;
-            
             var prefab = isBox ? pizzaBoxPrefab : pizzaSlicePrefab;
             var quantity = isBox ? 8 : 1;
-            var cheesePizza = new CheesePizza(quantity);
+            var pizzaToThrow = CreatePizzaToThrow(pizzaInventar.GetEquippedPizza(), quantity);
+            //TODO Create Pizza to throw
+            pizzaInventar.LosePizzas(quantity);
 
             var projectile = Instantiate(prefab, attackPoint.position, playerCam.GetChild(0).rotation);
-            projectile.GetComponent<ThrowablePizza>().Initialize(cheesePizza);
+            projectile.GetComponent<ThrowablePizza>().Initialize(pizzaToThrow);
             var projectileRb = projectile.GetComponent<Rigidbody>();
             var forceDirection = playerCam.GetChild(0).transform.forward;
             RaycastHit hit;
@@ -304,42 +289,37 @@ public class PlayerMovement : MonoBehaviour
             projectileRb.AddForce(forceToAdd, ForceMode.Impulse);
             currentThrows--;
             Invoke(nameof(ResetThrow), throwCooldown);
-
-            // TODO: Remove from appropriate PizzaType ammi
         }
     }
 
-    public void LosingPizzas(GameObject objectThrown)
+    private IPizza CreatePizzaToThrow(PizzaType pizzaTypeToThrow, int quantity) 
     {
-        bool fullPizzaShot = false;
-        if (objectThrown.name == "Pizza (Whole)") // Check if full pizza was thrown
-            fullPizzaShot = true;
+        Debug.Log("Pizza of type: " + pizzaTypeToThrow + " will be created to throw.");
+        switch (pizzaTypeToThrow)
+        {
+            case PizzaType.Cheese:
+                var cheesePizzaToThrow = new CheesePizza(quantity);
+                return cheesePizzaToThrow;
 
-        // Deduct pizzas while shooting
-        if (fullPizzaShot)
-            SetCurrentPizzaAmo(-8); // Full Pizza thrown: 8 slices lost
+            case PizzaType.Pineapple:
+                var pineapplePizzaToThrow = new PineapplePizza(quantity);
+                return pineapplePizzaToThrow;
 
-        else
-            SetCurrentPizzaAmo(-1); // Only a slice thrown: 1 slice lost
-    }
+            case PizzaType.Mushroom:
+                var mushroomPizzaToThrow = new MushroomPizza(quantity);
+                return mushroomPizzaToThrow;
 
-    public int GetCurrentPizzaAmo()
-    { return currentPizzaAmo; }
-    public void SetCurrentPizzaAmo(int change)
-    {
-        if (currentPizzaAmo + change > 40)
-            currentPizzaAmo = 40;
-        else if (currentPizzaAmo + change < 0)
-            currentPizzaAmo = 0;
-        else
-            currentPizzaAmo = currentPizzaAmo + change;
-        GameObject.Find("Canvas").GetComponentInChildren<TextMeshProUGUI>().text = currentPizzaAmo.ToString();
+            default:
+                Debug.LogError("Unknown pizza type selected!");
+                break;
+        }
+        return new CheesePizza(quantity); //base Pizza to throw
     }
 
     public void Restocking()
     {
         // Restocking pizzas to max order amount
-        SetCurrentPizzaAmo(maxPizzaAmo);
+        pizzaInventar.RestockPizzas();
     }
 
     private void ResetThrow()
