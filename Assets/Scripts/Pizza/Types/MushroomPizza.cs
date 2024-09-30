@@ -4,8 +4,8 @@ public class MushroomPizza : IPizza
     public PizzaType Type => PizzaType.Mushroom;
     public int Quantity { get; }
     public float Damage => 15;
-    public float Healing => 15;
-    public IEffect PlayerEffect { get; }
+    public float Healing => 10;
+    public IEffect PlayerEffect => new RegenEffect();
     public IEffect CustomerEffect => new StunEffect();
 
     public MushroomPizza(int quantity)

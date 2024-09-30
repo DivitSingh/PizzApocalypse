@@ -4,44 +4,40 @@ using UnityEngine;
 public class PlayerHealth : MonoBehaviour
 {
     [SerializeField] private float startingHealth = 100f;
-    private float currentHealth;
+
+    private float _currentHealth; // Backing Field
+    private float CurrentHealth
+    {
+        get => _currentHealth;
+        set
+        {
+            _currentHealth = value;
+            OnHpPctChanged?.Invoke(CurrentHpPct);
+        }
+    }
+
     public event Action<float> OnHpPctChanged;
     public event Action OnDeath;
-    [SerializeField] private UnityEngine.UI.Text debugText;
 
     private void Start()
     {
-        currentHealth = startingHealth;
-        UpdateDebugText();
+        _currentHealth = startingHealth;
         OnHpPctChanged?.Invoke(CurrentHpPct); // Add this line
     }
 
-    private float CurrentHpPct => Mathf.Max(0, currentHealth / startingHealth);
+    private float CurrentHpPct => Mathf.Max(0, CurrentHealth / startingHealth);
 
     public void TakeDamage(float damage)
     {
-        currentHealth -= damage;
-        OnHpPctChanged?.Invoke(CurrentHpPct);
-        Debug.Log($"Player took {damage} damage. Current health: {currentHealth}");
-        UpdateDebugText();
-
-        if (currentHealth <= 0)
+        CurrentHealth -= damage;
+        if (CurrentHealth <= 0)
         {
             OnDeath?.Invoke();
-            Debug.Log("Player died!");
         }
     }
 
-    private void UpdateDebugText()
+    public void Heal(float amount)
     {
-        if (debugText != null)
-        {
-            debugText.text = $"Health: {currentHealth} / {startingHealth}";
-        }
-    }
-
-    public void TestDamage(float amount)
-    {
-        TakeDamage(amount);
+        CurrentHealth = Mathf.Min(CurrentHealth + amount, startingHealth);
     }
 }

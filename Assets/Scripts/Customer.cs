@@ -277,7 +277,6 @@ public class Customer : MonoBehaviour
                 }
                 StopAllCoroutines();
                 Destroy(gameObject);
-                // return;
             }
             
             if (pizza.CustomerEffect != null)
@@ -308,9 +307,7 @@ public class Customer : MonoBehaviour
             .FirstOrDefault(t => t.Type == effect.Type && t.AffectedStat == effect.AffectedStat);
         if (existingEffect != null)
         {
-            Debug.Log($"Updating effect duration, Previous = {existingEffect.Duration}");
             existingEffect.Duration = Math.Max(existingEffect.Duration, effect.Duration);
-            Debug.Log($"NEw duration = {existingEffect.Duration}");
             yield break;
         }
         
@@ -344,6 +341,7 @@ public class Customer : MonoBehaviour
             case Stat.Speed:
                 if (effect.Type == EffectType.Multiplier)
                 {
+                    // TODO: If slowness is eventually added, will need to modify animator speed instead of disabling it
                     agent.speed *= effect.Value;
                     animator.enabled = false;
                 }

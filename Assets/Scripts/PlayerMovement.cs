@@ -1,5 +1,7 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using TMPro;
 using UnityEngine.InputSystem;
@@ -45,6 +47,9 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 normalVector = Vector3.up;
     private bool readyToThrow;
     private Rigidbody rb;
+    private PlayerHealth playerHealth;
+
+    private List<IEffect> activeEffects = new List<IEffect>();
 
     void Awake()
     {
@@ -57,6 +62,7 @@ public class PlayerMovement : MonoBehaviour
         Cursor.visible = false;
         readyToThrow = true;
         currentThrows = maxThrows;
+        playerHealth = GetComponent<PlayerHealth>();
         pizzaInventar = GetComponent<PizzaInventar>();
         pizzaInventar.InitializeInventory();
     }
@@ -101,6 +107,12 @@ public class PlayerMovement : MonoBehaviour
                     // Throw(pizzas[0]);// Slice Pizza thrown instead when 7 or less slices are left.
                     Throw(pizzaInventar.GetEquippedPizza(), false);
             }
+        }
+        
+        // Check for consuming pizza
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            Eat();
         }
 
         // Check for key inputs to switch pizza types
@@ -328,4 +340,59 @@ public class PlayerMovement : MonoBehaviour
         readyToThrow = true;
     }
 
+    /// <summary>
+    /// Handles the functionality for eating the currently selected pizza.
+    /// </summary>
+    private void Eat()
+    {
+        var pizzaType = pizzaInventar.GetEquippedPizza();
+        if (pizzaInventar.GetPizzaAmmo(pizzaType) == 0) return;
+        
+        // TODO: Move pizza creation logic to factory class
+        IPizza pizza = PizzaFactory.CreatePizza(pizzaType);
+        playerHealth.Heal(pizza.Healing);
+        pizzaInventar.LosePizzas(1);
+        StartCoroutine(StartEffect(pizza.PlayerEffect));
+    }
+    
+    private IEnumerator StartEffect(IEffect effect)
+    {
+        if (effect == null) yield break;
+        
+        // Check for existing effect
+        var existingEffect =
+            activeEffects.FirstOrDefault(e => e.Type == effect.Type && e.AffectedStat == effect.AffectedStat);
+        if (existingEffect != null)
+        {
+            existingEffect.Duration = Math.Max(effect.Duration, existingEffect.Duration);
+            yield break;
+        }
+        
+        activeEffects.Add(effect);
+        while (effect.Duration > 0)
+        {
+            ApplyEffect(effect);
+            effect.Duration--;
+            yield return new WaitForSeconds(1);
+        }
+
+        activeEffects.Remove(effect);
+    }
+
+    /// <summary>
+    /// Handles the application of any given effect.
+    /// </summary>
+    /// <param name="effect"></param>
+    private void ApplyEffect(IEffect effect)
+    {
+        // NOTE: Currently only handles Regen
+        Debug.Log("IN apply effect");
+        switch (effect.AffectedStat)
+        {
+            case Stat.Health:
+                if (effect.Type == EffectType.ConstantIncrease) playerHealth.Heal(effect.Value);
+            _:
+                break;
+        }
+    }
 }
