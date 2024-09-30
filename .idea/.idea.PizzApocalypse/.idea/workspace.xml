@@ -4,34 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fe648da1-4e18-4187-bf7f-b948f2246c1d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Pizza.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Pizza/Effects.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Pizza/Effects/EffectType.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Pizza/Effects/EffectType.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Pizza/Effects/IEffect.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Pizza/Effects/IEffect.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Pizza/Effects/Stat.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Pizza/Effects/Stat.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Pizza/Temp.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Pizza/Temp.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Pizza/ThrowablePizza.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Pizza/ThrowablePizza.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Pizza/Types.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Pizza/Types/CheesePizza.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Pizza/Types/CheesePizza.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Pizza/Types/IPizza.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Pizza/Types/IPizza.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Pizza/Types/PizzaType.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Pizza/Types/PizzaType.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.PizzApocalypse/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.PizzApocalypse/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Customer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Customer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/PizzaPlace.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Pizza/PizzaPlace.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/PizzaPlace.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Pizza/PizzaPlace.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/PizzaSlice.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Pizza/PizzaSlice.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/PizzaSlice.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Pizza/PizzaSlice.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/PlayerMovement.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/PlayerMovement.cs" afterDir="false" />
-    </list>
+    <list default="true" id="fe648da1-4e18-4187-bf7f-b948f2246c1d" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -144,7 +117,7 @@
       <workItem from="1727228683425" duration="518000" />
       <workItem from="1727467704347" duration="15200000" />
       <workItem from="1727532349426" duration="175000" />
-      <workItem from="1727624694318" duration="2398000" />
+      <workItem from="1727624694318" duration="3207000" />
     </task>
     <servers />
   </component>

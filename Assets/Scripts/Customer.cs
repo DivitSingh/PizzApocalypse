@@ -1,5 +1,7 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
@@ -8,8 +10,8 @@ using UnityEngine.UI;
 public class Customer : MonoBehaviour
 {
     [Header("Stats")]
-    [SerializeField] private int maxHealth = 100;
-    [SerializeField] private int health;
+    [SerializeField] private float maxHealth = 100f;
+    [SerializeField] private float health;
     [SerializeField] private float waitingTime = 3f;
     [SerializeField] private float attackDamage = 20f;
 
@@ -21,7 +23,6 @@ public class Customer : MonoBehaviour
     [SerializeField] private GameObject circularTimerPrefab;
     private CircularTimer circularTimer;
 
-
     [Header("Audio")]
     [SerializeField] private AudioClip rageSound;
     [SerializeField] private AudioClip hurtSound;
@@ -29,11 +30,14 @@ public class Customer : MonoBehaviour
     [SerializeField] private AudioClip happySound;
 
     private NavMeshAgent agent;
+    private float agentBaseSpeed;
     private Animator animator;
     private BoxCollider boxCollider;
     private Transform player;
     private State state = State.Hungry;
-
+    
+    private List<IEffect> activeEffects = new List<IEffect>();
+    
     private enum State
     {
         Angry,
@@ -47,6 +51,7 @@ public class Customer : MonoBehaviour
         boxCollider = GetComponentInChildren<BoxCollider>();
         player = GameObject.Find("Player").transform;
         health = maxHealth;
+        agentBaseSpeed = agent.speed;
         CreateCircularTimer();
         StartCoroutine(Waiting());
     }
@@ -244,8 +249,6 @@ public class Customer : MonoBehaviour
 
     public void ReceivePizza(IPizza pizza)
     {
-        Debug.Log("Called");
-        // TODO: Implement logic here
         if (state == State.Hungry)
         {
             // TODO: Check if pizza type matches order
@@ -262,8 +265,7 @@ public class Customer : MonoBehaviour
         }
         else
         {
-            // TODO: Should health not be float?
-            health -= (int) pizza.Damage;
+            health -= pizza.Damage;
             UpdateHealthBar();
             if (health <= 0)
             {
@@ -273,7 +275,14 @@ public class Customer : MonoBehaviour
                 {
                     Destroy(circularTimer.gameObject);
                 }
+                StopAllCoroutines();
                 Destroy(gameObject);
+                // return;
+            }
+            
+            if (pizza.CustomerEffect != null)
+            {
+                StartCoroutine(StartEffect(pizza.CustomerEffect));
             }
         }
     }
@@ -289,4 +298,72 @@ public class Customer : MonoBehaviour
             Destroy(healthBar.gameObject);
         }
     }
+
+    #region Effects
+    
+    private IEnumerator StartEffect(IEffect effect)
+    {
+        // Check if effect is duplicate
+        var existingEffect = activeEffects
+            .FirstOrDefault(t => t.Type == effect.Type && t.AffectedStat == effect.AffectedStat);
+        if (existingEffect != null)
+        {
+            Debug.Log($"Updating effect duration, Previous = {existingEffect.Duration}");
+            existingEffect.Duration = Math.Max(existingEffect.Duration, effect.Duration);
+            Debug.Log($"NEw duration = {existingEffect.Duration}");
+            yield break;
+        }
+        
+        // Effect is not duplicate, repeat effect while it is active
+        activeEffects.Add(effect);
+        while (effect.Duration > 0)
+        {
+            ApplyEffect(effect);
+            effect.Duration--;
+            yield return new WaitForSeconds(1);
+        }
+
+        activeEffects.Remove(effect);
+        CleanupEffect(effect);
+    }
+
+    /// <summary>
+    /// Handles the application of a given effect.
+    /// </summary>
+    /// <param name="effect"></param>
+    private void ApplyEffect(IEffect effect)
+    {
+        switch (effect.AffectedStat)
+        {
+            case Stat.Health:
+                if (effect.Type == EffectType.Multiplier) return; // This should not be possible, assuming only decrease
+                if (effect.Type == EffectType.ConstantDecrease) health -= effect.Value;
+                if (effect.Type == EffectType.ConstantIncrease) health += effect.Value;
+                UpdateHealthBar(); // TODO: Should do this automatically when health changes, add setter
+                break;
+            case Stat.Speed:
+                if (effect.Type == EffectType.Multiplier)
+                {
+                    agent.speed *= effect.Value;
+                    animator.enabled = false;
+                }
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Performs the necessary cleanup when the given effect has finished.
+    /// </summary>
+    /// <param name="effect"></param>
+    private void CleanupEffect(IEffect effect)
+    {
+        // NOTE: This is currently only for stun effect, may be extended later
+        if (effect.AffectedStat == Stat.Speed && effect.Value == 0)
+        {
+            agent.speed = agentBaseSpeed;
+            animator.enabled = true;
+        }
+    }
+
+    #endregion
 }

@@ -20,8 +20,6 @@ public class CustomerSpawner : MonoBehaviour
             .Where(t => t.CompareTag("SpawnPoint"))
             .ToArray();
 
-        Debug.Log($"Found {spawnPoints.Length} spawn points");
-
         if (spawnPoints.Length == 0)
         {
             Debug.LogError("No spawn points found! Make sure your spawn points are tagged with 'SpawnPoint'");

@@ -1,5 +1,6 @@
 public enum PizzaType
 {
     Cheese,
-    Pineapple
+    Mushroom,
+    Pineapple,
 }

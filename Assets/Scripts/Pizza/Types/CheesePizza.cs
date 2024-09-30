@@ -1,4 +1,4 @@
-public class CheesePizza : IPizza
+public struct CheesePizza : IPizza
 {
     public PizzaType Type => PizzaType.Cheese;
     public int Quantity { get; }
