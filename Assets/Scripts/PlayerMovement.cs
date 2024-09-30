@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using TMPro;
 using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
@@ -82,12 +81,12 @@ public class PlayerMovement : MonoBehaviour
         MyInput();
         Look();
 
-        if (Input.GetButtonDown("Fire1") && readyToThrow && maxThrows > 0)
+        if (Input.GetButtonDown("Fire") && readyToThrow && maxThrows > 0)
         {
             timer = Time.time;
         }
 
-        if (Input.GetButtonUp("Fire1"))
+        if (Input.GetButtonUp("Fire"))
         {
             Debug.Log("Start throw with: " + pizzaInventar.GetEquippedPizza() + "Current ammo: " + pizzaInventar.GetPizzaAmmo(pizzaInventar.GetEquippedPizza()));
 
@@ -108,19 +107,19 @@ public class PlayerMovement : MonoBehaviour
                     Throw(pizzaInventar.GetEquippedPizza(), false);
             }
         }
-        
+
         // Check for consuming pizza
-        if (Input.GetKeyDown(KeyCode.F))
+        if (Input.GetButtonDown("Consume"))
         {
             Eat();
         }
 
         // Check for key inputs to switch pizza types
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetButtonDown("Swap Forward"))
         {
             pizzaInventar.SwitchPizzaForward(); // Switch to the next pizza
         }
-        else if (Input.GetKeyDown(KeyCode.Q))
+        else if (Input.GetButtonDown("Swap Backward"))
         {
             pizzaInventar.SwitchPizzaBackward(); // Switch to the previous pizza
         }
@@ -293,7 +292,7 @@ public class PlayerMovement : MonoBehaviour
             var projectileRb = projectile.GetComponent<Rigidbody>();
             var forceDirection = playerCam.GetChild(0).transform.forward;
             RaycastHit hit;
-            
+
             if (Physics.Raycast(playerCam.GetChild(0).position, playerCam.GetChild(0).forward, out hit, 500f))
                 forceDirection = (hit.point - attackPoint.position).normalized;
 
@@ -304,7 +303,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private IPizza CreatePizzaToThrow(PizzaType pizzaTypeToThrow, int quantity) 
+    private IPizza CreatePizzaToThrow(PizzaType pizzaTypeToThrow, int quantity)
     {
         Debug.Log("Pizza of type: " + pizzaTypeToThrow + " will be created to throw.");
         switch (pizzaTypeToThrow)
@@ -347,18 +346,18 @@ public class PlayerMovement : MonoBehaviour
     {
         var pizzaType = pizzaInventar.GetEquippedPizza();
         if (pizzaInventar.GetPizzaAmmo(pizzaType) == 0) return;
-        
+
         // TODO: Move pizza creation logic to factory class
         IPizza pizza = PizzaFactory.CreatePizza(pizzaType);
         playerHealth.Heal(pizza.Healing);
         pizzaInventar.LosePizzas(1);
         StartCoroutine(StartEffect(pizza.PlayerEffect));
     }
-    
+
     private IEnumerator StartEffect(IEffect effect)
     {
         if (effect == null) yield break;
-        
+
         // Check for existing effect
         var existingEffect =
             activeEffects.FirstOrDefault(e => e.Type == effect.Type && e.AffectedStat == effect.AffectedStat);
@@ -367,7 +366,7 @@ public class PlayerMovement : MonoBehaviour
             existingEffect.Duration = Math.Max(effect.Duration, existingEffect.Duration);
             yield break;
         }
-        
+
         activeEffects.Add(effect);
         while (effect.Duration > 0)
         {
@@ -391,7 +390,7 @@ public class PlayerMovement : MonoBehaviour
         {
             case Stat.Health:
                 if (effect.Type == EffectType.ConstantIncrease) playerHealth.Heal(effect.Value);
-            _:
+                _:
                 break;
         }
     }
