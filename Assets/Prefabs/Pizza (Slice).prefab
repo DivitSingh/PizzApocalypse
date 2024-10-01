@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: 4453904108256345216}
   - component: {fileID: 5839515296804672384}
   - component: {fileID: 4124705140852772772}
-  - component: {fileID: 1938246055076094}
   - component: {fileID: -3877075550711342815}
+  - component: {fileID: 1938246055076094}
   m_Layer: 0
   m_Name: Pizza (Slice)
   m_TagString: Untagged
@@ -128,6 +128,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 10
+--- !u!114 &-3877075550711342815
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7595248782288383234}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a6fe47fc07b49bda9eec5c243aad5f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!65 &1938246055076094
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -149,15 +161,3 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.33577707, y: 0.04782318, z: 0.23812625}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &-3877075550711342815
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7595248782288383234}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1a6fe47fc07b49bda9eec5c243aad5f9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

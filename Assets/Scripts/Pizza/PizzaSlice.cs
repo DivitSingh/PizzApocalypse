@@ -14,17 +14,6 @@ public class PizzaSlice : MonoBehaviour
         time = Time.time;
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        return;
-        if (other.gameObject.GetComponent<Customer>() != null)
-        {
-            Customer currentCustomer = other.gameObject.GetComponent<Customer>();
-            currentCustomer.ReceivePizza(damage);
-            Destroy(gameObject);
-        }
-    }
-
     // Update is called once per frame
     void Update()
     {

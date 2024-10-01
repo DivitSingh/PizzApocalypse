@@ -40,9 +40,9 @@ public class Customer : MonoBehaviour
     private BoxCollider boxCollider;
     private Transform player;
     private State state = State.Hungry;
-    
+
     private List<IEffect> activeEffects = new List<IEffect>();
-    
+
     private enum State
     {
         Angry,
@@ -302,41 +302,6 @@ public class Customer : MonoBehaviour
         }
     }
 
-    public void ReceivePizza(int damage)
-    {
-        return;
-        if (state == State.Angry)
-        {
-            health -= damage;
-            UpdateHealthBar();
-            if (health <= 0)
-            {
-                GameObject.Find("Audio Source").GetComponent<AudioSource>().PlayOneShot(dieSound);
-                Destroy(healthBar.gameObject);
-                if (circularTimer != null)
-                {
-                    Destroy(circularTimer.gameObject);
-                }
-                Destroy(gameObject);
-            }
-            else
-                GameObject.Find("Audio Source").GetComponent<AudioSource>().PlayOneShot(hurtSound);
-        }
-        else if (state == State.Hungry)
-        {
-            GameObject.Find("Audio Source").GetComponent<AudioSource>().PlayOneShot(happySound);
-            StopCoroutine(Waiting());
-            GameManager.Instance.HandleFedCustomerScoring(this);
-
-            if (circularTimer != null)
-            {
-                Destroy(circularTimer.gameObject);
-            }
-
-            Destroy(gameObject);
-        }
-    }
-
     public void ReceivePizza(IPizza pizza)
     {
         if (state == State.Angry)
@@ -351,18 +316,22 @@ public class Customer : MonoBehaviour
                 {
                     Destroy(circularTimer.gameObject);
                 }
+                StopAllCoroutines();
                 DestroyOrderDisplay();
                 Destroy(gameObject);
             }
             else
+            {
+                StartCoroutine(StartEffect(pizza.CustomerEffect));
                 GameObject.Find("Audio Source").GetComponent<AudioSource>().PlayOneShot(hurtSound);
+            }
         }
         else if (state == State.Hungry)
         {
             if (pizza.Type == currentOrder.PizzaType)
             {
                 GameObject.Find("Audio Source").GetComponent<AudioSource>().PlayOneShot(happySound);
-                StopCoroutine(Waiting());
+                StopAllCoroutines();
                 GameManager.Instance.HandleFedCustomerScoring(this);
                 if (circularTimer != null)
                 {
@@ -404,7 +373,7 @@ public class Customer : MonoBehaviour
             existingEffect.Duration = Math.Max(existingEffect.Duration, effect.Duration);
             yield break;
         }
-        
+
         // Effect is not duplicate, repeat effect while it is active
         activeEffects.Add(effect);
         while (effect.Duration > 0)
