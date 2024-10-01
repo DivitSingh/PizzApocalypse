@@ -71,7 +71,6 @@ public class CustomerSpawner : MonoBehaviour
         var spawnPoint = availableSpawnPoints[index];
 
         GameObject enemy = Instantiate(enemyPrefab, spawnPoint.position, Quaternion.identity);
-
         Customer customer = enemy.GetComponent<Customer>();
         if (customer != null && healthBarCanvas != null)
         {

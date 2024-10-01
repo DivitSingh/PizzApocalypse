@@ -14,6 +14,11 @@ public class Customer : MonoBehaviour
     [SerializeField] private float health;
     [SerializeField] private float waitingTime = 3f;
     [SerializeField] private float attackDamage = 20f;
+    [SerializeField] private Order currentOrder;
+
+    [SerializeField] private GameObject orderDisplayPrefab;
+    [SerializeField] private Vector3 orderDisplayOffset = new Vector3(0, 2.5f, 0);
+    private OrderDisplay orderDisplay;
 
     [Header("UI")]
     [SerializeField] private GameObject healthBarPrefab;
@@ -53,7 +58,69 @@ public class Customer : MonoBehaviour
         health = maxHealth;
         agentBaseSpeed = agent.speed;
         CreateCircularTimer();
+        GenerateRandomOrder();
+        UpdateOrderDisplay();
         StartCoroutine(Waiting());
+    }
+
+    private void GenerateRandomOrder()
+    {
+        PizzaType randomType = (PizzaType)UnityEngine.Random.Range(0, System.Enum.GetValues(typeof(PizzaType)).Length);
+        currentOrder = new Order(randomType);
+    }
+
+    private void UpdateOrderDisplay()
+    {
+        if (orderDisplay != null)
+        {
+            orderDisplay.UpdateOrderDisplay(currentOrder.PizzaType);
+        }
+        else
+        {
+            Debug.LogWarning("OrderDisplay is null when trying to update!");
+        }
+    }
+
+    private void UpdateOrderUI()
+    {
+        if (orderDisplay != null)
+        {
+            orderDisplay.UpdateOrderDisplay(currentOrder.PizzaType);
+        }
+        else
+        {
+            Debug.LogWarning("Tried to update order display, but it's null!");
+        }
+    }
+
+    private void CreateOrderDisplay()
+    {
+        Debug.Log($"Creating order display. Prefab assigned: {orderDisplayPrefab != null}");
+
+        if (orderDisplayPrefab == null)
+        {
+            Debug.LogError("Order Display Prefab is not assigned in the Customer script!");
+            return;
+        }
+
+        if (healthBarCanvas == null)
+        {
+            Debug.LogError("Health Bar Canvas is not set for this Customer!");
+            return;
+        }
+
+        GameObject orderDisplayObject = Instantiate(orderDisplayPrefab, healthBarCanvas.transform);
+        orderDisplay = orderDisplayObject.GetComponent<OrderDisplay>();
+        if (orderDisplay == null)
+        {
+            Debug.LogError("OrderDisplay component not found on the instantiated prefab!");
+            return;
+        }
+
+        orderDisplay.SetTarget(transform);
+        orderDisplay.offset = orderDisplayOffset;
+
+        Debug.Log($"Order display created for customer at {transform.position}");
     }
 
     private void Update()
@@ -69,6 +136,19 @@ public class Customer : MonoBehaviour
         else
             Chase();
     }
+
+    public void SetOrder(Order order)
+    {
+        currentOrder = order;
+        UpdateOrderUI();
+    }
+
+    public void SetOrderDisplayPrefab(GameObject prefab)
+    {
+        orderDisplayPrefab = prefab;
+        CreateOrderDisplay();
+    }
+
 
     private void CreateCircularTimer()
     {
@@ -148,13 +228,23 @@ public class Customer : MonoBehaviour
         state = State.Angry;
         GameObject.Find("Audio Source").GetComponent<AudioSource>().PlayOneShot(rageSound);
         CreateHealthBar();
+        DestroyOrderDisplay();
         Chase();
     }
 
+    private void DestroyOrderDisplay()
+    {
+        if (orderDisplay != null)
+        {
+            Destroy(orderDisplay.gameObject);
+            orderDisplay = null;
+        }
+    }
 
     public void SetHealthBarCanvas(Canvas canvas)
     {
         healthBarCanvas = canvas;
+        CreateOrderDisplay();
     }
 
     private void CreateHealthBar()
@@ -249,21 +339,7 @@ public class Customer : MonoBehaviour
 
     public void ReceivePizza(IPizza pizza)
     {
-        if (state == State.Hungry)
-        {
-            // TODO: Check if pizza type matches order
-            GameObject.Find("Audio Source").GetComponent<AudioSource>().PlayOneShot(happySound);
-            StopCoroutine(Waiting());
-            GameManager.Instance.HandleFedCustomerScoring(this);
-
-            if (circularTimer != null)
-            {
-                Destroy(circularTimer.gameObject);
-            }
-
-            Destroy(gameObject);
-        }
-        else
+        if (state == State.Angry)
         {
             health -= pizza.Damage;
             UpdateHealthBar();
@@ -275,13 +351,30 @@ public class Customer : MonoBehaviour
                 {
                     Destroy(circularTimer.gameObject);
                 }
-                StopAllCoroutines();
+                DestroyOrderDisplay();
                 Destroy(gameObject);
             }
-            
-            if (pizza.CustomerEffect != null)
+            else
+                GameObject.Find("Audio Source").GetComponent<AudioSource>().PlayOneShot(hurtSound);
+        }
+        else if (state == State.Hungry)
+        {
+            if (pizza.Type == currentOrder.PizzaType)
             {
-                StartCoroutine(StartEffect(pizza.CustomerEffect));
+                GameObject.Find("Audio Source").GetComponent<AudioSource>().PlayOneShot(happySound);
+                StopCoroutine(Waiting());
+                GameManager.Instance.HandleFedCustomerScoring(this);
+                if (circularTimer != null)
+                {
+                    Destroy(circularTimer.gameObject);
+                }
+                DestroyOrderDisplay();
+                Destroy(gameObject);
+            }
+            else
+            {
+                // Wrong pizza type, do nothing
+                Debug.Log($"Customer received wrong pizza. Wanted: {currentOrder.PizzaType}, Got: {pizza.Type}");
             }
         }
     }
@@ -296,10 +389,11 @@ public class Customer : MonoBehaviour
         {
             Destroy(healthBar.gameObject);
         }
+        DestroyOrderDisplay();
     }
 
     #region Effects
-    
+
     private IEnumerator StartEffect(IEffect effect)
     {
         // Check if effect is duplicate
