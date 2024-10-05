@@ -27,6 +27,7 @@ public class Customer : MonoBehaviour
     private HealthBar healthBar;
     [SerializeField] private GameObject circularTimerPrefab;
     private CircularTimer circularTimer;
+    [SerializeField] private Sprite angryMarker;
 
     [Header("Audio")]
     [SerializeField] private AudioClip rageSound;
@@ -227,6 +228,7 @@ public class Customer : MonoBehaviour
     {
         state = State.Angry;
         GameObject.Find("Audio Source").GetComponent<AudioSource>().PlayOneShot(rageSound);
+        transform.Find("Marker").GetComponent<SpriteRenderer>().sprite = angryMarker;
         CreateHealthBar();
         DestroyOrderDisplay();
         Chase();
