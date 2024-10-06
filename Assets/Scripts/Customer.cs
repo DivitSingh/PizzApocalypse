@@ -324,7 +324,10 @@ public class Customer : MonoBehaviour
             }
             else
             {
-                StartCoroutine(StartEffect(pizza.CustomerEffect));
+                if (pizza.CustomerEffect != null)
+                {
+                    StartCoroutine(StartEffect(pizza.CustomerEffect));
+                }
                 GameObject.Find("Audio Source").GetComponent<AudioSource>().PlayOneShot(hurtSound);
             }
         }

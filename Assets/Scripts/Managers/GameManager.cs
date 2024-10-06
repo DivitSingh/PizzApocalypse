@@ -6,14 +6,15 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
+    [SerializeField] private RoundManager roundManager;
     [SerializeField] private GameObject gameOverScreen;
     [SerializeField] private TMP_Text scoreText;
 
-    private int score = 0;
     private void Awake()
     {
         Instance = this;
         GameObject.FindWithTag("Player").GetComponent<PlayerHealth>().OnDeath += HandleGameOver;
+        roundManager.OnRoundFailed += HandleGameOver;
 
         // Undo changes from paused state
         Time.timeScale = 1;
@@ -28,13 +29,12 @@ public class GameManager : MonoBehaviour
         AudioListener.pause = true;
         Cursor.lockState = CursorLockMode.Confined;
         Cursor.visible = true;
-        Show(score);
+        Show(roundManager.Score);
     }
 
     public void HandleFedCustomerScoring(Customer customer)
     {
-        // TODO: This should eventually be used to differentiate between customer orders
-        score++;
+        roundManager.HandleFedCustomer(customer);
     }
 
     public void Show(int score)

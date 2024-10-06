@@ -35,7 +35,6 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private int maxPizzaAmo = 40;
     private PizzaInventar pizzaInventar;
 
-
     private float xRotation;
     private float sensitivity = 50f;
     private float sensMultiplier = 1f;
