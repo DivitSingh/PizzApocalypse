@@ -31,5 +31,9 @@ public class RoundUI : MonoBehaviour
     {
         // TODO: Update UI for this later (color and format)?
         progressText.text = $"{score} / {passScore}";
+        if (score >= passScore)
+        {
+            progressText.color = Color.green;
+        }
     }
 }

@@ -1,85 +1,96 @@
+using System;
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Random = System.Random;
 
+
+// TODO: Need to be able to spawn with context
+/**
+ * - Don't spawn when game is paused, nor remove time from timer
+ * - Need to know customer stats (Health, Patience, Order Size?)
+ * - Need to know round spawning stats (totalSpawns, spawnInterval)
+ * - Need to know spawn points
+ */
 public class CustomerSpawner : MonoBehaviour
 {
-    [SerializeField] private GameObject enemyPrefab;
-    [SerializeField] private float spawnInterval = 1f;
-    [SerializeField] private float checkRadius = 0.5f;
-    [SerializeField] private Canvas healthBarCanvas;
+    [SerializeField] private GameObject customerPrefab;
+    [SerializeField] private Canvas healthBarCanvas; // TODO: Move this to Customer class?
 
     private Transform[] spawnPoints;
-    private readonly Random _random = new Random();
+    private readonly float checkRadius = 0.5f;
+    private readonly Random random = new Random();
 
-    private void Start()
+    private void Awake()
     {
-        spawnPoints = FindObjectsOfType<Transform>()
-            .Where(t => t.CompareTag("SpawnPoint"))
+        spawnPoints = GameObject.FindGameObjectsWithTag("SpawnPoint")
+            .Select(s => s.transform)
             .ToArray();
-
+        
         if (spawnPoints.Length == 0)
         {
-            Debug.LogError("No spawn points found! Make sure your spawn points are tagged with 'SpawnPoint'");
+            throw new ArgumentException("No spawn points found! Make sure your spawn points are tagged with 'SpawnPoint'");
         }
 
-        if (enemyPrefab == null)
+        if (customerPrefab == null)
         {
-            Debug.LogError("Enemy prefab is not assigned in the CustomerSpawner!");
+            // Debug.LogError("Enemy prefab is not assigned in the CustomerSpawner!");
+            throw new ArgumentException("Customer Prefab cannot be null.");
         }
 
         if (healthBarCanvas == null)
         {
-            Debug.LogError("Health Bar Canvas is not assigned in the CustomerSpawner!");
+            throw new ArgumentException("HealthBar Canvas cannot be null.");
         }
-
-        StartCoroutine(SpawnEnemies());
     }
 
-    private IEnumerator SpawnEnemies()
+    /// <summary>
+    /// This method is called to begin the process of spawning customers.
+    /// </summary>
+    /// <param name="spawnInterval">Rate at which customers spawn.</param>
+    /// <param name="totalSpawns">Total amount of customers to be spawned.</param>
+    /// <param name="health">The starting health for a spawned customer.</param>
+    /// <param name="patience">The patience value for a spawned customer.</param>
+    /// <param name="attackDamage">The amount of damage a customer attack deals to the player.</param>
+    public void StartSpawning(float spawnInterval, int totalSpawns, float health, float patience, float attackDamage)
     {
-        while (true)
+        StartCoroutine(SpawnCustomers(spawnInterval, totalSpawns, health, patience, attackDamage));
+    }
+
+    private IEnumerator SpawnCustomers(float spawnInterval, int totalSpawns, float health, float patience, float attackDamage)
+    {
+        for (int i = 0; i < totalSpawns; i++)
         {
-            SpawnEnemy();
+            SpawnCustomer(health, patience, attackDamage);
             yield return new WaitForSeconds(spawnInterval);
         }
     }
 
-    private void SpawnEnemy()
+    private void SpawnCustomer(float health, float patience, float attackDamage)
     {
-        if (spawnPoints.Length == 0 || enemyPrefab == null)
-        {
-            Debug.LogError("Cannot spawn enemy: missing spawn points or enemy prefab");
-            return;
-        }
-
+        // TODO: What to do if availableSpawnPoints is 0, still need to spawn?
         var availableSpawnPoints = spawnPoints
             .Where(s => Physics.CheckSphere(s.position, checkRadius))
             .ToList();
 
-        Debug.Log($"Available spawn points: {availableSpawnPoints.Count}");
-
-        if (availableSpawnPoints.Count == 0)
-        {
-            Debug.LogWarning("No available spawn points found. Skipping this spawn.");
-            return;
-        }
-
-        var index = _random.Next(0, availableSpawnPoints.Count);
+        var index = random.Next(0, availableSpawnPoints.Count);
         var spawnPoint = availableSpawnPoints[index];
+        
+        var customerObject = Instantiate(customerPrefab, spawnPoint.position, Quaternion.identity);
+        var customer = customerObject.GetComponent<Customer>();
+        if (customer != null)
+        {
+            var order = GenerateOrder();
+            customer.SetHealthBarCanvas(healthBarCanvas); // TODO: Move Canvas code to Customer class
+            customer.Initialize(health, patience, attackDamage, order);
+        }
+    }
 
-        GameObject enemy = Instantiate(enemyPrefab, spawnPoint.position, Quaternion.identity);
-        Customer customer = enemy.GetComponent<Customer>();
-        if (customer != null && healthBarCanvas != null)
-        {
-            customer.SetHealthBarCanvas(healthBarCanvas);
-            Debug.Log($"Spawned customer at {spawnPoint.position}");
-        }
-        else
-        {
-            Debug.LogError("Failed to set health bar canvas for spawned customer!");
-        }
+    private Order GenerateOrder()
+    {
+        // TODO: Add quantity to orders?
+        var pizzaType = (PizzaType) random.Next(0, Enum.GetValues(typeof(PizzaType)).Length);
+        return new Order(pizzaType);
     }
 }

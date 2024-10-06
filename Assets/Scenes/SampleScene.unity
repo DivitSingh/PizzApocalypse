@@ -602,10 +602,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddbd359b9d76407699134185d43f72ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyPrefab: {fileID: 3027856184760074827, guid: 2167ba38fc7de2e4db39401077ecd353,
+  customerPrefab: {fileID: 3027856184760074827, guid: 2167ba38fc7de2e4db39401077ecd353,
     type: 3}
-  spawnInterval: 5
-  checkRadius: 0.5
   healthBarCanvas: {fileID: 1525110932}
 --- !u!114 &83333102
 MonoBehaviour:
@@ -616,11 +614,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 83333098}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 680c7376d8de4dd38cec2a5697e95902, type: 3}
+  m_Script: {fileID: 11500000, guid: 166b7b8951274d909d4cfc60b5da5daa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  customerSpawner: {fileID: 83333101}
   roundDuration: 180
+  spawnInterval: 5
+  totalCustomers: 10
   passScore: 3
+  customerHealth: 100
+  customerPatience: 8
+  customerAttackDmg: 80
 --- !u!1 &165258391
 GameObject:
   m_ObjectHideFlags: 0

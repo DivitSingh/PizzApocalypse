@@ -9,13 +9,6 @@ using UnityEngine.UI;
 [RequireComponent(typeof(NavMeshAgent))]
 public class Customer : MonoBehaviour
 {
-    [Header("Stats")]
-    [SerializeField] private float maxHealth = 100f;
-    [SerializeField] private float health;
-    [SerializeField] private float waitingTime = 3f;
-    [SerializeField] private float attackDamage = 20f;
-    [SerializeField] private Order currentOrder;
-
     [SerializeField] private GameObject orderDisplayPrefab;
     [SerializeField] private Vector3 orderDisplayOffset = new Vector3(0, 2.5f, 0);
     private OrderDisplay orderDisplay;
@@ -34,6 +27,12 @@ public class Customer : MonoBehaviour
     [SerializeField] private AudioClip hurtSound;
     [SerializeField] private AudioClip dieSound;
     [SerializeField] private AudioClip happySound;
+    
+    private float maxHealth;
+    private float health;
+    private float attackDamage;
+    private float patience;
+    private Order order;
 
     private NavMeshAgent agent;
     private float agentBaseSpeed;
@@ -56,41 +55,32 @@ public class Customer : MonoBehaviour
         animator = GetComponent<Animator>();
         boxCollider = GetComponentInChildren<BoxCollider>();
         player = GameObject.Find("Player").transform;
-        health = maxHealth;
         agentBaseSpeed = agent.speed;
+    }
+    
+    // TODO: Add Initialize method
+    public void Initialize(float health, float patience, float attackDamage, Order order)
+    {
+        maxHealth = health;
+        this.health = health;
+        this.patience = patience;
+        this.attackDamage = attackDamage;
+        this.order = order;
+        
         CreateCircularTimer();
-        GenerateRandomOrder();
         UpdateOrderDisplay();
         StartCoroutine(Waiting());
-    }
-
-    private void GenerateRandomOrder()
-    {
-        PizzaType randomType = (PizzaType)UnityEngine.Random.Range(0, System.Enum.GetValues(typeof(PizzaType)).Length);
-        currentOrder = new Order(randomType);
     }
 
     private void UpdateOrderDisplay()
     {
         if (orderDisplay != null)
         {
-            orderDisplay.UpdateOrderDisplay(currentOrder.PizzaType);
+            orderDisplay.UpdateOrderDisplay(order.PizzaType);
         }
         else
         {
             Debug.LogWarning("OrderDisplay is null when trying to update!");
-        }
-    }
-
-    private void UpdateOrderUI()
-    {
-        if (orderDisplay != null)
-        {
-            orderDisplay.UpdateOrderDisplay(currentOrder.PizzaType);
-        }
-        else
-        {
-            Debug.LogWarning("Tried to update order display, but it's null!");
         }
     }
 
@@ -137,20 +127,7 @@ public class Customer : MonoBehaviour
         else
             Chase();
     }
-
-    public void SetOrder(Order order)
-    {
-        currentOrder = order;
-        UpdateOrderUI();
-    }
-
-    public void SetOrderDisplayPrefab(GameObject prefab)
-    {
-        orderDisplayPrefab = prefab;
-        CreateOrderDisplay();
-    }
-
-
+    
     private void CreateCircularTimer()
     {
         if (circularTimerPrefab == null)
@@ -174,7 +151,7 @@ public class Customer : MonoBehaviour
         }
 
         circularTimer.SetTarget(transform);
-        circularTimer.maxTime = waitingTime;
+        circularTimer.maxTime = patience;
         circularTimer.ResetTimer();
 
         Debug.Log($"Circular timer created for customer at {transform.position}");
@@ -183,7 +160,7 @@ public class Customer : MonoBehaviour
     private IEnumerator Waiting()
     {
         state = State.Hungry;
-        yield return new WaitForSeconds(waitingTime);
+        yield return new WaitForSeconds(patience);
         circularTimer.gameObject.SetActive(false);
         BecomeAngry();
     }
@@ -333,7 +310,7 @@ public class Customer : MonoBehaviour
         }
         else if (state == State.Hungry)
         {
-            if (pizza.Type == currentOrder.PizzaType)
+            if (pizza.Type == order.PizzaType)
             {
                 GameObject.Find("Audio Source").GetComponent<AudioSource>().PlayOneShot(happySound);
                 StopAllCoroutines();
@@ -348,7 +325,7 @@ public class Customer : MonoBehaviour
             else
             {
                 // Wrong pizza type, do nothing
-                Debug.Log($"Customer received wrong pizza. Wanted: {currentOrder.PizzaType}, Got: {pizza.Type}");
+                Debug.Log($"Customer received wrong pizza. Wanted: {order.PizzaType}, Got: {pizza.Type}");
             }
         }
     }
