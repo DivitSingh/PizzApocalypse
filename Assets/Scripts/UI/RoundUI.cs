@@ -1,17 +1,28 @@
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class RoundUI : MonoBehaviour
 {
     [SerializeField] private RoundManager roundManager;
-    [SerializeField] private TMP_Text timerText;
-    [SerializeField] private TMP_Text progressText;
 
-    private void Start()
+    [SerializeField] private TMP_Text timerText;
+    [SerializeField] private TMP_Text roundText;
+    [SerializeField] private Slider progressSlider;
+    [SerializeField] private TMP_Text progressText;
+    [SerializeField] private Image progressFill;
+
+    private static readonly Color LowProgressColor = new Color(238f / 255, 85f / 255, 95f / 225);
+    private static readonly Color MidProgressColor = new Color(254f / 255, 215f / 255, 50f / 255);
+    private static readonly Color HighProgressColor = new Color(57f / 255, 229f / 255, 5f / 255);
+
+    private void Awake()
     {
+        progressSlider.value = 0;
         roundManager.OnTimeRemainingChanged += UpdateTimer;
         roundManager.OnProgressChanged += UpdateProgress;
+        roundManager.OnRoundChanged += UpdateRound;
     }
 
     private void UpdateTimer(float timeRemaining)
@@ -22,18 +33,32 @@ public class RoundUI : MonoBehaviour
             return;
         }
         
-        int minutes = Mathf.FloorToInt(timeRemaining / 60);
-        int seconds = Mathf.FloorToInt(timeRemaining % 60);
+        var minutes = Mathf.FloorToInt(timeRemaining / 60);
+        var seconds = Mathf.FloorToInt(timeRemaining % 60);
         timerText.text = $"{minutes:0}:{seconds:00}";
     }
 
     private void UpdateProgress(int score, int passScore)
     {
-        // TODO: Update UI for this later (color and format)?
         progressText.text = $"{score} / {passScore}";
-        if (score >= passScore)
+        var progress = Mathf.InverseLerp(0, passScore, score);
+        progressSlider.value = progress;
+
+        if (progress <= 0.3)
         {
-            progressText.color = Color.green;
+            progressFill.color = LowProgressColor;
+        } else if (progress <= 0.7)
+        {
+            progressFill.color = MidProgressColor;
         }
+        else
+        {
+            progressFill.color = HighProgressColor;
+        }
+    }
+
+    private void UpdateRound(int round)
+    {
+        roundText.text = $"Round {round}";
     }
 }

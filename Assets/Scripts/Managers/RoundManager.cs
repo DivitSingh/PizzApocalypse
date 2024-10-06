@@ -22,6 +22,7 @@ public class RoundManager : MonoBehaviour
     // Events
     public event Action<float> OnTimeRemainingChanged;
     public event Action<int, int> OnProgressChanged;
+    public event Action<int> OnRoundChanged;
     public event Action OnRoundFailed;
     // TODO: Add onRoundPassed event with stats?
 

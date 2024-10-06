@@ -1,18 +1,9 @@
 using System;
 using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using Random = System.Random;
 
-
-// TODO: Need to be able to spawn with context
-/**
- * - Don't spawn when game is paused, nor remove time from timer
- * - Need to know customer stats (Health, Patience, Order Size?)
- * - Need to know round spawning stats (totalSpawns, spawnInterval)
- * - Need to know spawn points
- */
 public class CustomerSpawner : MonoBehaviour
 {
     [SerializeField] private GameObject customerPrefab;
@@ -30,18 +21,17 @@ public class CustomerSpawner : MonoBehaviour
         
         if (spawnPoints.Length == 0)
         {
-            throw new ArgumentException("No spawn points found! Make sure your spawn points are tagged with 'SpawnPoint'");
+            Debug.LogError("No spawn points found! Make sure your spawn points are tagged with 'SpawnPoint'");
         }
 
         if (customerPrefab == null)
         {
-            // Debug.LogError("Enemy prefab is not assigned in the CustomerSpawner!");
-            throw new ArgumentException("Customer Prefab cannot be null.");
+            Debug.LogError("Enemy prefab is not assigned in the CustomerSpawner!");
         }
 
         if (healthBarCanvas == null)
         {
-            throw new ArgumentException("HealthBar Canvas cannot be null.");
+            Debug.LogError("HealthBar Canvas cannot be null.");
         }
     }
 
@@ -70,6 +60,7 @@ public class CustomerSpawner : MonoBehaviour
     private void SpawnCustomer(float health, float patience, float attackDamage)
     {
         // TODO: What to do if availableSpawnPoints is 0, still need to spawn?
+        // FIXME: CheckSphere is not checking properly?
         var availableSpawnPoints = spawnPoints
             .Where(s => Physics.CheckSphere(s.position, checkRadius))
             .ToList();
