@@ -469,6 +469,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   customerPrefab: {fileID: 3027856184760074827, guid: 2167ba38fc7de2e4db39401077ecd353,
     type: 3}
+  customerLayerMask:
+    serializedVersion: 2
+    m_Bits: 256
   healthBarCanvas: {fileID: 1525110932}
 --- !u!114 &83333102
 MonoBehaviour:
@@ -483,13 +486,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   customerSpawner: {fileID: 83333101}
-  roundDuration: 20
+  roundDuration: 30
   spawnInterval: 5
-  totalCustomers: 2
+  totalCustomers: 5
   passScore: 1
   customerHealth: 100
   customerPatience: 8
-  customerAttackDmg: 80
+  customerAttackDmg: 20
 --- !u!1 &165258391
 GameObject:
   m_ObjectHideFlags: 0

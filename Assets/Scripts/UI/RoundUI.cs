@@ -1,4 +1,4 @@
-using System;
+using System;   
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -23,7 +23,7 @@ public class RoundUI : MonoBehaviour
         roundManager.OnTimeRemainingChanged += UpdateTimer;
         roundManager.OnProgressChanged += UpdateProgress;
         roundManager.OnRoundChanged += UpdateRound;
-        roundManager.OnRoundFailed += Hide;
+        GameManager.Instance.OnGameOver += Hide;
     }
 
     private void UpdateTimer(float timeRemaining)

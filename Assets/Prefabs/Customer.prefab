@@ -215,6 +215,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Customer
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 551fd576a91704d838f019db63f87da8,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 1168153666832646764, guid: 551fd576a91704d838f019db63f87da8,
         type: 3}
       propertyPath: m_Layer
@@ -373,10 +378,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c806839d6cf495cacdc212c4bafec04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
-  health: 25
-  waitingTime: 5
-  attackDamage: 20
   orderDisplayPrefab: {fileID: 4147306298993323, guid: 7761fb59113727a4488643f6a4ee3427,
     type: 3}
   orderDisplayOffset: {x: 0, y: 2.5, z: 0}

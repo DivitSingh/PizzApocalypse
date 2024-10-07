@@ -7,6 +7,7 @@ using Random = System.Random;
 public class CustomerSpawner : MonoBehaviour
 {
     [SerializeField] private GameObject customerPrefab;
+    [SerializeField] private LayerMask customerLayerMask;
     [SerializeField] private Canvas healthBarCanvas; // TODO: Move this to Customer class?
 
     private Transform[] spawnPoints;
@@ -60,11 +61,14 @@ public class CustomerSpawner : MonoBehaviour
     private void SpawnCustomer(float health, float patience, float attackDamage)
     {
         // TODO: What to do if availableSpawnPoints is 0, still need to spawn?
-        // FIXME: CheckSphere is not checking properly?
         var availableSpawnPoints = spawnPoints
-            .Where(s => Physics.CheckSphere(s.position, checkRadius))
+            .Where(s => !Physics.CheckSphere(s.position, checkRadius, customerLayerMask))
             .ToList();
-
+        if (availableSpawnPoints.Count == 0)
+        {
+            Debug.LogError("All spawn points are occupied.");
+            return;
+        }
         var index = random.Next(0, availableSpawnPoints.Count);
         var spawnPoint = availableSpawnPoints[index];
         

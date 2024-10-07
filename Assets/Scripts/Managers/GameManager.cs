@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -9,6 +10,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private RoundManager roundManager;
     [SerializeField] private GameObject gameOverScreen;
     [SerializeField] private TMP_Text scoreText;
+
+    public event Action OnGameOver; 
 
     private void Awake()
     {
@@ -29,6 +32,7 @@ public class GameManager : MonoBehaviour
         AudioListener.pause = true;
         Cursor.lockState = CursorLockMode.Confined;
         Cursor.visible = true;
+        OnGameOver?.Invoke();
         Show(roundManager.Score);
     }
 
