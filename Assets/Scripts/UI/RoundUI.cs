@@ -13,9 +13,9 @@ public class RoundUI : MonoBehaviour
     [SerializeField] private TMP_Text progressText;
     [SerializeField] private Image progressFill;
 
-    private static readonly Color LowProgressColor = new Color(238f / 255, 85f / 255, 95f / 225);
-    private static readonly Color MidProgressColor = new Color(254f / 255, 215f / 255, 50f / 255);
-    private static readonly Color HighProgressColor = new Color(57f / 255, 229f / 255, 5f / 255);
+    private static readonly Color LowProgressColor = new(238f / 255, 85f / 255, 95f / 225);
+    private static readonly Color MidProgressColor = new(254f / 255, 215f / 255, 50f / 255);
+    private static readonly Color HighProgressColor = new(57f / 255, 229f / 255, 5f / 255);
 
     private void Awake()
     {
@@ -23,6 +23,7 @@ public class RoundUI : MonoBehaviour
         roundManager.OnTimeRemainingChanged += UpdateTimer;
         roundManager.OnProgressChanged += UpdateProgress;
         roundManager.OnRoundChanged += UpdateRound;
+        roundManager.OnRoundFailed += Hide;
     }
 
     private void UpdateTimer(float timeRemaining)
@@ -60,5 +61,10 @@ public class RoundUI : MonoBehaviour
     private void UpdateRound(int round)
     {
         roundText.text = $"Round {round}";
+    }
+
+    private void Hide()
+    {
+        gameObject.SetActive(false);
     }
 }

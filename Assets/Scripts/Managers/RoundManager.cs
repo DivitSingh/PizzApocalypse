@@ -64,7 +64,28 @@ public class RoundManager : MonoBehaviour
         }
         else
         {
-            // TODO: Indicate that round was completed successfully
+            // TODO: Should eventually add break between rounds starting?
+            NextRound();
         }
+    }
+
+    private void NextRound()
+    {
+        // TODO: Need to fine tune these values, make sure round is still possible
+        // NOTE: Values are currently temporary, anything past first round should be ignored
+        Round++;
+        Score = 0;
+        passScore++;
+        timeRemaining = roundDuration;
+        customerPatience--;
+        spawnInterval--;
+        totalCustomers++;
+        
+        // TODO: Modify other customer stats
+        
+        OnProgressChanged?.Invoke(Score, passScore);
+        OnRoundChanged?.Invoke(Round);
+        OnTimeRemainingChanged?.Invoke(timeRemaining);
+        customerSpawner.StartSpawning(spawnInterval, totalCustomers, customerHealth, customerPatience, customerAttackDmg);
     }
 }
