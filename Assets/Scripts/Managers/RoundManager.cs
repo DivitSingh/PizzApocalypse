@@ -58,6 +58,11 @@ public class RoundManager : MonoBehaviour
 
     private void HandleRoundEnd()
     {
+        foreach (var customer in FindObjectsOfType<Customer>())
+        {
+            Destroy(customer.gameObject);
+        }
+
         if (Score < passScore)
         {
             OnRoundFailed?.Invoke();    

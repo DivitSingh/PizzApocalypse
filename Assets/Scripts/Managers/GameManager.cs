@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject gameOverScreen;
     [SerializeField] private TMP_Text scoreText;
 
-    public event Action OnGameOver; 
+    public event Action OnGameOver;
 
     private void Awake()
     {
@@ -33,6 +33,13 @@ public class GameManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.Confined;
         Cursor.visible = true;
         OnGameOver?.Invoke();
+        
+        // Delete customers
+        foreach (var customer in FindObjectsOfType<Customer>())
+        {
+            Destroy(customer.gameObject);
+        }
+        
         Show(roundManager.Score);
     }
 
