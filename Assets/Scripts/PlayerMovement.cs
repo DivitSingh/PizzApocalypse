@@ -32,7 +32,6 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float throwCooldown;
 
     [Header("PizzaAmo")]
-    [SerializeField] private int maxPizzaAmo = 40;
     private PizzaInventar pizzaInventar;
 
     private float xRotation;

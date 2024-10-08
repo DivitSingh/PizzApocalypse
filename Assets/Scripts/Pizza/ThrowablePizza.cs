@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 // NOTE: I added this script temporarily instead of refactoring PizzaSlice, but eventually we should remove one of them
@@ -26,7 +25,7 @@ public class ThrowablePizza : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    
+
     private void Update()
     {
         if (Time.time - time > 2.5f)

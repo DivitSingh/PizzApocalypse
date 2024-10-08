@@ -6,3 +6,16 @@ public interface IEffect
     public int Duration { get; set; } // Duration in seconds
 }
 
+public enum Stat
+{
+    Health,
+    Speed,
+    Damage
+}
+
+public enum EffectType
+{
+    Multiplier,
+    ConstantDecrease,
+    ConstantIncrease
+}
