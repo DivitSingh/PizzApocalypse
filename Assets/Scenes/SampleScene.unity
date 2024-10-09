@@ -634,12 +634,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   customerSpawner: {fileID: 83333101}
-  roundDuration: 30
+  roundDuration: 60
   spawnInterval: 10
-  totalCustomers: 3
-  passScore: 1
+  totalCustomers: 8
+  passScore: 2
   customerHealth: 100
-  customerPatience: 15
+  customerPatience: 10
   customerAttackDmg: 20
 --- !u!1 &91465815 stripped
 GameObject:
@@ -6716,7 +6716,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1904746548}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8fe0ab7ab2e24a54b8bf3629d253ed07, type: 3}
   m_Name: 
