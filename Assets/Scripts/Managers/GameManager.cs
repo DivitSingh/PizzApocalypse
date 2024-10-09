@@ -10,6 +10,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] private RoundManager roundManager;
     [SerializeField] private GameObject gameOverScreen;
     [SerializeField] private TMP_Text scoreText;
+    
+    // TODO: [Remove]: Temporary references for completed round screen
+    [SerializeField] private GameObject roundPassedScreen;
+    [SerializeField] private TMP_Text roundScoreText;
 
     public event Action OnGameOver;
 
@@ -18,6 +22,7 @@ public class GameManager : MonoBehaviour
         Instance = this;
         GameObject.FindWithTag("Player").GetComponent<PlayerHealth>().OnDeath += HandleGameOver;
         roundManager.OnRoundFailed += HandleGameOver;
+        roundManager.OnRoundChanged += HandleRoundPassed;
 
         // Undo changes from paused state
         Time.timeScale = 1;
@@ -41,6 +46,18 @@ public class GameManager : MonoBehaviour
         }
         
         Show(roundManager.Score);
+    }
+
+    // TODO: REMOVE, Temporarily shows round passed screen, remove
+    private void HandleRoundPassed(int _)
+    {
+        Time.timeScale = 0;
+        AudioListener.pause = true;
+        Cursor.lockState = CursorLockMode.Confined;
+        Cursor.visible = true;
+        OnGameOver?.Invoke();
+        roundScoreText.text = $"You made {roundManager.Score} {(roundManager.Score == 1 ? "delivery" : "deliveries")}.";
+        roundPassedScreen.SetActive(true);
     }
 
     public void HandleFedCustomerScoring(Customer customer)

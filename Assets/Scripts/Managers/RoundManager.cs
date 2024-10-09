@@ -70,7 +70,9 @@ public class RoundManager : MonoBehaviour
         else
         {
             // TODO: Should eventually add break between rounds starting?
-            NextRound();
+            // FIXME: Temporarily showing round passed screen
+            // NextRound();
+            OnRoundChanged?.Invoke(++Round);
         }
     }
 
