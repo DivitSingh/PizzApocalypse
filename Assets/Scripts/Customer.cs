@@ -28,6 +28,12 @@ public class Customer : MonoBehaviour
     [SerializeField] private AudioClip dieSound;
     [SerializeField] private AudioClip happySound;
 
+    [Header("Textures")]
+    [SerializeField] private Texture idleTexture;
+    [SerializeField] private Texture walkTexture;
+    [SerializeField] private Texture attackTexture;
+    [SerializeField] private Texture eatTexture;
+
     private float maxHealth;
     private float health;
     private float attackDamage;
@@ -160,6 +166,7 @@ public class Customer : MonoBehaviour
     private IEnumerator Waiting()
     {
         state = State.Hungry;
+        GetComponentInChildren<SkinnedMeshRenderer>().material.mainTexture = idleTexture;
         yield return new WaitForSeconds(patience);
         circularTimer.gameObject.SetActive(false);
         BecomeAngry();
@@ -170,6 +177,8 @@ public class Customer : MonoBehaviour
     {
         agent.isStopped = false;
         agent.SetDestination(player.position);
+        if (GetComponentInChildren<SkinnedMeshRenderer>().material.mainTexture != eatTexture)
+            GetComponentInChildren<SkinnedMeshRenderer>().material.mainTexture = walkTexture;
         animator.SetBool("isChasing", true);
     }
 
@@ -177,6 +186,7 @@ public class Customer : MonoBehaviour
     {
         if (!animator.GetCurrentAnimatorStateInfo(0).IsName("Attack") && !animator.IsInTransition(0))
         {
+            GetComponentInChildren<SkinnedMeshRenderer>().material.mainTexture = attackTexture;
             animator.SetTrigger("isAttacking");
             agent.isStopped = true;
         }
@@ -194,7 +204,7 @@ public class Customer : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (state == State.Hungry)
+        if (state == State.Angry)
         {
             var playerHealth = other.GetComponent<PlayerHealth>();
             if (playerHealth != null)
@@ -207,6 +217,7 @@ public class Customer : MonoBehaviour
     private void BecomeAngry()
     {
         state = State.Angry;
+        GetComponentInChildren<SkinnedMeshRenderer>().material.mainTexture = walkTexture;
         GameObject.Find("Audio Source").GetComponent<AudioSource>().PlayOneShot(rageSound);
         transform.Find("Marker").GetComponent<SpriteRenderer>().sprite = angryMarker;
         CreateHealthBar();
@@ -288,6 +299,7 @@ public class Customer : MonoBehaviour
     {
         if (state == State.Angry)
         {
+            StartCoroutine(Eat());
             health -= pizza.Damage;
             UpdateHealthBar();
             if (health <= 0)
@@ -331,6 +343,14 @@ public class Customer : MonoBehaviour
                 Debug.Log($"Customer received wrong pizza. Wanted: {order.PizzaType}, Got: {pizza.Type}");
             }
         }
+    }
+
+    private IEnumerator Eat()
+    {
+        Texture originalTexture = GetComponentInChildren<SkinnedMeshRenderer>().material.mainTexture;
+        GetComponentInChildren<SkinnedMeshRenderer>().material.mainTexture = eatTexture;
+        yield return new WaitForSeconds(0.25f);
+        GetComponentInChildren<SkinnedMeshRenderer>().material.mainTexture = originalTexture;
     }
 
     private void OnDestroy()
