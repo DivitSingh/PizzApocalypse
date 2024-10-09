@@ -27,7 +27,7 @@ public class Customer : MonoBehaviour
     [SerializeField] private AudioClip hurtSound;
     [SerializeField] private AudioClip dieSound;
     [SerializeField] private AudioClip happySound;
-    
+
     private float maxHealth;
     private float health;
     private float attackDamage;
@@ -57,7 +57,7 @@ public class Customer : MonoBehaviour
         player = GameObject.Find("Player").transform;
         agentBaseSpeed = agent.speed;
     }
-    
+
     // TODO: Add Initialize method
     public void Initialize(float health, float patience, float attackDamage, Order order)
     {
@@ -66,7 +66,7 @@ public class Customer : MonoBehaviour
         this.patience = patience;
         this.attackDamage = attackDamage;
         this.order = order;
-        
+
         CreateCircularTimer();
         UpdateOrderDisplay();
         StartCoroutine(Waiting());
@@ -127,7 +127,7 @@ public class Customer : MonoBehaviour
         else
             Chase();
     }
-    
+
     private void CreateCircularTimer()
     {
         if (circularTimerPrefab == null)
@@ -194,10 +194,13 @@ public class Customer : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        var playerHealth = other.GetComponent<PlayerHealth>();
-        if (playerHealth != null)
+        if (state == State.Hungry)
         {
-            playerHealth.TakeDamage(attackDamage);
+            var playerHealth = other.GetComponent<PlayerHealth>();
+            if (playerHealth != null)
+            {
+                playerHealth.TakeDamage(attackDamage);
+            }
         }
     }
 
