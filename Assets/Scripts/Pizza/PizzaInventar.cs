@@ -1,7 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI; 
+using UnityEngine.UI;
 using TMPro;
 
 public class PizzaInventar : MonoBehaviour
@@ -38,11 +37,11 @@ public class PizzaInventar : MonoBehaviour
         equippedPizza = PizzaType.Cheese;
 
         // Create a list of all available pizza types
-        pizzaTypes = new List<PizzaType> 
-        { 
-            PizzaType.Cheese, 
-            PizzaType.Pineapple, 
-            PizzaType.Mushroom 
+        pizzaTypes = new List<PizzaType>
+        {
+            PizzaType.Cheese,
+            PizzaType.Pineapple,
+            PizzaType.Mushroom
         };
 
         // Update the UI at the start

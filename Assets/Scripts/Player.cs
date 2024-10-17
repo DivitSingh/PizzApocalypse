@@ -20,31 +20,29 @@ public class Player : MonoBehaviour
     [SerializeField] private float moveSpeed = 4500;
     [SerializeField] private float maxSpeed = 20;
     [SerializeField] private float counterMovement = 0.175f;
-
-    [Header("Throwing")]
-    [SerializeField] private float throwForce;
-    [SerializeField] private float throwUpwardForce;
-    [SerializeField] private int maxThrows;
-    [SerializeField] private float throwCooldown;
-
-    [Header("Stats")]
-    private PizzaInventar pizzaInventar;
-    [SerializeField] private float startingHealth = 100f;
-    private float _currentHealth;
-    private float CurrentHpPct => Mathf.Max(0, CurrentHealth / startingHealth);
-    public event Action<float> OnHpPctChanged;
-    public event Action OnDeath;
-
-
+    private Rigidbody rb;
     private float xRotation;
     private float sensitivity = 50f;
     private float sensMultiplier = 1f;
     private float threshold = 0.01f;
     private float timer = 0.00f;
     private float x, y;
+
+    [Header("Throwing")]
+    [SerializeField] private float throwForce;
+    [SerializeField] private float throwUpwardForce;
+    [SerializeField] private int maxThrows;
+    [SerializeField] private float throwCooldown;
     private int currentThrows;
     private bool readyToThrow;
-    private Rigidbody rb;
+
+    [Header("Stats")]
+    private PizzaInventar pizzaInventar;
+    [SerializeField] private float startingHealth = 100f;
+    private float currentHealth;
+    private float currentHpPct => Mathf.Max(0, CurrentHealth / startingHealth);
+    public event Action<float> OnHpPctChanged;
+    public event Action OnDeath;
 
     private List<IEffect> activeEffects = new List<IEffect>();
 
@@ -57,8 +55,8 @@ public class Player : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         pizzaInventar = GetComponent<PizzaInventar>();
         pizzaInventar.InitializeInventory();
-        _currentHealth = startingHealth;
-        OnHpPctChanged?.Invoke(CurrentHpPct);
+        currentHealth = startingHealth;
+        OnHpPctChanged?.Invoke(currentHpPct);
     }
 
     private void FixedUpdate()
@@ -69,15 +67,11 @@ public class Player : MonoBehaviour
     private void Update()
     {
         playerCam.position = transform.position + new Vector3(0, 0.5f, 0);
-
         if (Time.timeScale == 0) return;
-
         Look();
 
         if (Input.GetButtonDown("Fire") && readyToThrow && maxThrows > 0)
-        {
             timer = Time.time;
-        }
 
         if (Input.GetButtonUp("Fire"))
         {
@@ -103,19 +97,37 @@ public class Player : MonoBehaviour
 
         // Check for consuming pizza
         if (Input.GetButtonDown("Consume"))
-        {
             Eat();
-        }
 
         // Check for key inputs to switch pizza types
         if (Input.GetButtonDown("Swap Forward"))
-        {
-            pizzaInventar.SwitchPizzaForward(); // Switch to the next pizza
-        }
+            pizzaInventar.SwitchPizzaForward(); // Switch to the next pizza    
         else if (Input.GetButtonDown("Swap Backward"))
+            pizzaInventar.SwitchPizzaBackward(); // Switch to the previous pizza        
+    }
+
+    private float CurrentHealth
+    {
+        get => currentHealth;
+        set
         {
-            pizzaInventar.SwitchPizzaBackward(); // Switch to the previous pizza
+            currentHealth = value;
+            OnHpPctChanged?.Invoke(currentHpPct);
         }
+    }
+
+    public void TakeDamage(float damage)
+    {
+        CurrentHealth -= damage;
+        if (CurrentHealth <= 0)
+        {
+            OnDeath?.Invoke();
+        }
+    }
+
+    private void Heal(float amount)
+    {
+        CurrentHealth = Mathf.Min(CurrentHealth + amount, startingHealth);
     }
 
     private void Movement()
@@ -147,13 +159,13 @@ public class Player : MonoBehaviour
         rb.AddForce(orientation.transform.right * x * moveSpeed * Time.deltaTime * multiplier);
     }
 
-    private float desiredX;
     private void Look()
     {
         x = Input.GetAxisRaw("Horizontal");
         y = Input.GetAxisRaw("Vertical");
         float mouseX = Input.GetAxis("Mouse X") * sensitivity * Time.fixedDeltaTime * sensMultiplier;
         float mouseY = Input.GetAxis("Mouse Y") * sensitivity * Time.fixedDeltaTime * sensMultiplier;
+        float desiredX;
         Vector3 rot = playerCam.transform.localRotation.eulerAngles;
         desiredX = rot.y + mouseX;
         xRotation -= mouseY;
@@ -205,30 +217,6 @@ public class Player : MonoBehaviour
         return new Vector2(xMag, yMag);
     }
 
-    private float CurrentHealth
-    {
-        get => _currentHealth;
-        set
-        {
-            _currentHealth = value;
-            OnHpPctChanged?.Invoke(CurrentHpPct);
-        }
-    }
-
-    public void TakeDamage(float damage)
-    {
-        CurrentHealth -= damage;
-        if (CurrentHealth <= 0)
-        {
-            OnDeath?.Invoke();
-        }
-    }
-
-    public void Heal(float amount)
-    {
-        CurrentHealth = Mathf.Min(CurrentHealth + amount, startingHealth);
-    }
-
     private void Throw(PizzaType pizzaType, bool isBox)
     {
         // TODO: Pizza creation logic could be moved to factory
@@ -248,10 +236,8 @@ public class Player : MonoBehaviour
             var projectileRb = projectile.GetComponent<Rigidbody>();
             var forceDirection = playerCam.GetChild(0).transform.forward;
             RaycastHit hit;
-
             if (Physics.Raycast(playerCam.GetChild(0).position, playerCam.GetChild(0).forward, out hit, 500f))
                 forceDirection = (hit.point - attackPoint.position).normalized;
-
             Vector3 forceToAdd = forceDirection * throwForce + transform.up * throwUpwardForce;
             projectileRb.AddForce(forceToAdd, ForceMode.Impulse);
             currentThrows--;
