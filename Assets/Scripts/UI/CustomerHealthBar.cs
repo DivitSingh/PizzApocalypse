@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HealthBar : MonoBehaviour
+public class CustomerHealthBar : MonoBehaviour
 {
     private Slider slider;
     public Vector3 offset;

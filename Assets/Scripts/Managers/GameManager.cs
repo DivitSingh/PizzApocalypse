@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private RoundManager roundManager;
     [SerializeField] private GameObject gameOverScreen;
     [SerializeField] private TMP_Text scoreText;
-    
+
     // TODO: [Remove]: Temporary references for completed round screen
     [SerializeField] private GameObject roundPassedScreen;
     [SerializeField] private TMP_Text roundScoreText;
@@ -20,7 +20,7 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-        GameObject.FindWithTag("Player").GetComponent<PlayerHealth>().OnDeath += HandleGameOver;
+        GameObject.FindWithTag("Player").GetComponent<Player>().OnDeath += HandleGameOver;
         roundManager.OnRoundFailed += HandleGameOver;
         roundManager.OnRoundChanged += HandleRoundPassed;
 
@@ -38,13 +38,13 @@ public class GameManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.Confined;
         Cursor.visible = true;
         OnGameOver?.Invoke();
-        
+
         // Delete customers
         foreach (var customer in FindObjectsOfType<Customer>())
         {
             Destroy(customer.gameObject);
         }
-        
+
         Show(roundManager.Score);
     }
 
@@ -73,7 +73,7 @@ public class GameManager : MonoBehaviour
 
     public void Restart()
     {
-        GameObject.FindWithTag("Player").GetComponent<PlayerHealth>().OnDeath -= HandleGameOver;
+        GameObject.FindWithTag("Player").GetComponent<Player>().OnDeath -= HandleGameOver;
         SceneManager.LoadScene(0);
     }
 }

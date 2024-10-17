@@ -42,7 +42,7 @@ public class PizzaPlace : MonoBehaviour
         audioSource.Stop();
 
         // Perform the restocking
-        PlayerMovement thePlayer = player.GetComponent<PlayerMovement>();
+        Player thePlayer = player.GetComponent<Player>();
         thePlayer.Restocking();
     }
 }

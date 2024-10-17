@@ -3291,52 +3291,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 723722950}
   m_CullTransparentMesh: 1
---- !u!1 &732644891
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 732644893}
-  - component: {fileID: 732644892}
-  m_Layer: 0
-  m_Name: HealthBarManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &732644892
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 732644891}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f3b109800e76211448cf415c78443ff2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerHealth: {fileID: 1917263826}
-  healthSlider: {fileID: 2115997739}
---- !u!4 &732644893
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 732644891}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &735061183 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 388977554655180817, guid: f48a11cb20047934e8e9d7d7b37f4a45,
@@ -7293,8 +7247,8 @@ GameObject:
   - component: {fileID: 1917263821}
   - component: {fileID: 1917263820}
   - component: {fileID: 1917263819}
-  - component: {fileID: 1917263826}
   - component: {fileID: 1917263827}
+  - component: {fileID: 1917263828}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -7317,9 +7271,6 @@ MonoBehaviour:
   playerCam: {fileID: 1102723691}
   orientation: {fileID: 2087841442}
   attackPoint: {fileID: 1002041975}
-  pizzas:
-  - {fileID: 7595248782288383234, guid: 89deb7310d061e4499bfe60e86f83656, type: 3}
-  - {fileID: 7381785348282878827, guid: 5232de6fa82056642989b44326b2a89c, type: 3}
   pizzaSlicePrefab: {fileID: 7595248782288383234, guid: 89deb7310d061e4499bfe60e86f83656,
     type: 3}
   pizzaBoxPrefab: {fileID: 7381785348282878827, guid: 5232de6fa82056642989b44326b2a89c,
@@ -7327,15 +7278,11 @@ MonoBehaviour:
   moveSpeed: 4500
   maxSpeed: 20
   counterMovement: 0.175
-  maxSlopeAngle: 35
-  grounded: 0
-  whatIsGround:
-    serializedVersion: 2
-    m_Bits: 8
   throwForce: 50
   throwUpwardForce: 0
   maxThrows: 2
   throwCooldown: 0.5
+  startingHealth: 100
 --- !u!54 &1917263820
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -7453,19 +7400,6 @@ Transform:
   - {fileID: 1002041975}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1917263826
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1917263818}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 14019833bf7aa48bfa4ea33578efc7f3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  startingHealth: 100
 --- !u!114 &1917263827
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7483,6 +7417,19 @@ MonoBehaviour:
   cheeseIcon: {fileID: 21300000, guid: 739d2ee61d718394ab1171dcdccde287, type: 3}
   pineappleIcon: {fileID: 21300000, guid: b6c3c5c8734a27c4bb88b8f2802f2f11, type: 3}
   mushroomIcon: {fileID: 21300000, guid: 3b002ac7df0071e43aa900aecbb90132, type: 3}
+--- !u!114 &1917263828
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1917263818}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3b109800e76211448cf415c78443ff2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healthSlider: {fileID: 2115997739}
 --- !u!1 &1944779101 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 9084487971145501161, guid: f48a11cb20047934e8e9d7d7b37f4a45,
@@ -8498,5 +8445,4 @@ SceneRoots:
   - {fileID: 599639174}
   - {fileID: 1617519778}
   - {fileID: 1902395211}
-  - {fileID: 732644893}
   - {fileID: 83333100}

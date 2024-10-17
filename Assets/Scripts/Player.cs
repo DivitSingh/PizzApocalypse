@@ -5,7 +5,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerMovement : MonoBehaviour
+public class Player : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private Transform playerCam;
@@ -27,8 +27,14 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private int maxThrows;
     [SerializeField] private float throwCooldown;
 
-    [Header("PizzaAmo")]
+    [Header("Stats")]
     private PizzaInventar pizzaInventar;
+    [SerializeField] private float startingHealth = 100f;
+    private float _currentHealth;
+    private float CurrentHpPct => Mathf.Max(0, CurrentHealth / startingHealth);
+    public event Action<float> OnHpPctChanged;
+    public event Action OnDeath;
+
 
     private float xRotation;
     private float sensitivity = 50f;
@@ -40,7 +46,6 @@ public class PlayerMovement : MonoBehaviour
     private bool readyToThrow;
     private Rigidbody rb;
 
-    private PlayerHealth playerHealth;
     private List<IEffect> activeEffects = new List<IEffect>();
 
     void Start()
@@ -50,9 +55,10 @@ public class PlayerMovement : MonoBehaviour
         readyToThrow = true;
         currentThrows = maxThrows;
         rb = GetComponent<Rigidbody>();
-        playerHealth = GetComponent<PlayerHealth>();
         pizzaInventar = GetComponent<PizzaInventar>();
         pizzaInventar.InitializeInventory();
+        _currentHealth = startingHealth;
+        OnHpPctChanged?.Invoke(CurrentHpPct);
     }
 
     private void FixedUpdate()
@@ -199,6 +205,30 @@ public class PlayerMovement : MonoBehaviour
         return new Vector2(xMag, yMag);
     }
 
+    private float CurrentHealth
+    {
+        get => _currentHealth;
+        set
+        {
+            _currentHealth = value;
+            OnHpPctChanged?.Invoke(CurrentHpPct);
+        }
+    }
+
+    public void TakeDamage(float damage)
+    {
+        CurrentHealth -= damage;
+        if (CurrentHealth <= 0)
+        {
+            OnDeath?.Invoke();
+        }
+    }
+
+    public void Heal(float amount)
+    {
+        CurrentHealth = Mathf.Min(CurrentHealth + amount, startingHealth);
+    }
+
     private void Throw(PizzaType pizzaType, bool isBox)
     {
         // TODO: Pizza creation logic could be moved to factory
@@ -275,7 +305,7 @@ public class PlayerMovement : MonoBehaviour
 
         // TODO: Move pizza creation logic to factory class
         IPizza pizza = PizzaFactory.CreatePizza(pizzaType);
-        playerHealth.Heal(pizza.Healing);
+        Heal(pizza.Healing);
         pizzaInventar.LosePizzas(1);
         StartCoroutine(StartEffect(pizza.PlayerEffect));
     }
@@ -315,7 +345,7 @@ public class PlayerMovement : MonoBehaviour
         switch (effect.AffectedStat)
         {
             case Stat.Health:
-                if (effect.Type == EffectType.ConstantIncrease) playerHealth.Heal(effect.Value);
+                if (effect.Type == EffectType.ConstantIncrease) Heal(effect.Value);
                 _:
                 break;
         }

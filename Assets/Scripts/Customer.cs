@@ -9,15 +9,14 @@ using UnityEngine.UI;
 [RequireComponent(typeof(NavMeshAgent))]
 public class Customer : MonoBehaviour
 {
-    [SerializeField] private GameObject orderDisplayPrefab;
-    [SerializeField] private Vector3 orderDisplayOffset = new Vector3(0, 2.5f, 0);
-    private OrderDisplay orderDisplay;
-
     [Header("UI")]
     [SerializeField] private GameObject healthBarPrefab;
     [SerializeField] private Vector3 healthBarOffset = new Vector3(0, 2f, 0);
     private Canvas healthBarCanvas;
-    private HealthBar healthBar;
+    private CustomerHealthBar healthBar;
+    [SerializeField] private GameObject orderDisplayPrefab;
+    [SerializeField] private Vector3 orderDisplayOffset = new Vector3(0, 2.5f, 0);
+    private OrderDisplay orderDisplay;
     [SerializeField] private GameObject circularTimerPrefab;
     private CircularTimer circularTimer;
     [SerializeField] private Sprite angryMarker;
@@ -206,10 +205,9 @@ public class Customer : MonoBehaviour
     {
         if (state == State.Angry)
         {
-            var playerHealth = other.GetComponent<PlayerHealth>();
-            if (playerHealth != null)
+            if (other.GetComponent<Player>() != null)
             {
-                playerHealth.TakeDamage(attackDamage);
+                other.GetComponent<Player>().TakeDamage(attackDamage);
             }
         }
     }
@@ -255,11 +253,11 @@ public class Customer : MonoBehaviour
         }
 
         GameObject healthBarObject = Instantiate(healthBarPrefab, healthBarCanvas.transform);
-        healthBar = healthBarObject.GetComponent<HealthBar>();
+        healthBar = healthBarObject.GetComponent<CustomerHealthBar>();
         if (healthBar == null)
         {
             Debug.LogError("HealthBar component not found on the instantiated prefab! Attempting to add one.");
-            healthBar = healthBarObject.AddComponent<HealthBar>();
+            healthBar = healthBarObject.AddComponent<CustomerHealthBar>();
         }
 
         if (healthBar == null)

@@ -3,15 +3,12 @@ using UnityEngine.UI;
 
 public class PlayerHealthBar : MonoBehaviour
 {
-    [SerializeField] private PlayerHealth playerHealth;
+    private Player playerHealth;
     [SerializeField] private Slider healthSlider;
 
     private void Start()
     {
-        if (playerHealth == null)
-        {
-            playerHealth = FindObjectOfType<PlayerHealth>();
-        }
+        playerHealth = FindObjectOfType<Player>();
 
         if (playerHealth != null)
         {
