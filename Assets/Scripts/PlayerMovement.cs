@@ -11,7 +11,6 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Transform playerCam;
     [SerializeField] private Transform orientation;
     [SerializeField] private Transform attackPoint;
-    [SerializeField] private List<GameObject> pizzas;
 
     // TODO: Should perhaps be replaced if we have different textures to map PizzaType to Prefab
     [SerializeField] private GameObject pizzaSlicePrefab;
@@ -21,9 +20,6 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float moveSpeed = 4500;
     [SerializeField] private float maxSpeed = 20;
     [SerializeField] private float counterMovement = 0.175f;
-    [SerializeField] private float maxSlopeAngle = 35f;
-    [SerializeField] private bool grounded;
-    [SerializeField] private LayerMask whatIsGround;
 
     [Header("Throwing")]
     [SerializeField] private float throwForce;
@@ -41,17 +37,11 @@ public class PlayerMovement : MonoBehaviour
     private float timer = 0.00f;
     private float x, y;
     private int currentThrows;
-    private Vector3 normalVector = Vector3.up;
     private bool readyToThrow;
     private Rigidbody rb;
+
     private PlayerHealth playerHealth;
-
     private List<IEffect> activeEffects = new List<IEffect>();
-
-    void Awake()
-    {
-        rb = GetComponent<Rigidbody>();
-    }
 
     void Start()
     {
@@ -59,11 +49,11 @@ public class PlayerMovement : MonoBehaviour
         Cursor.visible = false;
         readyToThrow = true;
         currentThrows = maxThrows;
+        rb = GetComponent<Rigidbody>();
         playerHealth = GetComponent<PlayerHealth>();
         pizzaInventar = GetComponent<PizzaInventar>();
         pizzaInventar.InitializeInventory();
     }
-
 
     private void FixedUpdate()
     {
@@ -76,7 +66,6 @@ public class PlayerMovement : MonoBehaviour
 
         if (Time.timeScale == 0) return;
 
-        MyInput();
         Look();
 
         if (Input.GetButtonDown("Fire") && readyToThrow && maxThrows > 0)
@@ -123,15 +112,6 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Find user input. Should put this in its own class but im lazy
-    /// </summary>
-    private void MyInput()
-    {
-        x = Input.GetAxisRaw("Horizontal");
-        y = Input.GetAxisRaw("Vertical");
-    }
-
     private void Movement()
     {
         //Extra gravity
@@ -156,13 +136,6 @@ public class PlayerMovement : MonoBehaviour
         //Some multipliers
         float multiplier = 1f, multiplierV = 1f;
 
-        // Movement in air
-        if (!grounded)
-        {
-            multiplier = 0.5f;
-            multiplierV = 0.5f;
-        }
-
         //Apply forces to move player
         rb.AddForce(orientation.transform.forward * y * moveSpeed * Time.deltaTime * multiplier * multiplierV);
         rb.AddForce(orientation.transform.right * x * moveSpeed * Time.deltaTime * multiplier);
@@ -171,6 +144,8 @@ public class PlayerMovement : MonoBehaviour
     private float desiredX;
     private void Look()
     {
+        x = Input.GetAxisRaw("Horizontal");
+        y = Input.GetAxisRaw("Vertical");
         float mouseX = Input.GetAxis("Mouse X") * sensitivity * Time.fixedDeltaTime * sensMultiplier;
         float mouseY = Input.GetAxis("Mouse Y") * sensitivity * Time.fixedDeltaTime * sensMultiplier;
         Vector3 rot = playerCam.transform.localRotation.eulerAngles;
@@ -187,8 +162,6 @@ public class PlayerMovement : MonoBehaviour
 
     private void CounterMovement(float x, float y, Vector2 mag)
     {
-        if (!grounded) return;
-
         if (Math.Abs(mag.x) > threshold && Math.Abs(x) < 0.05f || (mag.x < -threshold && x > 0) || (mag.x > threshold && x < 0))
         {
             rb.AddForce(moveSpeed * orientation.transform.right * Time.deltaTime * -mag.x * counterMovement);
@@ -224,51 +197,6 @@ public class PlayerMovement : MonoBehaviour
         float xMag = magnitue * Mathf.Cos(v * Mathf.Deg2Rad);
 
         return new Vector2(xMag, yMag);
-    }
-
-    private bool IsFloor(Vector3 v)
-    {
-        float angle = Vector3.Angle(Vector3.up, v);
-        return angle < maxSlopeAngle;
-    }
-
-    private bool cancellingGrounded;
-
-    /// <summary>
-    /// Handle ground detection
-    /// </summary>
-    private void OnCollisionStay(Collision other)
-    {
-        //Make sure we are only checking for walkable layers
-        int layer = other.gameObject.layer;
-        if (whatIsGround != (whatIsGround | (1 << layer))) return;
-
-        //Iterate through every collision in a physics update
-        for (int i = 0; i < other.contactCount; i++)
-        {
-            Vector3 normal = other.contacts[i].normal;
-            //FLOOR
-            if (IsFloor(normal))
-            {
-                grounded = true;
-                cancellingGrounded = false;
-                normalVector = normal;
-                CancelInvoke(nameof(StopGrounded));
-            }
-        }
-
-        //Invoke ground/wall cancel, since we can't check normals with CollisionExit
-        float delay = 3f;
-        if (!cancellingGrounded)
-        {
-            cancellingGrounded = true;
-            Invoke(nameof(StopGrounded), Time.deltaTime * delay);
-        }
-    }
-
-    private void StopGrounded()
-    {
-        grounded = false;
     }
 
     private void Throw(PizzaType pizzaType, bool isBox)
