@@ -25,7 +25,7 @@ public class Customer : MonoBehaviour
     [SerializeField] private AudioClip rageSound;
     [SerializeField] private AudioClip hurtSound;
     [SerializeField] private AudioClip dieSound;
-    [SerializeField] private AudioClip happySound;
+    [SerializeField] private AudioClip completeSound;
 
     [Header("Textures")]
     [SerializeField] private Texture idleTexture;
@@ -72,7 +72,7 @@ public class Customer : MonoBehaviour
         this.attackDamage = attackDamage;
         this.order = order;
 
-        CreateOrderDisplay(); 
+        CreateOrderDisplay();
         CreateCircularTimer();
         UpdateOrderDisplay();
         StartCoroutine(Waiting());
@@ -224,7 +224,7 @@ public class Customer : MonoBehaviour
         Chase();
     }
 
-   private void DestroyOrderDisplay()
+    private void DestroyOrderDisplay()
     {
         if (orderDisplay != null)
         {
@@ -328,7 +328,7 @@ public class Customer : MonoBehaviour
             UpdateOrderDisplay(); // Update the order display after receiving a pizza
             if (order.IsOrderFulfilled())
             {
-                GameObject.Find("Audio Source").GetComponent<AudioSource>().PlayOneShot(happySound);
+                GameObject.Find("Audio Source").GetComponent<AudioSource>().PlayOneShot(completeSound);
                 StopAllCoroutines();
                 GameManager.Instance.HandleFedCustomerScoring(this);
                 CleanupCustomer(); // Use a new method for cleanup

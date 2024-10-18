@@ -11,8 +11,6 @@ public class Player : MonoBehaviour
     [SerializeField] private Transform playerCam;
     [SerializeField] private Transform orientation;
     [SerializeField] private Transform attackPoint;
-
-    // TODO: Should perhaps be replaced if we have different textures to map PizzaType to Prefab
     [SerializeField] private GameObject pizzaSlicePrefab;
     [SerializeField] private GameObject pizzaBoxPrefab;
 
@@ -43,6 +41,11 @@ public class Player : MonoBehaviour
     private float currentHpPct => Mathf.Max(0, CurrentHealth / startingHealth);
     public event Action<float> OnHpPctChanged;
     public event Action OnDeath;
+
+    [Header("Audio")]
+    [SerializeField] private AudioClip swapSound;
+    [SerializeField] private AudioClip hurtSound;
+    [SerializeField] private AudioClip consumeSound;
 
     private List<IEffect> activeEffects = new List<IEffect>();
 
@@ -97,13 +100,22 @@ public class Player : MonoBehaviour
 
         // Check for consuming pizza
         if (Input.GetButtonDown("Consume"))
+        {
+            GameObject.Find("Audio Source").GetComponent<AudioSource>().PlayOneShot(consumeSound);
             Eat();
+        }
 
         // Check for key inputs to switch pizza types
         if (Input.GetButtonDown("Swap Forward"))
+        {
+            GameObject.Find("Audio Source").GetComponent<AudioSource>().PlayOneShot(swapSound);
             pizzaInventar.SwitchPizzaForward(); // Switch to the next pizza    
+        }
         else if (Input.GetButtonDown("Swap Backward"))
+        {
+            GameObject.Find("Audio Source").GetComponent<AudioSource>().PlayOneShot(swapSound);
             pizzaInventar.SwitchPizzaBackward(); // Switch to the previous pizza        
+        }
     }
 
     private float CurrentHealth
@@ -119,6 +131,7 @@ public class Player : MonoBehaviour
     public void TakeDamage(float damage)
     {
         CurrentHealth -= damage;
+        GameObject.Find("Audio Source").GetComponent<AudioSource>().PlayOneShot(hurtSound);
         if (CurrentHealth <= 0)
         {
             OnDeath?.Invoke();

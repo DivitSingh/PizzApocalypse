@@ -1,6 +1,7 @@
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
@@ -58,6 +59,7 @@ public class GameManager : MonoBehaviour
         OnGameOver?.Invoke();
         roundScoreText.text = $"You made {roundManager.Score} {(roundManager.Score == 1 ? "delivery" : "deliveries")}.";
         roundPassedScreen.SetActive(true);
+        EventSystem.current.SetSelectedGameObject(roundPassedScreen.transform.Find("RestartButton").gameObject);
     }
 
     public void HandleFedCustomerScoring(Customer customer)
@@ -69,6 +71,7 @@ public class GameManager : MonoBehaviour
     {
         scoreText.text = $"You made {score} {(score == 1 ? "delivery" : "deliveries")}.";
         gameOverScreen.SetActive(true);
+        EventSystem.current.SetSelectedGameObject(gameOverScreen.transform.Find("RestartButton").gameObject);
     }
 
     public void Restart()

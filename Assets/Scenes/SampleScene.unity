@@ -2084,7 +2084,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8119e28e1cd3f1e4a9ad0a8b6619f83b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  restockSound: {fileID: 8300000, guid: cf677e4e991e10e419264395793d4a73, type: 3}
+  restockSound: {fileID: 8300000, guid: fda9c89e0a349e14193ae0d9bea13a36, type: 3}
   restockTime: 2.5
 --- !u!1 &505037947 stripped
 GameObject:
@@ -7365,6 +7365,9 @@ MonoBehaviour:
   maxThrows: 2
   throwCooldown: 0.5
   startingHealth: 100
+  swapSound: {fileID: 8300000, guid: 7e3f43689ef9f4f4fb058492037d6557, type: 3}
+  hurtSound: {fileID: 8300000, guid: 862d377a35144ef43b16223999c0b77a, type: 3}
+  consumeSound: {fileID: 8300000, guid: 0b2b4fa38b4ad2a4788e531dd2853b46, type: 3}
 --- !u!54 &1917263820
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -7931,7 +7934,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8119e28e1cd3f1e4a9ad0a8b6619f83b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  restockSound: {fileID: 8300000, guid: cf677e4e991e10e419264395793d4a73, type: 3}
+  restockSound: {fileID: 8300000, guid: fda9c89e0a349e14193ae0d9bea13a36, type: 3}
   restockTime: 2.5
 --- !u!65 &1999931893
 BoxCollider:
