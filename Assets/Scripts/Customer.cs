@@ -72,6 +72,7 @@ public class Customer : MonoBehaviour
         this.attackDamage = attackDamage;
         this.order = order;
 
+        CreateOrderDisplay(); 
         CreateCircularTimer();
         UpdateOrderDisplay();
         StartCoroutine(Waiting());
@@ -81,7 +82,7 @@ public class Customer : MonoBehaviour
     {
         if (orderDisplay != null)
         {
-            orderDisplay.UpdateOrderDisplay(order.PizzaType);
+            orderDisplay.UpdateOrderDisplay(order);
         }
         else
         {
@@ -223,11 +224,11 @@ public class Customer : MonoBehaviour
         Chase();
     }
 
-    private void DestroyOrderDisplay()
+   private void DestroyOrderDisplay()
     {
         if (orderDisplay != null)
         {
-            Destroy(orderDisplay.gameObject);
+            orderDisplay.RemoveOrderUI(); // Call RemoveOrderUI instead of destroying directly
             orderDisplay = null;
         }
     }
@@ -323,24 +324,35 @@ public class Customer : MonoBehaviour
         }
         else if (state == State.Hungry)
         {
-            if (pizza.Type == order.PizzaType)
+            order.DeductPizzaFromOrder(pizza);
+            UpdateOrderDisplay(); // Update the order display after receiving a pizza
+            if (order.IsOrderFulfilled())
             {
                 GameObject.Find("Audio Source").GetComponent<AudioSource>().PlayOneShot(happySound);
                 StopAllCoroutines();
                 GameManager.Instance.HandleFedCustomerScoring(this);
-                if (circularTimer != null)
-                {
-                    Destroy(circularTimer.gameObject);
-                }
-                DestroyOrderDisplay();
-                Destroy(gameObject);
+                CleanupCustomer(); // Use a new method for cleanup
             }
             else
             {
                 // Wrong pizza type, do nothing
-                Debug.Log($"Customer received wrong pizza. Wanted: {order.PizzaType}, Got: {pizza.Type}");
+                Debug.Log($"Order not yet fulfilled, still needs: {order.PasteOrderContents()}");
             }
         }
+    }
+
+    private void CleanupCustomer()
+    {
+        if (circularTimer != null)
+        {
+            Destroy(circularTimer.gameObject);
+        }
+        if (healthBar != null)
+        {
+            Destroy(healthBar.gameObject);
+        }
+        DestroyOrderDisplay(); // Make sure to destroy the order display
+        Destroy(gameObject);
     }
 
     private IEnumerator Eat()

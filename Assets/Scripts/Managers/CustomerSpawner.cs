@@ -76,16 +76,9 @@ public class CustomerSpawner : MonoBehaviour
         var customer = customerObject.GetComponent<Customer>();
         if (customer != null)
         {
-            var order = GenerateOrder();
+            Order order = new Order(); //generate an Order
             customer.SetHealthBarCanvas(healthBarCanvas); // TODO: Move Canvas code to Customer class
             customer.Initialize(health, patience, attackDamage, order);
         }
-    }
-
-    private Order GenerateOrder()
-    {
-        // TODO: Add quantity to orders?
-        var pizzaType = (PizzaType) random.Next(0, Enum.GetValues(typeof(PizzaType)).Length);
-        return new Order(pizzaType);
     }
 }
