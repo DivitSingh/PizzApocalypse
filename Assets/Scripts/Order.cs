@@ -10,7 +10,7 @@ public class Order
 
     private Dictionary<PizzaType, int>[] Orders;
     private static System.Random random = new System.Random();
-    
+
     private int originalOrderAmount;
     private float orderModifier;
     // Implement OG Count and MOdifier
@@ -65,7 +65,7 @@ public class Order
         int differentTypes = 0;
         foreach (var pizzaTypeOrder in Orders)
         {
-            differentTypes ++;
+            differentTypes++;
         }
         Debug.Log("Different types: " + differentTypes);
 
@@ -110,7 +110,7 @@ public class Order
                 {
                     Orders[i][pizzaReceived.Type]--;
                     Debug.Log($"Hit by {pizzaReceived.Type}. Deducting 1. Remaining: {Orders[i][pizzaReceived.Type]}");
-                    
+
                     // If the count reaches zero, remove the pizza type from the dictionary
                     if (Orders[i][pizzaReceived.Type] == 0)
                     {
@@ -138,6 +138,8 @@ public class Order
                 return false;
             }
         }
+
+        Player.money += (int)(GetOriginalOrderAmount() * GetOrderModifier());
         return true;  // If all pizzas are fulfilled, return true
     }
 

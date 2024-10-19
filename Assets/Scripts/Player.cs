@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using TMPro;
 
 public class Player : MonoBehaviour
 {
@@ -13,6 +14,9 @@ public class Player : MonoBehaviour
     [SerializeField] private Transform attackPoint;
     [SerializeField] private GameObject pizzaSlicePrefab;
     [SerializeField] private GameObject pizzaBoxPrefab;
+    [SerializeField] private InputAction shootControls;
+    [SerializeField] private InputAction eatControls;
+    [SerializeField] private TextMeshProUGUI moneyText;
 
     [Header("Movement")]
     [SerializeField] private float moveSpeed = 4500;
@@ -37,6 +41,7 @@ public class Player : MonoBehaviour
     [Header("Stats")]
     private PizzaInventar pizzaInventar;
     [SerializeField] private float startingHealth = 100f;
+    public static int money;
     private float currentHealth;
     private float currentHpPct => Mathf.Max(0, CurrentHealth / startingHealth);
     public event Action<float> OnHpPctChanged;
@@ -48,6 +53,21 @@ public class Player : MonoBehaviour
     [SerializeField] private AudioClip consumeSound;
 
     private List<IEffect> activeEffects = new List<IEffect>();
+
+    private void OnEnable()
+    {
+        shootControls.Enable();
+        shootControls.performed += FirePerformed;
+        shootControls.canceled += FireCanceled;
+        eatControls.Enable();
+        eatControls.performed += Consume;
+    }
+
+    private void OnDisable()
+    {
+        shootControls.Disable();
+        eatControls.Disable();
+    }
 
     void Start()
     {
@@ -72,38 +92,7 @@ public class Player : MonoBehaviour
         playerCam.position = transform.position + new Vector3(0, 0.5f, 0);
         if (Time.timeScale == 0) return;
         Look();
-
-        if (Input.GetButtonDown("Fire") && readyToThrow && maxThrows > 0)
-            timer = Time.time;
-
-        if (Input.GetButtonUp("Fire"))
-        {
-            Debug.Log("Start throw with: " + pizzaInventar.GetEquippedPizza() + "Current ammo: " + pizzaInventar.GetPizzaAmmo(pizzaInventar.GetEquippedPizza()));
-
-            if (Time.time - timer < 1.00f)
-            {
-                // Throw(pizzas[0]);// Slice Pizza
-                Throw(pizzaInventar.GetEquippedPizza(), false);
-            }
-            else
-            {
-                if (pizzaInventar.GetPizzaAmmo(pizzaInventar.GetEquippedPizza()) >= 8)
-                    // Throw(pizzas[1]);// Full Pizza, only thrown, when there are 8 or more pieces left.
-                    Throw(pizzaInventar.GetEquippedPizza(), true);
-                // TODO: Should probably refactor to only pass in whether thrown pizza is box or not
-                // TODO: Let Throw method handle which type of Pizza is thrown
-                else
-                    // Throw(pizzas[0]);// Slice Pizza thrown instead when 7 or less slices are left.
-                    Throw(pizzaInventar.GetEquippedPizza(), false);
-            }
-        }
-
-        // Check for consuming pizza
-        if (Input.GetButtonDown("Consume"))
-        {
-            GameObject.Find("Audio Source").GetComponent<AudioSource>().PlayOneShot(consumeSound);
-            Eat();
-        }
+        moneyText.text = "Money: " + money.ToString();
 
         // Check for key inputs to switch pizza types
         if (Input.GetButtonDown("Swap Forward"))
@@ -116,6 +105,38 @@ public class Player : MonoBehaviour
             GameObject.Find("Audio Source").GetComponent<AudioSource>().PlayOneShot(swapSound);
             pizzaInventar.SwitchPizzaBackward(); // Switch to the previous pizza        
         }
+    }
+
+    private void FirePerformed(InputAction.CallbackContext context)
+    {
+        if (readyToThrow && maxThrows > 0)
+            timer = Time.time;
+    }
+
+    private void FireCanceled(InputAction.CallbackContext context)
+    {
+        if (Time.time - timer < 1.00f)
+        {
+            // Throw(pizzas[0]);// Slice Pizza
+            Throw(pizzaInventar.GetEquippedPizza(), false);
+        }
+        else
+        {
+            if (pizzaInventar.GetPizzaAmmo(pizzaInventar.GetEquippedPizza()) >= 8)
+                // Throw(pizzas[1]);// Full Pizza, only thrown, when there are 8 or more pieces left.
+                Throw(pizzaInventar.GetEquippedPizza(), true);
+            // TODO: Should probably refactor to only pass in whether thrown pizza is box or not
+            // TODO: Let Throw method handle which type of Pizza is thrown
+            else
+                // Throw(pizzas[0]);// Slice Pizza thrown instead when 7 or less slices are left.
+                Throw(pizzaInventar.GetEquippedPizza(), false);
+        }
+    }
+
+    private void Consume(InputAction.CallbackContext context)
+    {
+        GameObject.Find("Audio Source").GetComponent<AudioSource>().PlayOneShot(consumeSound);
+        Eat();
     }
 
     private float CurrentHealth
