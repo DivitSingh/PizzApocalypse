@@ -5,7 +5,7 @@ using TMPro;
 
 public class PizzaInventar : MonoBehaviour
 {    // Maximum ammo limit
-    private const int maxAmmo = 40;
+    [SerializeField] private int maxAmmo = 40;
 
     // Inventory to hold pizza amounts
     private Dictionary<PizzaType, int> pizzaInventory = new Dictionary<PizzaType, int>();
@@ -140,6 +140,12 @@ public class PizzaInventar : MonoBehaviour
 
         // Update the ammo text to show the current amount of pizza ammo
         ammoText.text = pizzaInventory[equippedPizza].ToString();
+    }
+
+    public void IncreaseCapacity(int amount)
+    {
+        maxAmmo += amount;
+        UpdateUI();
     }
 
 }

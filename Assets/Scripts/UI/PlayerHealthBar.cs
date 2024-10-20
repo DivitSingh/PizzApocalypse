@@ -3,13 +3,11 @@ using UnityEngine.UI;
 
 public class PlayerHealthBar : MonoBehaviour
 {
-    private Player playerHealth;
+    [SerializeField] private PlayerHealth playerHealth;
     [SerializeField] private Slider healthSlider;
 
     private void Start()
     {
-        playerHealth = FindObjectOfType<Player>();
-
         if (playerHealth != null)
         {
             playerHealth.OnHpPctChanged += UpdateHealthBar;

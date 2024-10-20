@@ -34,13 +34,8 @@ public class Player : MonoBehaviour
     private int currentThrows;
     private bool readyToThrow;
 
-    [Header("Stats")]
     private PizzaInventar pizzaInventar;
-    [SerializeField] private float startingHealth = 100f;
-    private float currentHealth;
-    private float currentHpPct => Mathf.Max(0, CurrentHealth / startingHealth);
-    public event Action<float> OnHpPctChanged;
-    public event Action OnDeath;
+    private PlayerHealth playerHealth;
 
     [Header("Audio")]
     [SerializeField] private AudioClip swapSound;
@@ -57,9 +52,8 @@ public class Player : MonoBehaviour
         currentThrows = maxThrows;
         rb = GetComponent<Rigidbody>();
         pizzaInventar = GetComponent<PizzaInventar>();
+        playerHealth = GetComponent<PlayerHealth>();
         pizzaInventar.InitializeInventory();
-        currentHealth = startingHealth;
-        OnHpPctChanged?.Invoke(currentHpPct);
     }
 
     private void FixedUpdate()
@@ -116,31 +110,6 @@ public class Player : MonoBehaviour
             GameObject.Find("Audio Source").GetComponent<AudioSource>().PlayOneShot(swapSound);
             pizzaInventar.SwitchPizzaBackward(); // Switch to the previous pizza        
         }
-    }
-
-    private float CurrentHealth
-    {
-        get => currentHealth;
-        set
-        {
-            currentHealth = value;
-            OnHpPctChanged?.Invoke(currentHpPct);
-        }
-    }
-
-    public void TakeDamage(float damage)
-    {
-        CurrentHealth -= damage;
-        GameObject.Find("Audio Source").GetComponent<AudioSource>().PlayOneShot(hurtSound);
-        if (CurrentHealth <= 0)
-        {
-            OnDeath?.Invoke();
-        }
-    }
-
-    private void Heal(float amount)
-    {
-        CurrentHealth = Mathf.Min(CurrentHealth + amount, startingHealth);
     }
 
     private void Movement()
@@ -304,7 +273,8 @@ public class Player : MonoBehaviour
 
         // TODO: Move pizza creation logic to factory class
         IPizza pizza = PizzaFactory.CreatePizza(pizzaType);
-        Heal(pizza.Healing);
+        // Heal(pizza.Healing);
+        playerHealth.Heal(pizza.Healing);
         pizzaInventar.LosePizzas(1);
         StartCoroutine(StartEffect(pizza.PlayerEffect));
     }
@@ -340,11 +310,10 @@ public class Player : MonoBehaviour
     private void ApplyEffect(IEffect effect)
     {
         // NOTE: Currently only handles Regen
-        Debug.Log("IN apply effect");
         switch (effect.AffectedStat)
         {
             case Stat.Health:
-                if (effect.Type == EffectType.ConstantIncrease) Heal(effect.Value);
+                if (effect.Type == EffectType.ConstantIncrease) playerHealth.Heal(effect.Value);
                 _:
                 break;
         }

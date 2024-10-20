@@ -208,7 +208,7 @@ public class Customer : MonoBehaviour
         {
             if (other.GetComponent<Player>() != null)
             {
-                other.GetComponent<Player>().TakeDamage(attackDamage);
+                other.GetComponent<PlayerHealth>().TakeDamage(attackDamage);
             }
         }
     }
