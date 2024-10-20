@@ -1,13 +1,19 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Order
 {
-    private Dictionary<PizzaType, int>[] Orders;
-    private static System.Random random = new System.Random();
     private static int maxPizzaAmountOrder = 3;
     private static int maxPizzaTypePerOrder = 3;
+
+    private Dictionary<PizzaType, int>[] Orders;
+    private static System.Random random = new System.Random();
+
+    private int originalOrderAmount;
+    private float orderModifier;
+    // Implement OG Count and MOdifier
 
     public Order()
     {
@@ -26,12 +32,72 @@ public class Order
             int pizzaCount = random.Next(1, maxPizzaAmountOrder);
 
             Orders[i].Add(selectedPizza, pizzaCount);
+
+            // Create originalOrderAmount
+            originalOrderAmount += Orders[i].Values.Sum();
+            Debug.Log("Original order amount: " + originalOrderAmount);
+
+            // Calculate orderModifier
+            orderModifier = CalculateModifier(Orders, originalOrderAmount);
         }
     }
 
     public Dictionary<PizzaType, int>[] GetOrders()
     {
         return Orders;
+    }
+
+    public float GetOrderModifier()
+    {
+        return orderModifier;
+    }
+    public float GetOriginalOrderAmount()
+    {
+        return originalOrderAmount;
+    }
+
+    public float CalculateModifier(Dictionary<PizzaType, int>[] Orders, int totalPizzas)
+    {
+        // Base modifier
+        float modifier = 1.0f;
+
+        // Calculate the variety modifier based on the number of different pizza types
+        int differentTypes = 0;
+        foreach (var pizzaTypeOrder in Orders)
+        {
+            differentTypes++;
+        }
+        Debug.Log("Different types: " + differentTypes);
+
+        switch (differentTypes)
+        {
+            case 2:
+                modifier += 0.2f;
+                break;
+            case 3:
+                modifier += 0.5f;
+                break;
+            default:
+                if (differentTypes > 3)
+                {
+                    modifier += 0.8f + (differentTypes - 3) * 0.3f;
+                }
+                break;
+        }
+
+        // Calculate the quantity modifier based on the number of pizzas in the order
+        switch (totalPizzas)
+        {
+            case int n when (n >= 3 && n <= 6):
+                modifier += 0.3f;
+                break;
+            case int n when (n > 6):
+                modifier += 0.2f;
+                break;
+        }
+
+        Debug.Log("Modifier: " + modifier);
+        return modifier;
     }
 
     public void DeductPizzaFromOrder(IPizza pizzaReceived)
@@ -44,7 +110,7 @@ public class Order
                 {
                     Orders[i][pizzaReceived.Type]--;
                     Debug.Log($"Hit by {pizzaReceived.Type}. Deducting 1. Remaining: {Orders[i][pizzaReceived.Type]}");
-                    
+
                     // If the count reaches zero, remove the pizza type from the dictionary
                     if (Orders[i][pizzaReceived.Type] == 0)
                     {
@@ -72,6 +138,8 @@ public class Order
                 return false;
             }
         }
+
+        Player.money += (int)(GetOriginalOrderAmount() * GetOrderModifier());
         return true;  // If all pizzas are fulfilled, return true
     }
 
