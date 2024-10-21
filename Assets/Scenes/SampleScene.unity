@@ -526,7 +526,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06cefa8a5d324f618e1349bbdf47103f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
+  player: {fileID: 1917263819}
   playerHealth: {fileID: 1917263828}
   playerInventory: {fileID: 1917263827}
 --- !u!1 &91465815 stripped
@@ -8446,6 +8446,7 @@ MonoBehaviour:
   throwUpwardForce: 0
   maxThrows: 2
   throwCooldown: 0.5
+  baseAttack: 10
   swapSound: {fileID: 8300000, guid: 7e3f43689ef9f4f4fb058492037d6557, type: 3}
   hurtSound: {fileID: 8300000, guid: 862d377a35144ef43b16223999c0b77a, type: 3}
   consumeSound: {fileID: 8300000, guid: 0b2b4fa38b4ad2a4788e531dd2853b46, type: 3}

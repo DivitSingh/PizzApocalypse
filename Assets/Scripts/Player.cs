@@ -38,9 +38,10 @@ public class Player : MonoBehaviour
     private int currentThrows;
     private bool readyToThrow;
 
-    [Header("Stats")]
+    [Header("Stats")] 
     private PizzaInventar pizzaInventar;
-    public static int money = 1_000_000;
+    public static int money = 0;
+    [SerializeField] private int baseAttack = 10;
     private PlayerHealth playerHealth;
 
     [Header("Audio")]
@@ -104,7 +105,7 @@ public class Player : MonoBehaviour
 
     private void FirePerformed(InputAction.CallbackContext context)
     {
-        if (readyToThrow && maxThrows > 0)
+        if (readyToThrow && maxThrows > 0 && Time.timeScale != 0)
             timer = Time.time;
     }
 
@@ -130,6 +131,7 @@ public class Player : MonoBehaviour
 
     private void Consume(InputAction.CallbackContext context)
     {
+        if (Time.timeScale == 0) return;
         GameObject.Find("Audio Source").GetComponent<AudioSource>().PlayOneShot(consumeSound);
         Eat();
     }
@@ -252,25 +254,7 @@ public class Player : MonoBehaviour
     private IPizza CreatePizzaToThrow(PizzaType pizzaTypeToThrow, int quantity)
     {
         Debug.Log("Pizza of type: " + pizzaTypeToThrow + " will be created to throw.");
-        switch (pizzaTypeToThrow)
-        {
-            case PizzaType.Cheese:
-                var cheesePizzaToThrow = new CheesePizza(quantity);
-                return cheesePizzaToThrow;
-
-            case PizzaType.Pineapple:
-                var pineapplePizzaToThrow = new PineapplePizza(quantity);
-                return pineapplePizzaToThrow;
-
-            case PizzaType.Mushroom:
-                var mushroomPizzaToThrow = new MushroomPizza(quantity);
-                return mushroomPizzaToThrow;
-
-            default:
-                Debug.LogError("Unknown pizza type selected!");
-                break;
-        }
-        return new CheesePizza(quantity); //base Pizza to throw
+        return PizzaFactory.CreatePizza(pizzaTypeToThrow, baseAttack, quantity);
     }
 
     public void Restocking()
@@ -294,7 +278,7 @@ public class Player : MonoBehaviour
         if (pizzaInventar.GetPizzaAmmo(pizzaType) == 0) return;
 
         // TODO: Move pizza creation logic to factory class
-        IPizza pizza = PizzaFactory.CreatePizza(pizzaType);
+        IPizza pizza = PizzaFactory.CreatePizza(pizzaType, baseAttack);
         // Heal(pizza.Healing);
         playerHealth.Heal(pizza.Healing);
         pizzaInventar.LosePizzas(1);
@@ -339,5 +323,11 @@ public class Player : MonoBehaviour
                 _:
                 break;
         }
+    }
+    
+    // TODO: Move attacking code to separate class
+    public void IncreaseAttack(int amount)
+    {
+        baseAttack += amount;
     }
 }

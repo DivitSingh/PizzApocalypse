@@ -6,13 +6,12 @@ public struct CheesePizza : IPizza
     public float Damage { get; }
     public float Healing => 10;
 
-    // TODO: Replace with actual effects
     public IEffect PlayerEffect => null;
     public IEffect CustomerEffect => null;
 
-    public CheesePizza(int quantity)
+    public CheesePizza(int baseDamage, int quantity)
     {
         Quantity = quantity;
-        Damage = quantity * 10; // TODO: This should probably be tuned, should there be bonus damage for throwing entire box?
+        Damage = baseDamage * quantity;
     }
 }
