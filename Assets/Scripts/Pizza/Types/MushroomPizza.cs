@@ -3,13 +3,14 @@ public class MushroomPizza : IPizza
 {
     public PizzaType Type => PizzaType.Mushroom;
     public int Quantity { get; }
-    public float Damage => 15;
+    public float Damage { get; }
     public float Healing => 10;
     public IEffect PlayerEffect => new RegenEffect();
     public IEffect CustomerEffect => new StunEffect();
 
-    public MushroomPizza(int quantity)
+    public MushroomPizza(float baseDamage, int quantity)
     {
         Quantity = quantity;
+        Damage = baseDamage * quantity;
     }
 }

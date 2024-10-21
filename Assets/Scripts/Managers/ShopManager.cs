@@ -41,8 +41,8 @@ public class ShopManager : MonoBehaviour
         if (Balance < healthBuff.Cost) return;
 
         Balance -= healthBuff.Cost;
-        healthBuff.Upgrade();
         playerHealth.UpgradeMaxHealth(healthBuff.IncreaseAmount);
+        healthBuff.Upgrade();
         OnBuffPurchased?.Invoke(healthBuff);
     }
 
@@ -51,9 +51,9 @@ public class ShopManager : MonoBehaviour
         if (Balance < damageBuff.Cost) return;
 
         Balance -= damageBuff.Cost;
+        player.IncreaseAttack(damageBuff.IncreaseAmount);
         damageBuff.Upgrade();
         OnBuffPurchased?.Invoke(damageBuff);
-        // TODO: Increase player damage somewhere
     }
     
     public void UpgradeCapacity()
@@ -61,8 +61,8 @@ public class ShopManager : MonoBehaviour
         if (Balance < capacityBuff.Cost) return;
 
         Balance -= capacityBuff.Cost;
-        capacityBuff.Upgrade();
         playerInventory.IncreaseCapacity(capacityBuff.IncreaseAmount);
+        capacityBuff.Upgrade();
         OnBuffPurchased?.Invoke(capacityBuff);
     }
 }
