@@ -24,7 +24,6 @@ public class RoundManager : MonoBehaviour
     public event Action<int, int> OnProgressChanged;
     public event Action<int> OnRoundChanged;
     public event Action OnRoundFailed;
-    // TODO: Add onRoundPassed event with stats?
 
     private void Start()
     {
@@ -37,6 +36,8 @@ public class RoundManager : MonoBehaviour
     private void Update()
     {
         // TODO: End round early if all customers have been fed or are dead?
+        if (Time.timeScale == 0) return;
+        
         if (timeRemaining > 0)
         {
             timeRemaining -= Time.deltaTime;
@@ -50,7 +51,6 @@ public class RoundManager : MonoBehaviour
 
     public void HandleFedCustomer(Customer customer)
     {
-        // TODO: Eventually add tips/score differently based on customer?
         Score++;
         OnProgressChanged?.Invoke(Score, passScore);
 
@@ -69,29 +69,22 @@ public class RoundManager : MonoBehaviour
         }
         else
         {
-            // TODO: Should eventually add break between rounds starting?
-            // FIXME: Temporarily showing round passed screen
-            // NextRound();
             OnRoundChanged?.Invoke(++Round);
         }
     }
 
-    private void NextRound()
+    public void NextRound()
     {
         // TODO: Need to fine tune these values, make sure round is still possible
         // NOTE: Values are currently temporary, anything past first round should be ignored
-        Round++;
         Score = 0;
         passScore++;
-        timeRemaining = roundDuration;
+        timeRemaining = roundDuration + 5;
         customerPatience--;
-        spawnInterval--;
         totalCustomers++;
         
         // TODO: Modify other customer stats
-        
         OnProgressChanged?.Invoke(Score, passScore);
-        OnRoundChanged?.Invoke(Round);
         OnTimeRemainingChanged?.Invoke(timeRemaining);
         customerSpawner.StartSpawning(spawnInterval, totalCustomers, customerHealth, customerPatience, customerAttackDmg);
     }

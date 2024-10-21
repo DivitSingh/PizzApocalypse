@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -5,42 +7,67 @@ using UnityEngine;
 /// </summary>
 public class ShopManager : MonoBehaviour
 {
+    [SerializeField] private Player player;
     [SerializeField] private PlayerHealth playerHealth;
     [SerializeField] private PizzaInventar playerInventory;
     
-    // TODO: Replace with player balance
-    private int Balance { get; } = 1_000_000;
+    public int Balance
+    {
+        get => Player.money;
+        private set
+        {
+            Player.money = value;
+            OnBalanceChanged?.Invoke(Balance);
+        }
+    }
     
     // Store current statuses of buffs
-    private Buff healthBuff = new Buff(200, 10);
-    private Buff damageBuff = new Buff(200, 5);
-    private Buff capacityBuff = new Buff(200, 5);
-    
-    // TODO: Add return indicating updated level and cost
+    private Buff healthBuff = new Buff(5, 5, BuffType.Health);
+    private Buff damageBuff = new Buff(5, 3, BuffType.Damage);
+    private Buff capacityBuff = new Buff(5, 5, BuffType.Capacity);
+    public List<Buff> Buffs { get; private set; }
+
+    // Delegates
+    public event Action<Buff> OnBuffPurchased;
+    public event Action<int> OnBalanceChanged;
+
+    private void Start()
+    {
+        Buffs = new List<Buff> { healthBuff, damageBuff, capacityBuff };
+    }
+
     public void UpgradeHealth()
     {
         if (Balance < healthBuff.Cost) return;
+
+        Balance -= healthBuff.Cost;
         healthBuff.Upgrade();
         playerHealth.UpgradeMaxHealth(healthBuff.IncreaseAmount);
+        OnBuffPurchased?.Invoke(healthBuff);
     }
 
     public void UpgradeDamage()
     {
         if (Balance < damageBuff.Cost) return;
+
+        Balance -= damageBuff.Cost;
         damageBuff.Upgrade();
-        // TODO: Increase player health somewhere
+        OnBuffPurchased?.Invoke(damageBuff);
+        // TODO: Increase player damage somewhere
     }
     
     public void UpgradeCapacity()
     {
         if (Balance < capacityBuff.Cost) return;
+
+        Balance -= capacityBuff.Cost;
         capacityBuff.Upgrade();
         playerInventory.IncreaseCapacity(capacityBuff.IncreaseAmount);
+        OnBuffPurchased?.Invoke(capacityBuff);
     }
-    
-    // TODO: Implement UI
 }
 
+// TODO: Should IncreaseAmount change over time or be constant?
 public class Buff
 {
     public int Level { get; private set; }
@@ -48,11 +75,14 @@ public class Buff
 
     public readonly int IncreaseAmount;
 
-    public Buff(int cost, int incAmount)
+    public readonly BuffType Type;
+
+    public Buff(int initialCost, int incAmount, BuffType buffType)
     {
         Level = 1;
-        Cost = cost;
+        Cost = initialCost;
         IncreaseAmount = incAmount;
+        Type = buffType;
     }
 
     public void Upgrade()
@@ -60,4 +90,11 @@ public class Buff
         Level += 1;
         Cost = (int) (Cost * 1.25);
     }
+}
+
+public enum BuffType
+{
+    Health,
+    Damage,
+    Capacity
 }

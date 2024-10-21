@@ -44,7 +44,6 @@ public class PlayerHealth: MonoBehaviour
     public void UpgradeMaxHealth(float amount)
     {
         startingHealth += amount;
-        OnHpPctChanged?.Invoke(CurrentHpPct);
+        CurrentHealth = startingHealth;
     }
-    
 }

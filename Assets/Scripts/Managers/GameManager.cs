@@ -11,59 +11,59 @@ public class GameManager : MonoBehaviour
     [SerializeField] private RoundManager roundManager;
     [SerializeField] private GameObject gameOverScreen;
     [SerializeField] private TMP_Text scoreText;
-
     [SerializeField] private ShopUI shopUI;
-
-    // TODO: [Remove]: Temporary references for completed round screen
-    [SerializeField] private GameObject roundPassedScreen;
-    [SerializeField] private TMP_Text roundScoreText;
 
     public event Action OnGameOver;
 
     private void Awake()
     {
+        Player.money = 0; // TODO: Refactor this, money should not be static variable
         Instance = this;
         GameObject.FindWithTag("Player").GetComponent<PlayerHealth>().OnDeath += HandleGameOver;
         roundManager.OnRoundFailed += HandleGameOver;
         roundManager.OnRoundChanged += HandleRoundPassed;
-
-        // Undo changes from paused state
-        Time.timeScale = 1;
-        AudioListener.pause = false;
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = true;
+        Unpause();
     }
 
     private void HandleGameOver()
     {
-        Time.timeScale = 0;
-        AudioListener.pause = true;
-        Cursor.lockState = CursorLockMode.Confined;
-        Cursor.visible = true;
-        OnGameOver?.Invoke();
-
-        // Delete customers
         foreach (var customer in FindObjectsOfType<Customer>())
         {
             Destroy(customer.gameObject);
         }
-
         
-        // Show(roundManager.Score);
+        Pause();
+        OnGameOver?.Invoke();
+        Show(roundManager.Score);
+    }
+
+    private void HandleRoundPassed(int _)
+    {
+        Pause();
         shopUI.Show();
     }
 
-    // TODO: REMOVE, Temporarily shows round passed screen, remove
-    private void HandleRoundPassed(int _)
+    public void StartNextRound()
+    {
+        shopUI.Hide();
+        roundManager.NextRound();
+        Unpause();
+    }
+
+    private void Pause()
     {
         Time.timeScale = 0;
         AudioListener.pause = true;
         Cursor.lockState = CursorLockMode.Confined;
         Cursor.visible = true;
-        OnGameOver?.Invoke();
-        roundScoreText.text = $"You made {roundManager.Score} {(roundManager.Score == 1 ? "delivery" : "deliveries")}.";
-        roundPassedScreen.SetActive(true);
-        EventSystem.current.SetSelectedGameObject(roundPassedScreen.transform.Find("RestartButton").gameObject);
+    }
+
+    private void Unpause()
+    {
+        Time.timeScale = 1;
+        AudioListener.pause = false;
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = true;
     }
 
     public void HandleFedCustomerScoring(Customer customer)

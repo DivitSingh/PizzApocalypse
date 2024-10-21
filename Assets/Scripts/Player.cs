@@ -40,8 +40,7 @@ public class Player : MonoBehaviour
 
     [Header("Stats")]
     private PizzaInventar pizzaInventar;
-    [SerializeField] private float startingHealth = 100f;
-    public static int money;
+    public static int money = 1_000_000;
     private PlayerHealth playerHealth;
 
     [Header("Audio")]
@@ -133,19 +132,6 @@ public class Player : MonoBehaviour
     {
         GameObject.Find("Audio Source").GetComponent<AudioSource>().PlayOneShot(consumeSound);
         Eat();
-    }
-
-        // Check for key inputs to switch pizza types
-        if (Input.GetButtonDown("Swap Forward"))
-        {
-            GameObject.Find("Audio Source").GetComponent<AudioSource>().PlayOneShot(swapSound);
-            pizzaInventar.SwitchPizzaForward(); // Switch to the next pizza    
-        }
-        else if (Input.GetButtonDown("Swap Backward"))
-        {
-            GameObject.Find("Audio Source").GetComponent<AudioSource>().PlayOneShot(swapSound);
-            pizzaInventar.SwitchPizzaBackward(); // Switch to the previous pizza        
-        }
     }
 
     private void Movement()

@@ -63,7 +63,6 @@ public class Customer : MonoBehaviour
         agentBaseSpeed = agent.speed;
     }
 
-    // TODO: Add Initialize method
     public void Initialize(float health, float patience, float attackDamage, Order order)
     {
         maxHealth = health;

@@ -46,9 +46,10 @@ public class CustomerSpawner : MonoBehaviour
     /// <param name="attackDamage">The amount of damage a customer attack deals to the player.</param>
     public void StartSpawning(float spawnInterval, int totalSpawns, float health, float patience, float attackDamage)
     {
+        StopAllCoroutines();
         StartCoroutine(SpawnCustomers(spawnInterval, totalSpawns, health, patience, attackDamage));
     }
-
+O
     private IEnumerator SpawnCustomers(float spawnInterval, int totalSpawns, float health, float patience, float attackDamage)
     {
         for (int i = 0; i < totalSpawns; i++)
