@@ -49,7 +49,7 @@ public class CustomerSpawner : MonoBehaviour
         StopAllCoroutines();
         StartCoroutine(SpawnCustomers(spawnInterval, totalSpawns, health, patience, attackDamage));
     }
-O
+
     private IEnumerator SpawnCustomers(float spawnInterval, int totalSpawns, float health, float patience, float attackDamage)
     {
         for (int i = 0; i < totalSpawns; i++)
