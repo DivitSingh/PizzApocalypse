@@ -8422,7 +8422,15 @@ MonoBehaviour:
     m_SingletonActionBindings:
     - m_Name: 
       m_Id: 54e304f0-7832-4df4-b6e9-d5827d73418d
-      m_Path: <Mouse>/press
+      m_Path: <Mouse>/rightButton
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Shoot Controls
+      m_Flags: 0
+    - m_Name: 
+      m_Id: 55e005f4-344c-432d-b705-6bb4245c8ef2
+      m_Path: <Gamepad>/rightTrigger
       m_Interactions: 
       m_Processors: 
       m_Groups: 
@@ -8431,12 +8439,28 @@ MonoBehaviour:
     m_Flags: 0
   eatControls:
     m_Name: Eat Controls
-    m_Type: 0
-    m_ExpectedControlType: 
+    m_Type: 1
+    m_ExpectedControlType: Button
     m_Id: 34cc0f88-e5fa-4d72-86f4-a632434fa3ab
     m_Processors: 
     m_Interactions: 
-    m_SingletonActionBindings: []
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 68ec3dd1-916c-4ee1-88d6-9e729c58d98e
+      m_Path: <Mouse>/leftButton
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Eat Controls
+      m_Flags: 0
+    - m_Name: 
+      m_Id: 94dc9520-db02-4131-a65b-618c8828fe9d
+      m_Path: <Gamepad>/leftTrigger
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Eat Controls
+      m_Flags: 0
     m_Flags: 0
   moneyText: {fileID: 1016070199}
   moveSpeed: 4500

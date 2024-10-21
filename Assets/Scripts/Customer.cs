@@ -9,6 +9,22 @@ using UnityEngine.UI;
 [RequireComponent(typeof(NavMeshAgent))]
 public class Customer : MonoBehaviour
 {
+    [Header("References")]
+    private NavMeshAgent agent;
+    private float agentBaseSpeed;
+    private Animator animator;
+    private BoxCollider boxCollider;
+    private Transform player;
+
+    [Header("Stats")]
+    private float maxHealth;
+    private float health;
+    private float attackDamage;
+    private float patience;
+    private State state = State.Hungry;
+    private Order order;
+    private List<IEffect> activeEffects = new List<IEffect>();
+
     [Header("UI")]
     [SerializeField] private GameObject healthBarPrefab;
     [SerializeField] private Vector3 healthBarOffset = new Vector3(0, 2f, 0);
@@ -32,21 +48,6 @@ public class Customer : MonoBehaviour
     [SerializeField] private Texture walkTexture;
     [SerializeField] private Texture attackTexture;
     [SerializeField] private Texture eatTexture;
-
-    private float maxHealth;
-    private float health;
-    private float attackDamage;
-    private float patience;
-    private Order order;
-
-    private NavMeshAgent agent;
-    private float agentBaseSpeed;
-    private Animator animator;
-    private BoxCollider boxCollider;
-    private Transform player;
-    private State state = State.Hungry;
-
-    private List<IEffect> activeEffects = new List<IEffect>();
 
     private enum State
     {
@@ -303,14 +304,11 @@ public class Customer : MonoBehaviour
             if (health <= 0)
             {
                 GameObject.Find("Audio Source").GetComponent<AudioSource>().PlayOneShot(dieSound);
-                Destroy(healthBar.gameObject);
+                if (healthBar != null)
+                    Destroy(healthBar.gameObject);
                 if (circularTimer != null)
-                {
                     Destroy(circularTimer.gameObject);
-                }
-                StopAllCoroutines();
-                DestroyOrderDisplay();
-                Destroy(gameObject);
+                StartCoroutine(RemoveCustomer());
             }
             else
             {
@@ -323,6 +321,7 @@ public class Customer : MonoBehaviour
         }
         else if (state == State.Hungry)
         {
+            transform.LookAt(player);
             order.DeductPizzaFromOrder(pizza);
             UpdateOrderDisplay(); // Update the order display after receiving a pizza
             if (order.IsOrderFulfilled())
@@ -330,7 +329,11 @@ public class Customer : MonoBehaviour
                 GameObject.Find("Audio Source").GetComponent<AudioSource>().PlayOneShot(completeSound);
                 StopAllCoroutines();
                 GameManager.Instance.HandleFedCustomerScoring(this);
-                CleanupCustomer(); // Use a new method for cleanup
+                if (circularTimer != null)
+                    Destroy(circularTimer.gameObject);
+                if (healthBar != null)
+                    Destroy(healthBar.gameObject);
+                StartCoroutine(RemoveCustomer());
             }
             else
             {
@@ -340,17 +343,15 @@ public class Customer : MonoBehaviour
         }
     }
 
-    private void CleanupCustomer()
+    private IEnumerator RemoveCustomer()
     {
-        if (circularTimer != null)
-        {
-            Destroy(circularTimer.gameObject);
-        }
-        if (healthBar != null)
-        {
-            Destroy(healthBar.gameObject);
-        }
-        DestroyOrderDisplay(); // Make sure to destroy the order display
+        agent.enabled = false;
+        GetComponent<CapsuleCollider>().enabled = false;
+        GetComponentInChildren<SkinnedMeshRenderer>().material.mainTexture = idleTexture;
+        animator.Play("Celebrate");
+        yield return new WaitForSeconds(1.2f);
+        StopAllCoroutines();
+        DestroyOrderDisplay();
         Destroy(gameObject);
     }
 
