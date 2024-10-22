@@ -16,6 +16,8 @@ public class Player : MonoBehaviour
     [SerializeField] private GameObject pizzaBoxPrefab;
     [SerializeField] private InputAction shootControls;
     [SerializeField] private InputAction eatControls;
+    [SerializeField] private InputAction swapForwardControls;
+    [SerializeField] private InputAction swapBackwardControls;
     [SerializeField] private TextMeshProUGUI moneyText;
 
     [Header("Movement")]
@@ -57,12 +59,18 @@ public class Player : MonoBehaviour
         shootControls.canceled += FireCanceled;
         eatControls.Enable();
         eatControls.performed += Consume;
+        swapForwardControls.Enable();
+        swapForwardControls.performed += SwapForward;
+        swapBackwardControls.Enable();
+        swapBackwardControls.performed += SwapBackward;
     }
 
     private void OnDisable()
     {
         shootControls.Disable();
         eatControls.Disable();
+        swapForwardControls.Disable();
+        swapBackwardControls.Disable();
     }
 
     void Start()
@@ -88,18 +96,6 @@ public class Player : MonoBehaviour
         if (Time.timeScale == 0) return;
         Look();
         moneyText.text = "$" + playerInventory.money.ToString();
-
-        // Check for key inputs to switch pizza types
-        if (Input.GetButtonDown("Swap Forward"))
-        {
-            GameObject.Find("Audio Source").GetComponent<AudioSource>().PlayOneShot(swapSound);
-            playerInventory.SwitchPizzaForward(); // Switch to the next pizza    
-        }
-        else if (Input.GetButtonDown("Swap Backward"))
-        {
-            GameObject.Find("Audio Source").GetComponent<AudioSource>().PlayOneShot(swapSound);
-            playerInventory.SwitchPizzaBackward(); // Switch to the previous pizza        
-        }
     }
 
     private void FirePerformed(InputAction.CallbackContext context)
@@ -132,7 +128,24 @@ public class Player : MonoBehaviour
     {
         if (Time.timeScale == 0) return;
         GameObject.Find("Audio Source").GetComponent<AudioSource>().PlayOneShot(consumeSound);
-        Eat();
+        var pizzaType = playerInventory.GetEquippedPizza();
+        if (playerInventory.GetPizzaAmmo(pizzaType) == 0) return;
+        IPizza pizza = PizzaFactory.CreatePizza(pizzaType, baseAttack);
+        playerHealth.Heal(pizza.Healing);
+        playerInventory.LosePizzas(1);
+        StartCoroutine(StartEffect(pizza.PlayerEffect));
+    }
+
+    private void SwapForward(InputAction.CallbackContext context)
+    {
+        GameObject.Find("Audio Source").GetComponent<AudioSource>().PlayOneShot(swapSound);
+        playerInventory.SwitchPizzaForward();
+    }
+
+    private void SwapBackward(InputAction.CallbackContext context)
+    {
+        GameObject.Find("Audio Source").GetComponent<AudioSource>().PlayOneShot(swapSound);
+        playerInventory.SwitchPizzaBackward();
     }
 
     private void Movement()
@@ -266,22 +279,6 @@ public class Player : MonoBehaviour
     {
         currentThrows = maxThrows;
         readyToThrow = true;
-    }
-
-    /// <summary>
-    /// Handles the functionality for eating the currently selected pizza.
-    /// </summary>
-    private void Eat()
-    {
-        var pizzaType = playerInventory.GetEquippedPizza();
-        if (playerInventory.GetPizzaAmmo(pizzaType) == 0) return;
-
-        // TODO: Move pizza creation logic to factory class
-        IPizza pizza = PizzaFactory.CreatePizza(pizzaType, baseAttack);
-        // Heal(pizza.Healing);
-        playerHealth.Heal(pizza.Healing);
-        playerInventory.LosePizzas(1);
-        StartCoroutine(StartEffect(pizza.PlayerEffect));
     }
 
     private IEnumerator StartEffect(IEffect effect)

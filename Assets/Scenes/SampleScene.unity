@@ -16322,7 +16322,7 @@ MonoBehaviour:
     m_SingletonActionBindings:
     - m_Name: 
       m_Id: 54e304f0-7832-4df4-b6e9-d5827d73418d
-      m_Path: <Mouse>/rightButton
+      m_Path: <Mouse>/leftButton
       m_Interactions: 
       m_Processors: 
       m_Groups: 
@@ -16347,7 +16347,7 @@ MonoBehaviour:
     m_SingletonActionBindings:
     - m_Name: 
       m_Id: 68ec3dd1-916c-4ee1-88d6-9e729c58d98e
-      m_Path: <Mouse>/leftButton
+      m_Path: <Mouse>/rightButton
       m_Interactions: 
       m_Processors: 
       m_Groups: 
@@ -16360,6 +16360,56 @@ MonoBehaviour:
       m_Processors: 
       m_Groups: 
       m_Action: Eat Controls
+      m_Flags: 0
+    m_Flags: 0
+  swapForwardControls:
+    m_Name: Swap Forward Controls
+    m_Type: 1
+    m_ExpectedControlType: Button
+    m_Id: d66f426f-3561-414a-86f9-161d6cc6f94d
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: a893a629-b3fb-4f92-afde-f6df5cc93da8
+      m_Path: <Mouse>/scroll/up
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Swap Forward Controls
+      m_Flags: 0
+    - m_Name: 
+      m_Id: e127ab4a-fa28-42aa-93ab-780a79a9cf78
+      m_Path: <Gamepad>/rightShoulder
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Swap Forward Controls
+      m_Flags: 0
+    m_Flags: 0
+  swapBackwardControls:
+    m_Name: Swap Backward Controls
+    m_Type: 1
+    m_ExpectedControlType: Button
+    m_Id: 7dfc3fb2-45f5-4de7-8feb-32351552772c
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 418cebc9-89c4-43bc-b474-6a8075aa3e80
+      m_Path: <Mouse>/scroll/down
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Swap Backward Controls
+      m_Flags: 0
+    - m_Name: 
+      m_Id: 4c0149b3-0ea3-4b1e-90b5-8f7f1d6fd65e
+      m_Path: <Gamepad>/leftShoulder
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Swap Backward Controls
       m_Flags: 0
     m_Flags: 0
   moneyText: {fileID: 1016070199}
