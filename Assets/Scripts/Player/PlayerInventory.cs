@@ -3,8 +3,11 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class PizzaInventar : MonoBehaviour
-{    // Maximum ammo limit
+public class PlayerInventory : MonoBehaviour
+{
+    public int money = 0;
+
+    // Maximum ammo limit
     [SerializeField] private int maxAmmo = 40;
 
     // Inventory to hold pizza amounts
@@ -24,7 +27,6 @@ public class PizzaInventar : MonoBehaviour
     public Sprite cheeseIcon;
     public Sprite pineappleIcon;
     public Sprite mushroomIcon;
-
 
     public void InitializeInventory()
     {
@@ -148,4 +150,8 @@ public class PizzaInventar : MonoBehaviour
         UpdateUI();
     }
 
+    public void IncreaseMoney(int amount)
+    {
+        money += amount;
+    }
 }

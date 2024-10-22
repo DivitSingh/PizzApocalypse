@@ -17,7 +17,6 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        Player.money = 0; // TODO: Refactor this, money should not be static variable
         Instance = this;
         GameObject.FindWithTag("Player").GetComponent<PlayerHealth>().OnDeath += HandleGameOver;
         roundManager.OnRoundFailed += HandleGameOver;
@@ -31,7 +30,7 @@ public class GameManager : MonoBehaviour
         {
             Destroy(customer.gameObject);
         }
-        
+
         Pause();
         OnGameOver?.Invoke();
         Show(roundManager.Score);

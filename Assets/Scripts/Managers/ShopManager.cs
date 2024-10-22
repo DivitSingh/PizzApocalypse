@@ -9,18 +9,18 @@ public class ShopManager : MonoBehaviour
 {
     [SerializeField] private Player player;
     [SerializeField] private PlayerHealth playerHealth;
-    [SerializeField] private PizzaInventar playerInventory;
-    
+    [SerializeField] private PlayerInventory playerInventory;
+
     public int Balance
     {
-        get => Player.money;
+        get => playerInventory.money;
         private set
         {
-            Player.money = value;
+            playerInventory.money = value;
             OnBalanceChanged?.Invoke(Balance);
         }
     }
-    
+
     // Store current statuses of buffs
     private Buff healthBuff = new Buff(5, 5, BuffType.Health);
     private Buff damageBuff = new Buff(5, 3, BuffType.Damage);
@@ -55,15 +55,15 @@ public class ShopManager : MonoBehaviour
         damageBuff.Upgrade();
         OnBuffPurchased?.Invoke(damageBuff);
     }
-    
+
     public void UpgradeCapacity()
     {
         if (Balance < capacityBuff.Cost) return;
-
         Balance -= capacityBuff.Cost;
         playerInventory.IncreaseCapacity(capacityBuff.IncreaseAmount);
         capacityBuff.Upgrade();
         OnBuffPurchased?.Invoke(capacityBuff);
+        playerInventory.RestockPizzas();
     }
 }
 
@@ -88,7 +88,7 @@ public class Buff
     public void Upgrade()
     {
         Level += 1;
-        Cost = (int) (Cost * 1.25);
+        Cost = (int)(Cost * 1.25);
     }
 }
 

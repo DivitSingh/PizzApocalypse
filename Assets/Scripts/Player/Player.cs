@@ -39,17 +39,16 @@ public class Player : MonoBehaviour
     private bool readyToThrow;
 
     [Header("Stats")]
-    private PizzaInventar pizzaInventar;
+    private PlayerHealth playerHealth;
+    public PlayerInventory playerInventory;
     public static int money = 0;
     [SerializeField] private int baseAttack = 10;
-    private PlayerHealth playerHealth;
+    private List<IEffect> activeEffects = new List<IEffect>();
 
     [Header("Audio")]
     [SerializeField] private AudioClip swapSound;
     [SerializeField] private AudioClip hurtSound;
     [SerializeField] private AudioClip consumeSound;
-
-    private List<IEffect> activeEffects = new List<IEffect>();
 
     private void OnEnable()
     {
@@ -73,9 +72,9 @@ public class Player : MonoBehaviour
         readyToThrow = true;
         currentThrows = maxThrows;
         rb = GetComponent<Rigidbody>();
-        pizzaInventar = GetComponent<PizzaInventar>();
+        playerInventory = GetComponent<PlayerInventory>();
         playerHealth = GetComponent<PlayerHealth>();
-        pizzaInventar.InitializeInventory();
+        playerInventory.InitializeInventory();
     }
 
     private void FixedUpdate()
@@ -88,18 +87,18 @@ public class Player : MonoBehaviour
         playerCam.position = transform.position + new Vector3(0, 0.5f, 0);
         if (Time.timeScale == 0) return;
         Look();
-        moneyText.text = "$" + money.ToString();
+        moneyText.text = "$" + playerInventory.money.ToString();
 
         // Check for key inputs to switch pizza types
         if (Input.GetButtonDown("Swap Forward"))
         {
             GameObject.Find("Audio Source").GetComponent<AudioSource>().PlayOneShot(swapSound);
-            pizzaInventar.SwitchPizzaForward(); // Switch to the next pizza    
+            playerInventory.SwitchPizzaForward(); // Switch to the next pizza    
         }
         else if (Input.GetButtonDown("Swap Backward"))
         {
             GameObject.Find("Audio Source").GetComponent<AudioSource>().PlayOneShot(swapSound);
-            pizzaInventar.SwitchPizzaBackward(); // Switch to the previous pizza        
+            playerInventory.SwitchPizzaBackward(); // Switch to the previous pizza        
         }
     }
 
@@ -114,18 +113,18 @@ public class Player : MonoBehaviour
         if (Time.time - timer < 1.00f)
         {
             // Throw(pizzas[0]);// Slice Pizza
-            Throw(pizzaInventar.GetEquippedPizza(), false);
+            Throw(playerInventory.GetEquippedPizza(), false);
         }
         else
         {
-            if (pizzaInventar.GetPizzaAmmo(pizzaInventar.GetEquippedPizza()) >= 8)
+            if (playerInventory.GetPizzaAmmo(playerInventory.GetEquippedPizza()) >= 8)
                 // Throw(pizzas[1]);// Full Pizza, only thrown, when there are 8 or more pieces left.
-                Throw(pizzaInventar.GetEquippedPizza(), true);
+                Throw(playerInventory.GetEquippedPizza(), true);
             // TODO: Should probably refactor to only pass in whether thrown pizza is box or not
             // TODO: Let Throw method handle which type of Pizza is thrown
             else
                 // Throw(pizzas[0]);// Slice Pizza thrown instead when 7 or less slices are left.
-                Throw(pizzaInventar.GetEquippedPizza(), false);
+                Throw(playerInventory.GetEquippedPizza(), false);
         }
     }
 
@@ -226,16 +225,16 @@ public class Player : MonoBehaviour
     private void Throw(PizzaType pizzaType, bool isBox)
     {
         // TODO: Pizza creation logic could be moved to factory
-        Debug.Log("Pizza type to throw: " + pizzaType + "Current ammo: " + pizzaInventar.GetPizzaAmmo(pizzaInventar.GetEquippedPizza()));
+        Debug.Log("Pizza type to throw: " + pizzaType + "Current ammo: " + playerInventory.GetPizzaAmmo(playerInventory.GetEquippedPizza()));
 
-        if (pizzaInventar.GetPizzaAmmo(pizzaInventar.GetEquippedPizza()) > 0)
+        if (playerInventory.GetPizzaAmmo(playerInventory.GetEquippedPizza()) > 0)
         {
             readyToThrow = false;
             var prefab = isBox ? pizzaBoxPrefab : pizzaSlicePrefab;
             var quantity = isBox ? 8 : 1;
-            var pizzaToThrow = CreatePizzaToThrow(pizzaInventar.GetEquippedPizza(), quantity);
+            var pizzaToThrow = CreatePizzaToThrow(playerInventory.GetEquippedPizza(), quantity);
             //TODO Create Pizza to throw
-            pizzaInventar.LosePizzas(quantity);
+            playerInventory.LosePizzas(quantity);
 
             var projectile = Instantiate(prefab, attackPoint.position, playerCam.GetChild(0).rotation);
             projectile.GetComponent<ThrowablePizza>().Initialize(pizzaToThrow);
@@ -260,7 +259,7 @@ public class Player : MonoBehaviour
     public void Restocking()
     {
         // Restocking pizzas to max order amount
-        pizzaInventar.RestockPizzas();
+        playerInventory.RestockPizzas();
     }
 
     private void ResetThrow()
@@ -274,14 +273,14 @@ public class Player : MonoBehaviour
     /// </summary>
     private void Eat()
     {
-        var pizzaType = pizzaInventar.GetEquippedPizza();
-        if (pizzaInventar.GetPizzaAmmo(pizzaType) == 0) return;
+        var pizzaType = playerInventory.GetEquippedPizza();
+        if (playerInventory.GetPizzaAmmo(pizzaType) == 0) return;
 
         // TODO: Move pizza creation logic to factory class
         IPizza pizza = PizzaFactory.CreatePizza(pizzaType, baseAttack);
         // Heal(pizza.Healing);
         playerHealth.Heal(pizza.Healing);
-        pizzaInventar.LosePizzas(1);
+        playerInventory.LosePizzas(1);
         StartCoroutine(StartEffect(pizza.PlayerEffect));
     }
 
@@ -320,7 +319,6 @@ public class Player : MonoBehaviour
         {
             case Stat.Health:
                 if (effect.Type == EffectType.ConstantIncrease) playerHealth.Heal(effect.Value);
-                _:
                 break;
         }
     }

@@ -205,12 +205,8 @@ public class Customer : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (state == State.Angry)
-        {
             if (other.GetComponent<Player>() != null)
-            {
                 other.GetComponent<PlayerHealth>().TakeDamage(attackDamage);
-            }
-        }
     }
 
     private void BecomeAngry()
@@ -324,11 +320,12 @@ public class Customer : MonoBehaviour
             transform.LookAt(player);
             order.DeductPizzaFromOrder(pizza);
             UpdateOrderDisplay(); // Update the order display after receiving a pizza
-            if (order.IsOrderFulfilled())
+            if (order.IsOrderFulfilled() > -1)
             {
                 GameObject.Find("Audio Source").GetComponent<AudioSource>().PlayOneShot(completeSound);
                 StopAllCoroutines();
                 GameManager.Instance.HandleFedCustomerScoring(this);
+                player.GetComponent<Player>().playerInventory.IncreaseMoney(order.IsOrderFulfilled());
                 if (circularTimer != null)
                     Destroy(circularTimer.gameObject);
                 if (healthBar != null)

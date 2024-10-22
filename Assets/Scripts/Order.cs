@@ -129,18 +129,17 @@ public class Order
         Debug.Log($"No {pizzaReceived.Type} left in the order.");
     }
 
-    public bool IsOrderFulfilled()
+    public int IsOrderFulfilled()
     {
         for (int i = 0; i < Orders.Length; i++)
         {
             if (Orders[i].Count > 0)  // If any pizza type still has remaining pizzas, the order is not fulfilled
             {
-                return false;
+                return -1;
             }
         }
 
-        Player.money += (int)(GetOriginalOrderAmount() * GetOrderModifier());
-        return true;  // If all pizzas are fulfilled, return true
+        return (int)(GetOriginalOrderAmount() * GetOrderModifier());  // If all pizzas are fulfilled, return true
     }
 
     public string PasteOrderContents() //Debugging method to paste Order array

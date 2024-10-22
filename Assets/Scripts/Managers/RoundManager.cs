@@ -4,7 +4,7 @@ using UnityEngine;
 public class RoundManager : MonoBehaviour
 {
     [SerializeField] private CustomerSpawner customerSpawner;
-    
+
     [Header("Initial Stats")]
     [SerializeField] private float roundDuration = 120f;
     [SerializeField] private float spawnInterval = 5f;
@@ -37,7 +37,7 @@ public class RoundManager : MonoBehaviour
     {
         // TODO: End round early if all customers have been fed or are dead?
         if (Time.timeScale == 0) return;
-        
+
         if (timeRemaining > 0)
         {
             timeRemaining -= Time.deltaTime;
@@ -65,7 +65,7 @@ public class RoundManager : MonoBehaviour
 
         if (Score < passScore)
         {
-            OnRoundFailed?.Invoke();    
+            OnRoundFailed?.Invoke();
         }
         else
         {
@@ -82,10 +82,12 @@ public class RoundManager : MonoBehaviour
         timeRemaining = roundDuration + 5;
         customerPatience--;
         totalCustomers++;
-        
+
         // TODO: Modify other customer stats
         OnProgressChanged?.Invoke(Score, passScore);
         OnTimeRemainingChanged?.Invoke(timeRemaining);
+        GameObject.Find("Audio Source").GetComponent<AudioSource>().Stop();
+        GameObject.Find("Audio Source").GetComponent<AudioSource>().Play();
         customerSpawner.StartSpawning(spawnInterval, totalCustomers, customerHealth, customerPatience, customerAttackDmg);
     }
 }

@@ -33,9 +33,9 @@ public class ShopUI : MonoBehaviour
     private BuffComponents healthComponents;
     private BuffComponents damageComponents;
     private BuffComponents capacityComponents;
-    
+
     private bool firstLoad = true;
-    
+
     private BuffComponents ExtractComponents(GameObject buffContainer)
     {
         // Extract relevant UI components for the given buff container
@@ -61,7 +61,7 @@ public class ShopUI : MonoBehaviour
 
             firstLoad = false;
         }
-        
+
         HandleBalanceChanged(shopManager.Balance); // Need to update each time screen is shown
         shopManager.OnBuffPurchased += HandlePurchasedBuff;
         shopManager.OnBalanceChanged += HandleBalanceChanged;
@@ -101,7 +101,7 @@ public class ShopUI : MonoBehaviour
     }
 
     #region Event Handlers
-    
+
     private void HandleBalanceChanged(int newBalance)
     {
         balanceText.text = $"${newBalance}";
@@ -119,23 +119,23 @@ public class ShopUI : MonoBehaviour
         costText.text = $"${buff.Cost}";
         UpdateDescription(buff);
     }
-    
+
     #endregion
-   
+
 
     private TMP_Text GetLevelText(BuffType type)
     {
-        return (type) switch
+        return type switch
         {
             BuffType.Health => healthComponents.LevelText,
             BuffType.Capacity => capacityComponents.LevelText,
             BuffType.Damage => damageComponents.LevelText
         };
     }
-    
+
     private TMP_Text GetCostText(BuffType type)
     {
-        return (type) switch
+        return type switch
         {
             BuffType.Health => healthComponents.CostText,
             BuffType.Capacity => capacityComponents.CostText,
