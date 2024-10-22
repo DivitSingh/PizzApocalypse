@@ -38,7 +38,7 @@ public class Player : MonoBehaviour
     private int currentThrows;
     private bool readyToThrow;
 
-    [Header("Stats")] 
+    [Header("Stats")]
     private PizzaInventar pizzaInventar;
     public static int money = 0;
     [SerializeField] private int baseAttack = 10;
@@ -88,7 +88,7 @@ public class Player : MonoBehaviour
         playerCam.position = transform.position + new Vector3(0, 0.5f, 0);
         if (Time.timeScale == 0) return;
         Look();
-        moneyText.text = "Money: " + money.ToString();
+        moneyText.text = "$" + money.ToString();
 
         // Check for key inputs to switch pizza types
         if (Input.GetButtonDown("Swap Forward"))
@@ -324,7 +324,7 @@ public class Player : MonoBehaviour
                 break;
         }
     }
-    
+
     // TODO: Move attacking code to separate class
     public void IncreaseAttack(int amount)
     {
