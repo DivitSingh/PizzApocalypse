@@ -11,7 +11,7 @@ public class CustomerSpawner : MonoBehaviour
     [SerializeField] private Canvas healthBarCanvas; // TODO: Move this to Customer class?
 
     private Transform[] spawnPoints;
-    private readonly float checkRadius = 0.5f;
+    private readonly float checkRadius = 2f;
     private readonly Random random = new Random();
 
     private void Awake()

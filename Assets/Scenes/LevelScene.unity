@@ -600,9 +600,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   customerSpawner: {fileID: 83333101}
-  roundDuration: 60
-  spawnInterval: 10
-  totalCustomers: 8
+  roundDuration: 45
+  spawnInterval: 7
+  totalCustomers: 6
   passScore: 2
   customerHealth: 100
   customerPatience: 10
@@ -17359,6 +17359,14 @@ MonoBehaviour:
       m_Groups: 
       m_Action: Swap Forward Controls
       m_Flags: 0
+    - m_Name: 
+      m_Id: efe1720f-033e-4c18-8d9c-63d9d4ba9049
+      m_Path: <Keyboard>/e
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Swap Forward Controls
+      m_Flags: 0
     m_Flags: 0
   swapBackwardControls:
     m_Name: Swap Backward Controls
@@ -17384,6 +17392,14 @@ MonoBehaviour:
       m_Groups: 
       m_Action: Swap Backward Controls
       m_Flags: 0
+    - m_Name: 
+      m_Id: 2457df98-84a4-4a4a-8ce0-69b56c450c87
+      m_Path: <Keyboard>/q
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Swap Backward Controls
+      m_Flags: 0
     m_Flags: 0
   moneyText: {fileID: 1016070199}
   moveSpeed: 4500
@@ -17393,7 +17409,7 @@ MonoBehaviour:
   throwUpwardForce: 0
   maxThrows: 2
   throwCooldown: 0.5
-  playerInventory: {fileID: 0}
+  playerInventory: {fileID: 1917263827}
   baseAttack: 10
   swapSound: {fileID: 8300000, guid: 7e3f43689ef9f4f4fb058492037d6557, type: 3}
   hurtSound: {fileID: 8300000, guid: 862d377a35144ef43b16223999c0b77a, type: 3}
@@ -17528,7 +17544,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   money: 0
-  maxAmmo: 40
+  maxAmmo: 25
   pizzaIcon: {fileID: 505862210}
   pizzaIcon2type_unequipped: {fileID: 2067643067}
   pizzaIcon3type_unequipped: {fileID: 1525455529}
