@@ -346,9 +346,9 @@ public class Customer : MonoBehaviour
         GetComponent<CapsuleCollider>().enabled = false;
         GetComponentInChildren<SkinnedMeshRenderer>().material.mainTexture = idleTexture;
         animator.Play("Celebrate");
+        DestroyOrderDisplay();
         yield return new WaitForSeconds(1.2f);
         StopAllCoroutines();
-        DestroyOrderDisplay();
         Destroy(gameObject);
     }
 

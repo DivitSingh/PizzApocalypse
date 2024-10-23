@@ -17287,8 +17287,8 @@ MonoBehaviour:
     type: 3}
   shootControls:
     m_Name: Shoot Controls
-    m_Type: 0
-    m_ExpectedControlType: 
+    m_Type: 1
+    m_ExpectedControlType: Button
     m_Id: 438955f6-02c4-42e7-bbdf-bdfa911a34f5
     m_Processors: 
     m_Interactions: 
