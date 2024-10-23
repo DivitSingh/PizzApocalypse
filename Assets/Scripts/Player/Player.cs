@@ -26,7 +26,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float counterMovement = 0.175f;
     private Rigidbody rb;
     private float xRotation;
-    private float sensitivity = 50f;
+    private float sensitivity = 100f;
     private float sensMultiplier = 1f;
     private float threshold = 0.01f;
     private float timer = 0.00f;
