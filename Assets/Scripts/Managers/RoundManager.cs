@@ -78,10 +78,36 @@ public class RoundManager : MonoBehaviour
         // TODO: Need to fine tune these values, make sure round is still possible
         // NOTE: Values are currently temporary, anything past first round should be ignored
         Score = 0;
-        passScore++;
-        timeRemaining = roundDuration + 5;
-        customerPatience--;
-        totalCustomers++;
+        // TODO: Temporary hardcoded values
+        switch (Round)
+        {
+            case 2:
+                passScore = 4;
+                customerPatience = 8;
+                totalCustomers = 12;
+                spawnInterval = 6;
+                timeRemaining = 60;
+                customerHealth += 15;
+                break;
+            case 3:
+                passScore = 6;
+                customerPatience = 6;
+                totalCustomers = 12;
+                spawnInterval = 5;
+                timeRemaining = 60;
+                customerAttackDmg += 5;
+                customerHealth += 25;
+                break;
+            default:
+                // TODO: Figure out formula for future rounds
+                passScore++;
+                timeRemaining = roundDuration + 5;
+                totalCustomers++;
+                customerAttackDmg += 5;
+                customerHealth += 10;
+                break;
+        };
+        
 
         // TODO: Modify other customer stats
         OnProgressChanged?.Invoke(Score, passScore);
