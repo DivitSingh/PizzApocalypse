@@ -91,7 +91,7 @@ MonoBehaviour:
   offset: {x: 0, y: 0, z: 0}
   pizzaUIPrefab: {fileID: 4147306298993323}
   cheesePizzaSprite: {fileID: 21300000, guid: 739d2ee61d718394ab1171dcdccde287, type: 3}
-  mushroomPizzaSprite: {fileID: 21300000, guid: 3b002ac7df0071e43aa900aecbb90132,
+  mushroomPizzaSprite: {fileID: 21300000, guid: 54d9ca173db83ba4ca25ad9633cfd4fd,
     type: 3}
   pineapplePizzaSprite: {fileID: 21300000, guid: b6c3c5c8734a27c4bb88b8f2802f2f11,
     type: 3}
