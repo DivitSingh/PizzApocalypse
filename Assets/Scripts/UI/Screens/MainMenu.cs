@@ -58,7 +58,7 @@ public class MainMenu : MonoBehaviour
         switch (currentIndex)
         {
             case 0:
-                SceneManager.LoadScene("SampleScene");
+                SceneManager.LoadScene("LevelScene");
                 break;
             case 1:
                 SceneManager.LoadScene("OptionsScene");

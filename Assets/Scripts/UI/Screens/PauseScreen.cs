@@ -1,12 +1,14 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.InputSystem;
 
 public class PauseMenu : MonoBehaviour
 {
     public GameObject pauseMenuUI;
     public RectTransform[] menuItems;
     public RectTransform selectionHighlight;
+    [SerializeField] private InputAction pauseControls;
     private bool isPaused = false;
     private int currentIndex = 0;
     private bool needsInitialPosition = false;
@@ -17,6 +19,25 @@ public class PauseMenu : MonoBehaviour
         pauseMenuUI.SetActive(false);
     }
 
+    private void OnEnable()
+    {
+        pauseControls.Enable();
+        pauseControls.performed += PausePerformed;
+    }
+
+    private void OnDisable()
+    {
+        pauseControls.Disable();
+    }
+
+    private void PausePerformed(InputAction.CallbackContext context)
+    {
+        if (isPaused)
+            Resume();
+        else
+            Pause();
+    }
+
     void LateUpdate()
     {
         // Check if we need to set initial position
@@ -24,19 +45,6 @@ public class PauseMenu : MonoBehaviour
         {
             UpdateSelectionHighlight();
             needsInitialPosition = false;
-        }
-
-        // Check for both Escape key and controller Options/Start button
-        if (Input.GetKeyDown(KeyCode.Escape) || Input.GetButtonDown("Cancel"))
-        {
-            if (isPaused)
-            {
-                Resume();
-            }
-            else
-            {
-                Pause();
-            }
         }
 
         if (isPaused)
@@ -49,9 +57,7 @@ public class PauseMenu : MonoBehaviour
             {
                 // Only trigger once when the stick/dpad is pushed
                 if (Mathf.Abs(Input.GetAxisRaw("Vertical")) > 0.5f)
-                {
                     verticalInput = -Mathf.Sign(Input.GetAxisRaw("Vertical"));
-                }
             }
 
             if (verticalInput > 0)
@@ -67,9 +73,7 @@ public class PauseMenu : MonoBehaviour
 
             // Check for both keyboard Return and controller Submit button
             if (Input.GetKeyDown(KeyCode.Return) || Input.GetButtonDown("Submit"))
-            {
                 SelectMenuItem();
-            }
         }
     }
 

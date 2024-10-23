@@ -96,7 +96,8 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000000, guid: 16b5527300b867843a77a2f9cbeac9ca,
+    type: 2}
   m_LightingSettings: {fileID: 0}
 --- !u!196 &4
 NavMeshSettings:
@@ -2928,6 +2929,31 @@ MonoBehaviour:
   menuItems:
   - {fileID: 2115520328}
   selectionHighlight: {fileID: 331579335}
+  pauseControls:
+    m_Name: Pause Controls
+    m_Type: 1
+    m_ExpectedControlType: Button
+    m_Id: 0c5838e1-b8c2-45c8-a8d1-3d6b930f5cf5
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 323f3be9-077f-463b-a525-c746a2c7e9d5
+      m_Path: <Keyboard>/escape
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Pause Controls
+      m_Flags: 0
+    - m_Name: 
+      m_Id: 76584708-9cd0-485c-ab83-2a24c715d1cd
+      m_Path: <Gamepad>/select
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Pause Controls
+      m_Flags: 0
+    m_Flags: 0
 --- !u!114 &538129904
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2940,7 +2966,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_IgnoreReversedGraphics: 1
+  m_IgnoreReversedGraphics: 0
   m_BlockingObjects: 0
   m_BlockingMask:
     serializedVersion: 2
