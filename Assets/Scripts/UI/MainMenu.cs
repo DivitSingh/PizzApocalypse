@@ -1,41 +1,46 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-
 public class MainMenu : MonoBehaviour
 {
     public RectTransform[] menuItems;
     public RectTransform selectionHighlight;
     private int currentIndex = 0;
     private bool hasInitialized = false;
+    private bool wasVerticalPressed = false;
 
     void Start()
     {
         Canvas.ForceUpdateCanvases();
-        // Set initial index
         currentIndex = 0;
     }
 
     void LateUpdate()
     {
-        // Initialize position on the first frame after all UI elements are properly positioned
         if (!hasInitialized)
         {
             UpdateSelectionHighlight();
             hasInitialized = true;
         }
 
-        if (Input.GetKeyDown(KeyCode.DownArrow))
+        // Get gamepad/keyboard vertical input
+        bool upPressed = Input.GetKeyDown(KeyCode.UpArrow) || (Input.GetAxisRaw("Vertical") > 0.5f && !wasVerticalPressed);
+        bool downPressed = Input.GetKeyDown(KeyCode.DownArrow) || (Input.GetAxisRaw("Vertical") < -0.5f && !wasVerticalPressed);
+
+        // Track if vertical was pressed this frame
+        wasVerticalPressed = Mathf.Abs(Input.GetAxisRaw("Vertical")) > 0.5f;
+
+        if (downPressed)
         {
             currentIndex = (currentIndex + 1) % menuItems.Length;
             UpdateSelectionHighlight();
         }
-        else if (Input.GetKeyDown(KeyCode.UpArrow))
+        else if (upPressed)
         {
             currentIndex = (currentIndex - 1 + menuItems.Length) % menuItems.Length;
             UpdateSelectionHighlight();
         }
-        else if (Input.GetKeyDown(KeyCode.Return))
+        else if (Input.GetKeyDown(KeyCode.Return) || Input.GetButtonDown("Submit"))
         {
             SelectMenuItem();
         }
@@ -52,13 +57,13 @@ public class MainMenu : MonoBehaviour
     {
         switch (currentIndex)
         {
-            case 0: // Play
+            case 0:
                 SceneManager.LoadScene("SampleScene");
                 break;
-            case 1: // Options
-                Debug.Log("Options selected");
+            case 1:
+                SceneManager.LoadScene("OptionsScene");
                 break;
-            case 2: // Exit
+            case 2:
                 Application.Quit();
                 Debug.Log("Exit selected");
                 break;

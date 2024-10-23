@@ -28,6 +28,8 @@ public class RoundManager : MonoBehaviour
 
     private void Start()
     {
+        float savedVolume = PlayerPrefs.GetFloat("GameVolume", 1f);
+        AudioListener.volume = savedVolume;
         timeRemaining = roundDuration;
         OnTimeRemainingChanged?.Invoke(timeRemaining);
         OnProgressChanged?.Invoke(Score, passScore);

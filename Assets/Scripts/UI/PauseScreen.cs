@@ -68,12 +68,9 @@ public class PauseMenu : MonoBehaviour
     {
         switch (currentIndex)
         {
-            case 0: // Options
-                Debug.Log("Options selected");
-                break;
-            case 1: // Return to Main Menu
-                Time.timeScale = 1f; // Reset time scale before loading new scene
-                SceneManager.LoadScene("StartScene"); // Make sure this matches your main menu scene name
+            case 0:
+                Time.timeScale = 1f;
+                SceneManager.LoadScene("StartScene");
                 break;
         }
     }
@@ -81,11 +78,11 @@ public class PauseMenu : MonoBehaviour
     void Pause()
     {
         pauseMenuUI.SetActive(true);
-        Canvas.ForceUpdateCanvases(); // Force UI update
+        Canvas.ForceUpdateCanvases();
         Time.timeScale = 0f;
         isPaused = true;
         currentIndex = 0;
-        needsInitialPosition = true; // Set flag to update position on next frame
+        needsInitialPosition = true;
     }
 
     void Resume()
