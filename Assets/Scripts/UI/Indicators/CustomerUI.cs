@@ -17,6 +17,7 @@ public class CustomerUI : MonoBehaviour
 
     private void Update()
     {
+        timerImage.transform.LookAt(GameObject.Find("Player").transform);
         if (currentTime > 0 && maxTime != -1.0f)
         {
             currentTime -= Time.deltaTime;

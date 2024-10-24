@@ -2583,7 +2583,6 @@ GameObject:
   m_Component:
   - component: {fileID: 482188119}
   - component: {fileID: 482188118}
-  - component: {fileID: 482188117}
   - component: {fileID: 482188116}
   - component: {fileID: 482188120}
   m_Layer: 0
@@ -2614,48 +2613,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!23 &482188117
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 482188115}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: e9ec47ff8c4ceaa489abadc14d4c6c0b, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &482188118
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -8635,7 +8592,7 @@ GameObject:
   - component: {fileID: 1525455530}
   - component: {fileID: 1525455529}
   m_Layer: 5
-  m_Name: PizzaType3_unequipped
+  m_Name: Pizza Icon Unequipped 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -17260,12 +17217,12 @@ MonoBehaviour:
   money: 0
   maxAmmo: 25
   pizzaIcon: {fileID: 505862210}
-  pizzaIcon2type_unequipped: {fileID: 2067643067}
-  pizzaIcon3type_unequipped: {fileID: 1525455529}
+  pizzaIconUnequipped_2: {fileID: 2067643067}
+  pizzaIconUnequipped_3: {fileID: 1525455529}
   ammoText: {fileID: 1644222396}
-  cheeseIcon: {fileID: 21300000, guid: 739d2ee61d718394ab1171dcdccde287, type: 3}
-  pineappleIcon: {fileID: 21300000, guid: b6c3c5c8734a27c4bb88b8f2802f2f11, type: 3}
-  mushroomIcon: {fileID: 21300000, guid: 54d9ca173db83ba4ca25ad9633cfd4fd, type: 3}
+  cheeseIcon: {fileID: 21300000, guid: 8bf43028875eef945b89849d61a16996, type: 3}
+  pineappleIcon: {fileID: 21300000, guid: 663598d69e164854e908a576ae024a9a, type: 3}
+  mushroomIcon: {fileID: 21300000, guid: a666c327e4621974fb754cda700e34e8, type: 3}
 --- !u!114 &1917263828
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17700,7 +17657,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1999931896}
   - component: {fileID: 1999931895}
-  - component: {fileID: 1999931894}
   - component: {fileID: 1999931893}
   - component: {fileID: 1999931892}
   m_Layer: 0
@@ -17746,48 +17702,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!23 &1999931894
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1999931891}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: e9ec47ff8c4ceaa489abadc14d4c6c0b, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &1999931895
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -18277,7 +18191,7 @@ GameObject:
   - component: {fileID: 2067643068}
   - component: {fileID: 2067643067}
   m_Layer: 5
-  m_Name: PizzaType2_unequipped
+  m_Name: Pizza Icon Unequipped 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

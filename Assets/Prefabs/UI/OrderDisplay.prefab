@@ -90,8 +90,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   offset: {x: 0, y: 0, z: 0}
   pizzaUIPrefab: {fileID: 4147306298993323}
-  cheesePizzaSprite: {fileID: 21300000, guid: 739d2ee61d718394ab1171dcdccde287, type: 3}
-  mushroomPizzaSprite: {fileID: 21300000, guid: 54d9ca173db83ba4ca25ad9633cfd4fd,
+  cheesePizzaSprite: {fileID: 21300000, guid: 8bf43028875eef945b89849d61a16996, type: 3}
+  mushroomPizzaSprite: {fileID: 21300000, guid: a666c327e4621974fb754cda700e34e8,
     type: 3}
-  pineapplePizzaSprite: {fileID: 21300000, guid: b6c3c5c8734a27c4bb88b8f2802f2f11,
+  pineapplePizzaSprite: {fileID: 21300000, guid: 663598d69e164854e908a576ae024a9a,
     type: 3}

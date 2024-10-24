@@ -21,8 +21,8 @@ public class PlayerInventory : MonoBehaviour
 
     // UI Elements
     public Image pizzaIcon; // To display the pizza icon
-    public Image pizzaIcon2type_unequipped; // To display the pizza icon of the second but unequipped type
-    public Image pizzaIcon3type_unequipped; // To display the pizza icon of the third but unequipped type
+    public Image pizzaIconUnequipped_2; // To display the pizza icon of the second but unequipped type
+    public Image pizzaIconUnequipped_3; // To display the pizza icon of the third but unequipped type
     public TextMeshProUGUI ammoText; // To display the ammo count
 
     // Pizza icons for UI
@@ -133,18 +133,18 @@ public class PlayerInventory : MonoBehaviour
         {
             case PizzaType.Cheese:
                 pizzaIcon.sprite = cheeseIcon;
-                pizzaIcon2type_unequipped.sprite = pineappleIcon;
-                pizzaIcon3type_unequipped.sprite = mushroomIcon;
+                pizzaIconUnequipped_2.sprite = pineappleIcon;
+                pizzaIconUnequipped_3.sprite = mushroomIcon;
                 break;
             case PizzaType.Pineapple:
                 pizzaIcon.sprite = pineappleIcon;
-                pizzaIcon2type_unequipped.sprite = mushroomIcon;
-                pizzaIcon3type_unequipped.sprite = cheeseIcon;
+                pizzaIconUnequipped_2.sprite = mushroomIcon;
+                pizzaIconUnequipped_3.sprite = cheeseIcon;
                 break;
             case PizzaType.Mushroom:
                 pizzaIcon.sprite = mushroomIcon;
-                pizzaIcon2type_unequipped.sprite = cheeseIcon;
-                pizzaIcon3type_unequipped.sprite = pineappleIcon;
+                pizzaIconUnequipped_2.sprite = cheeseIcon;
+                pizzaIconUnequipped_3.sprite = pineappleIcon;
                 break;
         }
 
