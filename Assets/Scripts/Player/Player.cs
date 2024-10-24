@@ -106,6 +106,8 @@ public class Player : MonoBehaviour
 
     private void FireCanceled(InputAction.CallbackContext context)
     {
+        if (Time.timeScale == 0) return;
+
         if (Time.time - timer < 1.00f)
         {
             // Throw(pizzas[0]);// Slice Pizza

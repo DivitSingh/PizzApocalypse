@@ -19,7 +19,7 @@ public class CustomerSpawner : MonoBehaviour
         spawnPoints = GameObject.FindGameObjectsWithTag("SpawnPoint")
             .Select(s => s.transform)
             .ToArray();
-        
+
         if (spawnPoints.Length == 0)
         {
             Debug.LogError("No spawn points found! Make sure your spawn points are tagged with 'SpawnPoint'");
@@ -72,7 +72,7 @@ public class CustomerSpawner : MonoBehaviour
         }
         var index = random.Next(0, availableSpawnPoints.Count);
         var spawnPoint = availableSpawnPoints[index];
-        
+
         var customerObject = Instantiate(customerPrefab, spawnPoint.position, Quaternion.identity);
         var customer = customerObject.GetComponent<Customer>();
         if (customer != null)

@@ -48,7 +48,7 @@ public class OrderDisplay : MonoBehaviour
             // Scale the canvas based on distance to camera to maintain apparent size
             float distanceToCamera = Vector3.Distance(mainCamera.transform.position, targetPosition);
             float scale = distanceToCamera / 8f; // Adjust the divisor to fine-tune the scale
-            if (scale > 2f) {scale = 2f;} //Let icon size not get bigger then 10f
+            if (scale > 2f) { scale = 2f; } //Let icon size not get bigger then 10f
             orderCanvas.transform.localScale = Vector3.one * scale;
         }
     }
