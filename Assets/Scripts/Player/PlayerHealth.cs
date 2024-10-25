@@ -23,6 +23,7 @@ public class PlayerHealth: MonoBehaviour
     }
 
     public event Action<float> OnHpPctChanged;
+    public event Action OnDamageTaken;
     public event Action OnDeath;
 
     public void Start()
@@ -34,6 +35,7 @@ public class PlayerHealth: MonoBehaviour
     public void TakeDamage(float damage)
     {
         CurrentHealth -= damage;
+        OnDamageTaken?.Invoke();
     }
 
     public void Heal(float amount)
