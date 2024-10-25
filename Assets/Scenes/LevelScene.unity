@@ -10100,6 +10100,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -643988432483630667, guid: fffb2f1f56bd3e444aaeadb9a7a7688d,
         type: 3}
+      propertyPath: m_Name
+      value: PizzaRestaurant2
+      objectReference: {fileID: 0}
+    - target: {fileID: -643988432483630667, guid: fffb2f1f56bd3e444aaeadb9a7a7688d,
+        type: 3}
       propertyPath: m_Layer
       value: 0
       objectReference: {fileID: 0}
@@ -10902,6 +10907,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_StaticEditorFlags
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 3437928191754472632, guid: fffb2f1f56bd3e444aaeadb9a7a7688d,
+        type: 3}
+      propertyPath: m_Name
+      value: PizzaRestaurant1
       objectReference: {fileID: 0}
     - target: {fileID: 3437928191754472632, guid: fffb2f1f56bd3e444aaeadb9a7a7688d,
         type: 3}
