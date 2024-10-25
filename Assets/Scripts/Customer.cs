@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.UI;
 
 [RequireComponent(typeof(NavMeshAgent))]
 public class Customer : MonoBehaviour
@@ -24,13 +23,7 @@ public class Customer : MonoBehaviour
     private State state = State.Hungry;
     private Order order;
     private List<IEffect> activeEffects = new List<IEffect>();
-
-    [Header("UI")]
-    private Canvas healthBarCanvas;
     [SerializeField] private CustomerUI customerUI;
-    [SerializeField] private GameObject orderDisplayPrefab;
-    [SerializeField] private Vector3 orderDisplayOffset = new Vector3(0, 2.5f, 0);
-    private OrderDisplay orderDisplay;
     [SerializeField] private Sprite angryMarker;
 
     [Header("Audio")]
@@ -67,49 +60,10 @@ public class Customer : MonoBehaviour
         this.patience = patience;
         this.attackDamage = attackDamage;
         this.order = order;
-        customerUI.maxTime = patience;
-
-        CreateOrderDisplay();
-        UpdateOrderDisplay();
+        customerUI.maxTime = this.patience;
+        customerUI.currentTime = customerUI.maxTime;
+        customerUI.UpdateOrderDisplay(this.order);
         StartCoroutine(Waiting());
-    }
-
-    private void UpdateOrderDisplay()
-    {
-        if (orderDisplay != null)
-            orderDisplay.UpdateOrderDisplay(order);
-        else
-            Debug.LogWarning("OrderDisplay is null when trying to update!");
-    }
-
-    private void CreateOrderDisplay()
-    {
-        Debug.Log($"Creating order display. Prefab assigned: {orderDisplayPrefab != null}");
-
-        if (orderDisplayPrefab == null)
-        {
-            Debug.LogError("Order Display Prefab is not assigned in the Customer script!");
-            return;
-        }
-
-        if (healthBarCanvas == null)
-        {
-            Debug.LogError("Health Bar Canvas is not set for this Customer!");
-            return;
-        }
-
-        GameObject orderDisplayObject = Instantiate(orderDisplayPrefab, healthBarCanvas.transform);
-        orderDisplay = orderDisplayObject.GetComponent<OrderDisplay>();
-        if (orderDisplay == null)
-        {
-            Debug.LogError("OrderDisplay component not found on the instantiated prefab!");
-            return;
-        }
-
-        orderDisplay.SetTarget(transform);
-        orderDisplay.offset = orderDisplayOffset;
-
-        Debug.Log($"Order display created for customer at {transform.position}");
     }
 
     private void Update()
@@ -177,32 +131,11 @@ public class Customer : MonoBehaviour
     {
         state = State.Angry;
         GetComponentInChildren<SkinnedMeshRenderer>().material.mainTexture = walkTexture;
+        customerUI.orderPanel.SetActive(false);
         GameObject.Find("Audio Source").GetComponent<AudioSource>().PlayOneShot(rageSound);
         transform.Find("Marker").GetComponent<SpriteRenderer>().sprite = angryMarker;
-        // CreateHealthBar();
         customerUI.healthBar.gameObject.SetActive(true);
-        DestroyOrderDisplay();
         Chase();
-    }
-
-    private void DestroyOrderDisplay()
-    {
-        if (orderDisplay != null)
-        {
-            orderDisplay.RemoveOrderUI(); // Call RemoveOrderUI instead of destroying directly
-            orderDisplay = null;
-        }
-    }
-
-    public void SetHealthBarCanvas(Canvas canvas)
-    {
-        healthBarCanvas = canvas;
-        CreateOrderDisplay();
-    }
-
-    private void UpdateHealthBar()
-    {
-        customerUI.UpdateHealthBar((float)health / maxHealth);
     }
 
     public void ReceivePizza(IPizza pizza)
@@ -211,7 +144,7 @@ public class Customer : MonoBehaviour
         {
             StartCoroutine(Eat());
             health -= pizza.Damage;
-            UpdateHealthBar();
+            customerUI.UpdateHealthBar((float)health / maxHealth);
             if (health <= 0)
             {
                 GameObject.Find("Audio Source").GetComponent<AudioSource>().PlayOneShot(dieSound);
@@ -220,9 +153,7 @@ public class Customer : MonoBehaviour
             else
             {
                 if (pizza.CustomerEffect != null)
-                {
                     StartCoroutine(StartEffect(pizza.CustomerEffect));
-                }
                 GameObject.Find("Audio Source").GetComponent<AudioSource>().PlayOneShot(hurtSound);
             }
         }
@@ -230,7 +161,7 @@ public class Customer : MonoBehaviour
         {
             transform.LookAt(player);
             order.DeductPizzaFromOrder(pizza);
-            UpdateOrderDisplay(); // Update the order display after receiving a pizza
+            customerUI.UpdateOrderDisplay(order);
             if (order.IsOrderFulfilled() > -1)
             {
                 GameObject.Find("Audio Source").GetComponent<AudioSource>().PlayOneShot(completeSound);
@@ -240,10 +171,7 @@ public class Customer : MonoBehaviour
                 StartCoroutine(RemoveCustomer());
             }
             else
-            {
-                // Wrong pizza type, do nothing
                 Debug.Log($"Order not yet fulfilled, still needs: {order.PasteOrderContents()}");
-            }
         }
     }
 
@@ -255,7 +183,7 @@ public class Customer : MonoBehaviour
         animator.Play("Celebrate");
         customerUI.healthBar.gameObject.SetActive(false);
         customerUI.timerImage.gameObject.SetActive(false);
-        DestroyOrderDisplay();
+        // DestroyOrderDisplay();
         yield return new WaitForSeconds(1.2f);
         StopAllCoroutines();
         Destroy(gameObject);
@@ -267,11 +195,6 @@ public class Customer : MonoBehaviour
         GetComponentInChildren<SkinnedMeshRenderer>().material.mainTexture = eatTexture;
         yield return new WaitForSeconds(0.25f);
         GetComponentInChildren<SkinnedMeshRenderer>().material.mainTexture = originalTexture;
-    }
-
-    private void OnDestroy()
-    {
-        DestroyOrderDisplay();
     }
 
     #region Effects
@@ -312,7 +235,7 @@ public class Customer : MonoBehaviour
                 if (effect.Type == EffectType.Multiplier) return; // This should not be possible, assuming only decrease
                 if (effect.Type == EffectType.ConstantDecrease) health -= effect.Value;
                 if (effect.Type == EffectType.ConstantIncrease) health += effect.Value;
-                UpdateHealthBar(); // TODO: Should do this automatically when health changes, add setter
+                customerUI.UpdateHealthBar((float)health / maxHealth);
                 break;
             case Stat.Speed:
                 if (effect.Type == EffectType.Multiplier)

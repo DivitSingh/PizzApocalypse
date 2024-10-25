@@ -8,7 +8,7 @@ public class Order
     private static int maxPizzaAmountOrder = 3;
     private static int maxPizzaTypePerOrder = 3;
 
-    private Dictionary<PizzaType, int>[] Orders;
+    private Dictionary<PizzaType, int>[] orders;
     private static System.Random random = new System.Random();
 
     private int originalOrderAmount;
@@ -18,12 +18,12 @@ public class Order
     public Order()
     {
         int numOrders = random.Next(1, maxPizzaTypePerOrder);  // Randomly pick between 1 and maxPizzaTypePerOrder (static int) pizzas in the order
-        Orders = new Dictionary<PizzaType, int>[numOrders];
+        orders = new Dictionary<PizzaType, int>[numOrders];
 
         var availablePizzaTypes = Enum.GetValues(typeof(PizzaType));
         for (int i = 0; i < numOrders; i++)
         {
-            Orders[i] = new Dictionary<PizzaType, int>();
+            orders[i] = new Dictionary<PizzaType, int>();
 
             // Randomly choose a pizza type
             PizzaType selectedPizza = (PizzaType)availablePizzaTypes.GetValue(random.Next(availablePizzaTypes.Length));
@@ -31,20 +31,20 @@ public class Order
             // Randomly assign count between 1 and maxPizzaAmountOrder (static int)
             int pizzaCount = random.Next(1, maxPizzaAmountOrder);
 
-            Orders[i].Add(selectedPizza, pizzaCount);
+            orders[i].Add(selectedPizza, pizzaCount);
 
             // Create originalOrderAmount
-            originalOrderAmount += Orders[i].Values.Sum();
+            originalOrderAmount += orders[i].Values.Sum();
             Debug.Log("Original order amount: " + originalOrderAmount);
 
             // Calculate orderModifier
-            orderModifier = CalculateModifier(Orders, originalOrderAmount);
+            orderModifier = CalculateModifier(orders, originalOrderAmount);
         }
     }
 
     public Dictionary<PizzaType, int>[] GetOrders()
     {
-        return Orders;
+        return orders;
     }
 
     public float GetOrderModifier()
@@ -102,19 +102,19 @@ public class Order
 
     public void DeductPizzaFromOrder(IPizza pizzaReceived)
     {
-        for (int i = 0; i < Orders.Length; i++)
+        for (int i = 0; i < orders.Length; i++)
         {
-            if (Orders[i].ContainsKey(pizzaReceived.Type))
+            if (orders[i].ContainsKey(pizzaReceived.Type))
             {
-                if (Orders[i][pizzaReceived.Type] > 0)
+                if (orders[i][pizzaReceived.Type] > 0)
                 {
-                    Orders[i][pizzaReceived.Type]--;
-                    Debug.Log($"Hit by {pizzaReceived.Type}. Deducting 1. Remaining: {Orders[i][pizzaReceived.Type]}");
+                    orders[i][pizzaReceived.Type]--;
+                    Debug.Log($"Hit by {pizzaReceived.Type}. Deducting 1. Remaining: {orders[i][pizzaReceived.Type]}");
 
                     // If the count reaches zero, remove the pizza type from the dictionary
-                    if (Orders[i][pizzaReceived.Type] == 0)
+                    if (orders[i][pizzaReceived.Type] == 0)
                     {
-                        Orders[i].Remove(pizzaReceived.Type);
+                        orders[i].Remove(pizzaReceived.Type);
                         Debug.Log($"{pizzaReceived.Type} removed from the order.");
                     }
                 }
@@ -131,9 +131,9 @@ public class Order
 
     public int IsOrderFulfilled()
     {
-        for (int i = 0; i < Orders.Length; i++)
+        for (int i = 0; i < orders.Length; i++)
         {
-            if (Orders[i].Count > 0)  // If any pizza type still has remaining pizzas, the order is not fulfilled
+            if (orders[i].Count > 0)  // If any pizza type still has remaining pizzas, the order is not fulfilled
             {
                 return -1;
             }
@@ -146,7 +146,7 @@ public class Order
     {
         List<string> orderContents = new List<string>();
 
-        foreach (var order in Orders)
+        foreach (var order in orders)
         {
             foreach (var item in order)
             {

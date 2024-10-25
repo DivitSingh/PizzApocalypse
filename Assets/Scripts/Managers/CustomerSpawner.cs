@@ -1,4 +1,4 @@
-using System;
+
 using UnityEngine;
 using System.Collections;
 using System.Linq;
@@ -78,7 +78,7 @@ public class CustomerSpawner : MonoBehaviour
         if (customer != null)
         {
             Order order = new Order(); //generate an Order
-            customer.SetHealthBarCanvas(healthBarCanvas); // TODO: Move Canvas code to Customer class
+            // customer.SetHealthBarCanvas(healthBarCanvas); // TODO: Move Canvas code to Customer class
             customer.Initialize(health, patience, attackDamage, order);
         }
     }
