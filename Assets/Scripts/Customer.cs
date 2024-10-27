@@ -135,6 +135,7 @@ public class Customer : MonoBehaviour
         GameObject.Find("Audio Source").GetComponent<AudioSource>().PlayOneShot(rageSound);
         transform.Find("Marker").GetComponent<SpriteRenderer>().sprite = angryMarker;
         customerUI.healthBar.gameObject.SetActive(true);
+        Destroy(GetComponent<CustomerIndicator>());
         Chase();
     }
 
