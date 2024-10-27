@@ -1,4 +1,4 @@
-
+using System;
 using UnityEngine;
 using System.Collections;
 using System.Linq;
@@ -13,6 +13,9 @@ public class CustomerSpawner : MonoBehaviour
     private Transform[] spawnPoints;
     private readonly float checkRadius = 2f;
     private readonly Random random = new Random();
+    private IEnumerator spawnCoroutine;
+
+    public event Action<Customer> OnSpawned; 
 
     private void Awake()
     {
@@ -46,8 +49,14 @@ public class CustomerSpawner : MonoBehaviour
     /// <param name="attackDamage">The amount of damage a customer attack deals to the player.</param>
     public void StartSpawning(float spawnInterval, int totalSpawns, float health, float patience, float attackDamage)
     {
-        StopAllCoroutines();
-        StartCoroutine(SpawnCustomers(spawnInterval, totalSpawns, health, patience, attackDamage));
+        if (spawnCoroutine != null)
+        {
+            StopCoroutine(spawnCoroutine);
+            Debug.LogError("Previous spawning did not finish before new one started.");
+        }
+
+        spawnCoroutine = SpawnCustomers(spawnInterval, totalSpawns, health, patience, attackDamage);
+        StartCoroutine(spawnCoroutine);
     }
 
     private IEnumerator SpawnCustomers(float spawnInterval, int totalSpawns, float health, float patience, float attackDamage)
@@ -80,6 +89,7 @@ public class CustomerSpawner : MonoBehaviour
             Order order = new Order(); //generate an Order
             // customer.SetHealthBarCanvas(healthBarCanvas); // TODO: Move Canvas code to Customer class
             customer.Initialize(health, patience, attackDamage, order);
+            OnSpawned?.Invoke(customer);
         }
     }
 }

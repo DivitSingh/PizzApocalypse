@@ -43,6 +43,10 @@ public class Customer : MonoBehaviour
         Angry,
         Hungry
     }
+    
+    // Events
+    public event Action<Customer> OnBecameAngry;
+    public event Action<Customer> OnFed; 
 
     private void Start()
     {
@@ -137,6 +141,7 @@ public class Customer : MonoBehaviour
         customerUI.healthBar.gameObject.SetActive(true);
         Destroy(GetComponent<CustomerIndicator>());
         Chase();
+        OnBecameAngry?.Invoke(this);
     }
 
     public void ReceivePizza(IPizza pizza)
@@ -169,6 +174,7 @@ public class Customer : MonoBehaviour
                 StopAllCoroutines();
                 GameManager.Instance.HandleFedCustomerScoring(this);
                 player.GetComponent<Player>().playerInventory.IncreaseMoney(order.IsOrderFulfilled());
+                OnFed?.Invoke(this);
                 StartCoroutine(RemoveCustomer());
             }
             else

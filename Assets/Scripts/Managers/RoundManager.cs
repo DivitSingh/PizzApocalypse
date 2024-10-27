@@ -4,6 +4,7 @@ using UnityEngine;
 public class RoundManager : MonoBehaviour
 {
     [SerializeField] private CustomerSpawner customerSpawner;
+    [SerializeField] private ActiveCustomersManager activeCustomersManager;
 
     [Header("Initial Stats")]
     [SerializeField] private float roundDuration = 120f;
@@ -24,6 +25,11 @@ public class RoundManager : MonoBehaviour
     public event Action<int, int> OnProgressChanged;
     public event Action<int> OnRoundChanged;
     public event Action OnRoundFailed;
+
+    private void Awake()
+    {
+        customerSpawner.OnSpawned += HandleCustomerSpawned;
+    }
 
     private void Start()
     {
@@ -115,5 +121,14 @@ public class RoundManager : MonoBehaviour
         GameObject.Find("Audio Source").GetComponent<AudioSource>().Stop();
         GameObject.Find("Audio Source").GetComponent<AudioSource>().Play();
         customerSpawner.StartSpawning(spawnInterval, totalCustomers, customerHealth, customerPatience, customerAttackDmg);
+    }
+
+    private void HandleCustomerSpawned(Customer customer)
+    {
+        // TODO: Add this customer to ActiveCustomersManager
+        activeCustomersManager.Add(customer);
+        
+        // TODO: Subscribe to onDeath + onFed delegate to be able to keep track of amount of customers and end round early
+        
     }
 }
