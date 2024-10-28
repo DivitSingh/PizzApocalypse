@@ -10,7 +10,6 @@ using UnityEngine.UI;
 /// </summary>
 public class OrderUI : MonoBehaviour
 {
-    
     [Header("Local UI Elements")]
     [SerializeField] private Slider slider;
     [SerializeField] private TMP_Text moneyLabel;
@@ -23,14 +22,17 @@ public class OrderUI : MonoBehaviour
     [SerializeField] private Sprite pineappleIcon;
     [SerializeField] private Sprite mushroomIcon;
     [SerializeField] private GameObject itemSlot;
+    private Dictionary<PizzaType, Sprite> iconMap;
     
-    // private static readonly Color LowTimeColor = new Color()
     private static readonly Color LowTimerColor = new(217f / 255, 35f / 255, 11f / 225);
     private static readonly Color MidTimerColor = new(254f / 255, 215f / 255, 50f / 255);
     private static readonly Color HighTimerColor = new(57f / 255, 229f / 255, 5f / 255);
 
-    private Dictionary<PizzaType, Sprite> iconMap;
-
+    // Animation configurations
+    private static readonly Vector2 SlideStartPosition = new Vector2(0, 400);
+    private static readonly Vector2 SlideEndPosition = Vector2.zero;
+    private const float SlideDuration = 0.3f;
+    
     private void Awake()
     {
         sliderFill = slider.GetComponentsInChildren<Image>().FirstOrDefault(c => c.name == "Fill");
@@ -40,6 +42,25 @@ public class OrderUI : MonoBehaviour
             { PizzaType.Mushroom, mushroomIcon },
             { PizzaType.Pineapple, pineappleIcon }
         };
+
+        StartCoroutine(PlaySlideAnimation());
+    }
+
+    private IEnumerator PlaySlideAnimation()
+    {
+        var innerContainer = transform.GetChild(0).GetComponent<RectTransform>();
+        innerContainer.anchoredPosition = SlideStartPosition;
+        
+        var elapsedTime = 0f;
+        while (elapsedTime < SlideDuration)
+        {
+            innerContainer.anchoredPosition =
+                Vector2.Lerp(SlideStartPosition, SlideEndPosition, elapsedTime / SlideDuration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        innerContainer.anchoredPosition = SlideEndPosition;
     }
 
     public void Configure(Customer customer)

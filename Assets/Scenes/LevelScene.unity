@@ -6531,7 +6531,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   customersManager: {fileID: 85063847}
-  orderPrefab: {fileID: 4675509049466949758, guid: b4f4338919d77410ea7708cbfc5ea500,
+  orderPrefab: {fileID: 9051291692286294026, guid: b6fbe390b7cab4e07b04c5fa0816685f,
     type: 3}
 --- !u!64 &1095783255
 MeshCollider:
