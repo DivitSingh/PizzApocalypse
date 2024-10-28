@@ -8,12 +8,15 @@ public class Order
     private static int maxPizzaAmountOrder = 3;
     private static int maxPizzaTypePerOrder = 3;
 
+    // TODO: Refactor to use single dictionary with (PizzaType, Amount) mapping
     private Dictionary<PizzaType, int>[] orders;
     private static System.Random random = new System.Random();
 
     private int originalOrderAmount;
     private float orderModifier;
-    // Implement OG Count and MOdifier
+    // Implement OG Count and Modifier
+
+    public readonly int Value;
 
     public Order()
     {
@@ -40,6 +43,8 @@ public class Order
             // Calculate orderModifier
             orderModifier = CalculateModifier(orders, originalOrderAmount);
         }
+
+        Value = (int) (originalOrderAmount * orderModifier);
     }
 
     public Dictionary<PizzaType, int>[] GetOrders()
@@ -47,16 +52,7 @@ public class Order
         return orders;
     }
 
-    public float GetOrderModifier()
-    {
-        return orderModifier;
-    }
-    public float GetOriginalOrderAmount()
-    {
-        return originalOrderAmount;
-    }
-
-    public float CalculateModifier(Dictionary<PizzaType, int>[] Orders, int totalPizzas)
+    private float CalculateModifier(Dictionary<PizzaType, int>[] Orders, int totalPizzas)
     {
         // Base modifier
         float modifier = 1.0f;
@@ -139,7 +135,7 @@ public class Order
             }
         }
 
-        return (int)(GetOriginalOrderAmount() * GetOrderModifier());  // If all pizzas are fulfilled, return true
+        return Value; // If all pizzas are fulfilled, return true
     }
 
     public string PasteOrderContents() //Debugging method to paste Order array
