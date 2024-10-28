@@ -196,6 +196,7 @@ GameObject:
   - component: {fileID: 7075822641488989203}
   - component: {fileID: 8078545700019830406}
   - component: {fileID: 309174428706799583}
+  - component: {fileID: 7482906112913899116}
   m_Layer: 5
   m_Name: OrderContainer
   m_TagString: Untagged
@@ -262,6 +263,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!225 &7482906112913899116
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 674879489651886901}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &879383279869864392
 GameObject:
   m_ObjectHideFlags: 0
@@ -1137,6 +1150,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d060f03db0794cfcaee1f2929789ea9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canvasGroup: {fileID: 7482906112913899116}
+  panel: {fileID: 3381193693297404510}
   slider: {fileID: 1881365049253827341}
   moneyLabel: {fileID: 1054589853233583488}
   itemsGrid: {fileID: 3990650733703850555}

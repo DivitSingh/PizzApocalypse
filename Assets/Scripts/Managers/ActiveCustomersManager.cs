@@ -13,6 +13,7 @@ public class ActiveCustomersManager: MonoBehaviour
     // Events
     public event Action<Customer> OnCustomerAdded;
     public event Action<Customer, bool> OnOrderStatusChanged; // Indicates that an order has expired or been completed
+    public event Action OnReset;
 
     public void Add(Customer customer)
     {
@@ -45,9 +46,7 @@ public class ActiveCustomersManager: MonoBehaviour
 
     public void Reset()
     {
-        foreach (var customer in customers)
-        {
-            OnOrderStatusChanged?.Invoke(customer, false);
-        }
+        customers.Clear();
+        OnReset?.Invoke();
     }
 }

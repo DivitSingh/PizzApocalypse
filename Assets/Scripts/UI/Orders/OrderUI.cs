@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,7 +11,9 @@ using UnityEngine.UI;
 /// </summary>
 public class OrderUI : MonoBehaviour
 {
-    [Header("Local UI Elements")]
+    [Header("Local UI Elements")] 
+    [SerializeField] private CanvasGroup canvasGroup;
+    [SerializeField] private Image panel;
     [SerializeField] private Slider slider;
     [SerializeField] private TMP_Text moneyLabel;
     [SerializeField] private GameObject itemsGrid;
@@ -32,6 +35,10 @@ public class OrderUI : MonoBehaviour
     private static readonly Vector2 SlideStartPosition = new Vector2(0, 400);
     private static readonly Vector2 SlideEndPosition = Vector2.zero;
     private const float SlideDuration = 0.3f;
+
+    private const float RemoveDuration = 0.4f;
+    private static readonly Color FailedOrderColor = new(241f / 255, 86f / 255, 49f / 225);
+    private static readonly Color CompletedOrderColor = new(57f / 255, 229f / 255, 5f / 255);
     
     private void Awake()
     {
@@ -46,23 +53,6 @@ public class OrderUI : MonoBehaviour
         StartCoroutine(PlaySlideAnimation());
     }
 
-    private IEnumerator PlaySlideAnimation()
-    {
-        var innerContainer = transform.GetChild(0).GetComponent<RectTransform>();
-        innerContainer.anchoredPosition = SlideStartPosition;
-        
-        var elapsedTime = 0f;
-        while (elapsedTime < SlideDuration)
-        {
-            innerContainer.anchoredPosition =
-                Vector2.Lerp(SlideStartPosition, SlideEndPosition, elapsedTime / SlideDuration);
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-
-        innerContainer.anchoredPosition = SlideEndPosition;
-    }
-
     public void Configure(Customer customer)
     {
         var order = customer.Order;
@@ -71,7 +61,6 @@ public class OrderUI : MonoBehaviour
         ConfigureItems(customer.Order);
         StartCoroutine(BeginTimer(customer.Patience));
     }
-
     
     private void ConfigureItems(Order order)
     {
@@ -87,8 +76,6 @@ public class OrderUI : MonoBehaviour
                     image.sprite = iconMap[orderItem.Key];
                     image.preserveAspect = true;
                 }
-                
-                
             }
         }
     }
@@ -116,4 +103,50 @@ public class OrderUI : MonoBehaviour
         };
         slider.value = pct;
     }
+    
+    public void Remove(bool success)
+    {
+        StopAllCoroutines();
+        var animColor = success ? CompletedOrderColor : FailedOrderColor;
+        StartCoroutine(FadeOut(animColor));
+    }
+
+    #region Animations
+    private IEnumerator PlaySlideAnimation()
+    {
+        var innerContainer = transform.GetChild(0).GetComponent<RectTransform>();
+        innerContainer.anchoredPosition = SlideStartPosition;
+        
+        var elapsedTime = 0f;
+        while (elapsedTime < SlideDuration)
+        {
+            innerContainer.anchoredPosition =
+                Vector2.Lerp(SlideStartPosition, SlideEndPosition, elapsedTime / SlideDuration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        innerContainer.anchoredPosition = SlideEndPosition;
+    }
+
+    private IEnumerator FadeOut(Color color)
+    {
+        // Set panel and shadow colors
+        var shadows = panel.gameObject.GetComponents<Shadow>();
+        foreach (var shadow in shadows) { shadow.effectColor = color; }
+        panel.color = color;
+        
+        // Play fade animation
+        var elapsedTime = 0f;
+        while (elapsedTime < RemoveDuration)
+        {
+            var alpha = Mathf.Lerp(1, 0, elapsedTime / RemoveDuration);
+            canvasGroup.alpha = alpha;
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+        Destroy(this.gameObject);
+    }
+
+    #endregion
 }
