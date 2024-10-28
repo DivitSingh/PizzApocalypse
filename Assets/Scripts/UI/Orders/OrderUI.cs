@@ -44,9 +44,9 @@ public class OrderUI : MonoBehaviour
 
     public void Configure(Customer customer)
     {
-        // TODO: Configure order number
         var order = customer.Order;
         moneyLabel.text = $"${order.Value}";
+        numberLabel.text = customer.Id.ToString();
         ConfigureItems(customer.Order);
         StartCoroutine(BeginTimer(customer.Patience));
     }

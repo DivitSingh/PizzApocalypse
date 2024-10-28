@@ -1,4 +1,5 @@
 using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,7 +13,7 @@ public class CustomerIndicator : MonoBehaviour
     private Camera playerCamera;
     private GameObject indicator;
     private Image image;
-    
+
     private const float HeightOffset = 3f;
     private const float BorderSize = 8f;
 
@@ -23,6 +24,12 @@ public class CustomerIndicator : MonoBehaviour
         
         indicator = Instantiate(indicatorPrefab, canvas.transform);
         image = indicator.GetComponent<Image>();
+    }
+
+    private void Start()
+    {
+        var idLabel = indicator.GetComponentInChildren<TMP_Text>();
+        idLabel.text = GetComponent<Customer>().Id.ToString();
     }
 
     private void Update()
@@ -44,16 +51,26 @@ public class CustomerIndicator : MonoBehaviour
             // Hide indicator if player can directly see customer
             if (Physics.Raycast(playerCamera.transform.position + Vector3.up, direction, out var hit))
             {
-                var isVisible = hit.collider.gameObject.GetComponent<Customer>() != null;
-                image.enabled = !isVisible;
+                var customerComponent = hit.collider.gameObject.GetComponent<Customer>();
+                if (customerComponent != null || hit.collider.GetComponent<ThrowablePizza>() != null)
+                {
+                    // NOTE: Need to check for ThrowablePizza, else indicator reappears for a split second on throws
+                    indicator.SetActive(false);
+                }
+                else
+                {
+                    // Not visible due to some obstruction
+                    indicator.SetActive(true);
+                }
+                
             }
 
             image.transform.position = worldPos;
             return;
         }
         
-        // Customer is off screen, find the nearest edge to display
-        image.enabled = true;
+        // Customer is off-screen, find the nearest edge to display
+        indicator.SetActive(true);
         if (worldPos.x < 0)
         {
             // Display on left edge unless it is behind, which requires flipping

@@ -23,8 +23,10 @@ public class RoundManager : MonoBehaviour
     // Events
     public event Action<float> OnTimeRemainingChanged;
     public event Action<int, int> OnProgressChanged;
-    public event Action<int> OnRoundChanged;
-    public event Action OnRoundFailed;
+    
+    // TODO: Refactor to use OnRoundEnd(bool)
+    public event Action<bool> OnRoundEnd;
+    public event Action<int> OnNewRound;
 
     private void Awake()
     {
@@ -64,19 +66,15 @@ public class RoundManager : MonoBehaviour
 
     private void HandleRoundEnd()
     {
+        activeCustomersManager.Reset();
         foreach (var customer in FindObjectsOfType<Customer>())
         {
             Destroy(customer.gameObject);
         }
 
-        if (Score < passScore)
-        {
-            OnRoundFailed?.Invoke();
-        }
-        else
-        {
-            OnRoundChanged?.Invoke(++Round);
-        }
+
+        var didPass = Score >= passScore;
+        OnRoundEnd?.Invoke(didPass);
     }
 
     public void NextRound()
@@ -84,6 +82,7 @@ public class RoundManager : MonoBehaviour
         // TODO: Need to fine tune these values, make sure round is still possible
         // NOTE: Values are currently temporary, anything past first round should be ignored
         Score = 0;
+        Round++;
         // TODO: Temporary hardcoded values
         switch (Round)
         {
@@ -116,6 +115,7 @@ public class RoundManager : MonoBehaviour
         
 
         // TODO: Modify other customer stats
+        OnNewRound?.Invoke(Round);
         OnProgressChanged?.Invoke(Score, passScore);
         OnTimeRemainingChanged?.Invoke(timeRemaining);
         GameObject.Find("Audio Source").GetComponent<AudioSource>().Stop();
@@ -125,7 +125,6 @@ public class RoundManager : MonoBehaviour
 
     private void HandleCustomerSpawned(Customer customer)
     {
-        // TODO: Add this customer to ActiveCustomersManager
         activeCustomersManager.Add(customer);
         
         // TODO: Subscribe to onDeath + onFed delegate to be able to keep track of amount of customers and end round early

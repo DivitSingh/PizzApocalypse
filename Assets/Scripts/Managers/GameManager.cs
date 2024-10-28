@@ -12,6 +12,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject gameOverScreen;
     [SerializeField] private TMP_Text scoreText;
     [SerializeField] private ShopUI shopUI;
+    
+    // TODO: Move this to menu manager to set active again?
+    [SerializeField] private GameObject roundUI;
 
     public event Action OnGameOver;
 
@@ -19,9 +22,20 @@ public class GameManager : MonoBehaviour
     {
         Instance = this;
         GameObject.FindWithTag("Player").GetComponent<PlayerHealth>().OnDeath += HandleGameOver;
-        roundManager.OnRoundFailed += HandleGameOver;
-        roundManager.OnRoundChanged += HandleRoundPassed;
+        roundManager.OnRoundEnd += HandleRoundEnd;
         Unpause();
+    }
+
+    private void HandleRoundEnd(bool didPass)
+    {
+        if (didPass)
+        {
+            HandleRoundPassed();
+        }
+        else
+        {
+            HandleGameOver();;
+        }
     }
 
     private void HandleGameOver()
@@ -36,7 +50,7 @@ public class GameManager : MonoBehaviour
         Show(roundManager.Score);
     }
 
-    private void HandleRoundPassed(int _)
+    private void HandleRoundPassed()
     {
         Pause();
         shopUI.Show();
@@ -44,6 +58,7 @@ public class GameManager : MonoBehaviour
 
     public void StartNextRound()
     {
+        roundUI.SetActive(true);
         shopUI.Hide();
         roundManager.NextRound();
         Unpause();

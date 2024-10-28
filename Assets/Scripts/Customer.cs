@@ -14,6 +14,7 @@ public class Customer : MonoBehaviour
     private Animator animator;
     private BoxCollider boxCollider;
     private Transform player;
+    public int Id { get; private set; }
 
     [Header("Stats")]
     private float maxHealth;
@@ -57,13 +58,14 @@ public class Customer : MonoBehaviour
         agentBaseSpeed = agent.speed;
     }
 
-    public void Initialize(float health, float patience, float attackDamage, Order order)
+    public void Initialize(float health, float patience, float attackDamage, Order order, int id)
     {
         maxHealth = health;
         this.health = health;
-        this.Patience = patience;
+        Patience = patience;
         this.attackDamage = attackDamage;
-        this.Order = order;
+        Order = order;
+        Id = id;
         customerUI.maxTime = this.Patience;
         customerUI.currentTime = customerUI.maxTime;
         customerUI.UpdateOrderDisplay(this.Order);
@@ -184,6 +186,7 @@ public class Customer : MonoBehaviour
 
     private IEnumerator RemoveCustomer()
     {
+        Destroy(GetComponent<CustomerIndicator>());
         agent.enabled = false;
         GetComponent<CapsuleCollider>().enabled = false;
         GetComponentInChildren<SkinnedMeshRenderer>().material.mainTexture = idleTexture;

@@ -14,6 +14,7 @@ public class CustomerSpawner : MonoBehaviour
     private readonly float checkRadius = 2f;
     private readonly Random random = new Random();
     private IEnumerator spawnCoroutine;
+    private int nextId = 1;
 
     public event Action<Customer> OnSpawned; 
 
@@ -49,6 +50,7 @@ public class CustomerSpawner : MonoBehaviour
     /// <param name="attackDamage">The amount of damage a customer attack deals to the player.</param>
     public void StartSpawning(float spawnInterval, int totalSpawns, float health, float patience, float attackDamage)
     {
+        nextId = 1;
         if (spawnCoroutine != null)
         {
             StopCoroutine(spawnCoroutine);
@@ -64,8 +66,13 @@ public class CustomerSpawner : MonoBehaviour
         for (int i = 0; i < totalSpawns; i++)
         {
             SpawnCustomer(health, patience, attackDamage);
-            yield return new WaitForSeconds(spawnInterval);
+            if (i != totalSpawns - 1)
+            {
+                yield return new WaitForSeconds(spawnInterval);    
+            }
         }
+
+        spawnCoroutine = null;
     }
 
     private void SpawnCustomer(float health, float patience, float attackDamage)
@@ -88,7 +95,8 @@ public class CustomerSpawner : MonoBehaviour
         {
             Order order = new Order(); //generate an Order
             // customer.SetHealthBarCanvas(healthBarCanvas); // TODO: Move Canvas code to Customer class
-            customer.Initialize(health, patience, attackDamage, order);
+            customer.Initialize(health, patience, attackDamage, order, nextId);
+            nextId++;
             OnSpawned?.Invoke(customer);
         }
     }
