@@ -57,23 +57,23 @@ public class CustomersManager: MonoBehaviour
         customer.OnBecameAngry -= HandleBecameAngry;
         customer.OnFed -= HandleFed;
         customer.OnDeath -= HandleDeath;
-        HandledCount++;
     }
 
     private void HandleBecameAngry(Customer customer)
     {
         OnOrderStatusChanged?.Invoke(customer, false);
-        Cleanup(customer);
     }
 
     private void HandleFed(Customer customer)
     {
+        HandledCount++;
         OnOrderStatusChanged?.Invoke(customer, true);
         Cleanup(customer);
     }
 
     private void HandleDeath(Customer customer)
     {
+        HandledCount++;
         Cleanup(customer);
     }
 
