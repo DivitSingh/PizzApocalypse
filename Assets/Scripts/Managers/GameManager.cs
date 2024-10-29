@@ -80,11 +80,6 @@ public class GameManager : MonoBehaviour
         Cursor.visible = true;
     }
 
-    public void HandleFedCustomerScoring(Customer customer)
-    {
-        roundManager.HandleFedCustomer(customer);
-    }
-
     public void Show(int score)
     {
         scoreText.text = $"You made {score} {(score == 1 ? "delivery" : "deliveries")}.";

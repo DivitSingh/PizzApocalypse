@@ -8,7 +8,7 @@ using UnityEngine.UI;
 /// </summary>
 public class OrderBarUI : MonoBehaviour
 {
-    [SerializeField] private ActiveCustomersManager customersManager;
+    [SerializeField] private CustomersManager customersManager;
     [SerializeField] private GameObject orderPrefab;
 
     private readonly Dictionary<Customer, OrderUI> customerObjectMap = new Dictionary<Customer, OrderUI>();
@@ -37,9 +37,9 @@ public class OrderBarUI : MonoBehaviour
 
     private void Reset()
     {
-        foreach (var order in customerObjectMap.Values)
+        for (int i = transform.childCount - 1; i >= 0; i--)
         {
-            Destroy(order.gameObject);
+            Destroy(transform.GetChild(i).gameObject);
         }
         customerObjectMap.Clear();
     }

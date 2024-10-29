@@ -602,7 +602,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   customerSpawner: {fileID: 83333101}
-  activeCustomersManager: {fileID: 85063847}
+  customersManager: {fileID: 85063847}
   roundDuration: 45
   spawnInterval: 7
   totalCustomers: 6
@@ -648,7 +648,7 @@ GameObject:
   - component: {fileID: 85063848}
   - component: {fileID: 85063847}
   m_Layer: 0
-  m_Name: ActiveCustomersManager
+  m_Name: CustomersManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6470,7 +6470,7 @@ GameObject:
   - component: {fileID: 1095110895}
   m_Layer: 5
   m_Name: OrdersBar
-  m_TagString: Untagged
+  m_TagString: OrdersBar
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

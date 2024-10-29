@@ -1,10 +1,11 @@
 using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class RoundManager : MonoBehaviour
 {
     [SerializeField] private CustomerSpawner customerSpawner;
-    [SerializeField] private ActiveCustomersManager activeCustomersManager;
+    [SerializeField] private CustomersManager customersManager;
 
     [Header("Initial Stats")]
     [SerializeField] private float roundDuration = 120f;
@@ -24,13 +25,14 @@ public class RoundManager : MonoBehaviour
     public event Action<float> OnTimeRemainingChanged;
     public event Action<int, int> OnProgressChanged;
     
-    // TODO: Refactor to use OnRoundEnd(bool)
     public event Action<bool> OnRoundEnd;
     public event Action<int> OnNewRound;
 
     private void Awake()
     {
         customerSpawner.OnSpawned += HandleCustomerSpawned;
+        customersManager.OnAllCustomersHandled += HandleRoundEnd;
+        customersManager.OnOrderStatusChanged += HandleOrderStatusChanged;
     }
 
     private void Start()
@@ -39,11 +41,11 @@ public class RoundManager : MonoBehaviour
         OnTimeRemainingChanged?.Invoke(timeRemaining);
         OnProgressChanged?.Invoke(Score, passScore);
         customerSpawner.StartSpawning(spawnInterval, totalCustomers, customerHealth, customerPatience, customerAttackDmg);
+        customersManager.Configure(totalCustomers);
     }
 
     private void Update()
     {
-        // TODO: End round early if all customers have been fed or are dead?
         if (Time.timeScale == 0) return;
 
         if (timeRemaining > 0)
@@ -57,22 +59,16 @@ public class RoundManager : MonoBehaviour
         }
     }
 
-    public void HandleFedCustomer(Customer customer)
+    public void HandleOrderStatusChanged(Customer customer, bool success)
     {
+        if (!success) return;
         Score++;
         OnProgressChanged?.Invoke(Score, passScore);
-
     }
 
     private void HandleRoundEnd()
     {
-        activeCustomersManager.Reset();
-        foreach (var customer in FindObjectsOfType<Customer>())
-        {
-            Destroy(customer.gameObject);
-        }
-
-
+        customersManager.Reset();
         var didPass = Score >= passScore;
         OnRoundEnd?.Invoke(didPass);
     }
@@ -89,7 +85,7 @@ public class RoundManager : MonoBehaviour
             case 2:
                 passScore = 4;
                 customerPatience = 8;
-                totalCustomers = 12;
+                totalCustomers = 10;
                 spawnInterval = 6;
                 timeRemaining = 60;
                 customerHealth += 15;
@@ -115,6 +111,7 @@ public class RoundManager : MonoBehaviour
         
 
         // TODO: Modify other customer stats
+        customersManager.Configure(totalCustomers);
         OnNewRound?.Invoke(Round);
         OnProgressChanged?.Invoke(Score, passScore);
         OnTimeRemainingChanged?.Invoke(timeRemaining);
@@ -125,9 +122,6 @@ public class RoundManager : MonoBehaviour
 
     private void HandleCustomerSpawned(Customer customer)
     {
-        activeCustomersManager.Add(customer);
-        
-        // TODO: Subscribe to onDeath + onFed delegate to be able to keep track of amount of customers and end round early
-        
+        customersManager.Add(customer);
     }
 }

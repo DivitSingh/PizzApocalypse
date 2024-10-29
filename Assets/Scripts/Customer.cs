@@ -47,7 +47,8 @@ public class Customer : MonoBehaviour
     
     // Events
     public event Action<Customer> OnBecameAngry;
-    public event Action<Customer> OnFed; 
+    public event Action<Customer> OnFed;
+    public event Action<Customer> OnDeath;
 
     private void Start()
     {
@@ -156,6 +157,7 @@ public class Customer : MonoBehaviour
             if (health <= 0)
             {
                 GameObject.Find("Audio Source").GetComponent<AudioSource>().PlayOneShot(dieSound);
+                OnDeath?.Invoke(this);
                 StartCoroutine(RemoveCustomer());
             }
             else
@@ -174,7 +176,6 @@ public class Customer : MonoBehaviour
             {
                 GameObject.Find("Audio Source").GetComponent<AudioSource>().PlayOneShot(completeSound);
                 StopAllCoroutines();
-                GameManager.Instance.HandleFedCustomerScoring(this);
                 player.GetComponent<Player>().playerInventory.IncreaseMoney(Order.IsOrderFulfilled());
                 OnFed?.Invoke(this);
                 StartCoroutine(RemoveCustomer());
