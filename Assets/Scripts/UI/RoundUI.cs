@@ -23,7 +23,8 @@ public class RoundUI : MonoBehaviour
         progressSlider.value = 0;
         roundManager.OnTimeRemainingChanged += UpdateTimer;
         roundManager.OnProgressChanged += UpdateProgress;
-        roundManager.OnRoundChanged += UpdateRound;
+        roundManager.OnNewRound += UpdateRound;
+        roundManager.OnRoundEnd += (_ => Hide());
         GameManager.Instance.OnGameOver += Hide;
     }
 
@@ -61,10 +62,11 @@ public class RoundUI : MonoBehaviour
 
     private void UpdateRound(int round)
     {
+        gameObject.SetActive(true);
         roundText.text = $"Round {round}";
     }
 
-    private void Hide()
+    public void Hide()
     {
         gameObject.SetActive(false);
     }

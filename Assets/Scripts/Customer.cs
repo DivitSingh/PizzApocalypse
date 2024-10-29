@@ -14,14 +14,15 @@ public class Customer : MonoBehaviour
     private Animator animator;
     private BoxCollider boxCollider;
     private Transform player;
+    public int Id { get; private set; }
 
     [Header("Stats")]
     private float maxHealth;
     private float health;
     private float attackDamage;
-    private float patience;
+    public float Patience { get; private set; }
     private State state = State.Hungry;
-    private Order order;
+    public Order Order { get; private set; }
     private List<IEffect> activeEffects = new List<IEffect>();
     [SerializeField] private CustomerUI customerUI;
     [SerializeField] private Sprite angryMarker;
@@ -43,6 +44,11 @@ public class Customer : MonoBehaviour
         Angry,
         Hungry
     }
+    
+    // Events
+    public event Action<Customer> OnBecameAngry;
+    public event Action<Customer> OnFed;
+    public event Action<Customer> OnDeath;
 
     private void Start()
     {
@@ -53,16 +59,17 @@ public class Customer : MonoBehaviour
         agentBaseSpeed = agent.speed;
     }
 
-    public void Initialize(float health, float patience, float attackDamage, Order order)
+    public void Initialize(float health, float patience, float attackDamage, Order order, int id)
     {
         maxHealth = health;
         this.health = health;
-        this.patience = patience;
+        Patience = patience;
         this.attackDamage = attackDamage;
-        this.order = order;
-        customerUI.maxTime = this.patience;
+        Order = order;
+        Id = id;
+        customerUI.maxTime = this.Patience;
         customerUI.currentTime = customerUI.maxTime;
-        customerUI.UpdateOrderDisplay(this.order);
+        customerUI.UpdateOrderDisplay(this.Order);
         StartCoroutine(Waiting());
     }
 
@@ -84,7 +91,7 @@ public class Customer : MonoBehaviour
     {
         state = State.Hungry;
         GetComponentInChildren<SkinnedMeshRenderer>().material.mainTexture = idleTexture;
-        yield return new WaitForSeconds(patience);
+        yield return new WaitForSeconds(Patience);
         // circularTimer.gameObject.SetActive(false);
         customerUI.timerImage.gameObject.SetActive(false);
         BecomeAngry();
@@ -135,7 +142,9 @@ public class Customer : MonoBehaviour
         GameObject.Find("Audio Source").GetComponent<AudioSource>().PlayOneShot(rageSound);
         transform.Find("Marker").GetComponent<SpriteRenderer>().sprite = angryMarker;
         customerUI.healthBar.gameObject.SetActive(true);
+        Destroy(GetComponent<CustomerIndicator>());
         Chase();
+        OnBecameAngry?.Invoke(this);
     }
 
     public void ReceivePizza(IPizza pizza)
@@ -148,6 +157,7 @@ public class Customer : MonoBehaviour
             if (health <= 0)
             {
                 GameObject.Find("Audio Source").GetComponent<AudioSource>().PlayOneShot(dieSound);
+                OnDeath?.Invoke(this);
                 StartCoroutine(RemoveCustomer());
             }
             else
@@ -160,23 +170,24 @@ public class Customer : MonoBehaviour
         else if (state == State.Hungry)
         {
             transform.LookAt(player);
-            order.DeductPizzaFromOrder(pizza);
-            customerUI.UpdateOrderDisplay(order);
-            if (order.IsOrderFulfilled() > -1)
+            Order.DeductPizzaFromOrder(pizza);
+            customerUI.UpdateOrderDisplay(Order);
+            if (Order.IsOrderFulfilled() > -1)
             {
                 GameObject.Find("Audio Source").GetComponent<AudioSource>().PlayOneShot(completeSound);
                 StopAllCoroutines();
-                GameManager.Instance.HandleFedCustomerScoring(this);
-                player.GetComponent<Player>().playerInventory.IncreaseMoney(order.IsOrderFulfilled());
+                player.GetComponent<Player>().playerInventory.IncreaseMoney(Order.IsOrderFulfilled());
+                OnFed?.Invoke(this);
                 StartCoroutine(RemoveCustomer());
             }
             else
-                Debug.Log($"Order not yet fulfilled, still needs: {order.PasteOrderContents()}");
+                Debug.Log($"Order not yet fulfilled, still needs: {Order.PasteOrderContents()}");
         }
     }
 
     private IEnumerator RemoveCustomer()
     {
+        Destroy(GetComponent<CustomerIndicator>());
         agent.enabled = false;
         GetComponent<CapsuleCollider>().enabled = false;
         GetComponentInChildren<SkinnedMeshRenderer>().material.mainTexture = idleTexture;
