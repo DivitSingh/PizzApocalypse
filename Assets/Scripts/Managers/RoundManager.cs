@@ -16,7 +16,6 @@ public class RoundManager : MonoBehaviour
     [SerializeField] private float customerPatience = 8f;
     [SerializeField] private float customerAttackDmg = 20f;
 
-
     public int Score { get; private set; }
     public int Round { get; private set; } = 1;
     private float timeRemaining;

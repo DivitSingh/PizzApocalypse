@@ -17,7 +17,6 @@ public class AudioManager : MonoBehaviour
         }
 
         instance = this;
-        DontDestroyOnLoad(this.gameObject);
 
         // Load and apply the volume setting immediately when AudioManager starts
         LoadVolume();
