@@ -6843,7 +6843,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 54.299927, y: 5.0999756}
+  m_AnchoredPosition: {x: 54.299805, y: 5.1000977}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!64 &1122541797
@@ -17314,6 +17314,8 @@ MonoBehaviour:
   throwCooldown: 0.5
   playerInventory: {fileID: 1917263827}
   baseAttack: 10
+  sliceSound: {fileID: 8300000, guid: f6d04ca3689b30740a62cf3d31168169, type: 3}
+  pizzaSound: {fileID: 8300000, guid: 7731379bfb3424a489475cdf6f7c44b1, type: 3}
   swapSound: {fileID: 8300000, guid: 7e3f43689ef9f4f4fb058492037d6557, type: 3}
   hurtSound: {fileID: 8300000, guid: 862d377a35144ef43b16223999c0b77a, type: 3}
   consumeSound: {fileID: 8300000, guid: 0b2b4fa38b4ad2a4788e531dd2853b46, type: 3}

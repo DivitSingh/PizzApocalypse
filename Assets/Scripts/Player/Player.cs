@@ -48,6 +48,8 @@ public class Player : MonoBehaviour
     private List<IEffect> activeEffects = new List<IEffect>();
 
     [Header("Audio")]
+    [SerializeField] private AudioClip sliceSound;
+    [SerializeField] private AudioClip pizzaSound;
     [SerializeField] private AudioClip swapSound;
     [SerializeField] private AudioClip hurtSound;
     [SerializeField] private AudioClip consumeSound;
@@ -106,22 +108,21 @@ public class Player : MonoBehaviour
 
     private void FireCanceled(InputAction.CallbackContext context)
     {
-        if (Time.timeScale == 0) return;
+        if (Time.timeScale == 0 || playerInventory.GetPizzaAmmo(playerInventory.GetEquippedPizza()) < 1) return;
 
         if (Time.time - timer < 1.00f)
         {
-            // Throw(pizzas[0]);// Slice Pizza
+            GameObject.Find("Audio Source").GetComponent<AudioSource>().PlayOneShot(sliceSound);
             Throw(playerInventory.GetEquippedPizza(), false);
         }
         else
         {
             if (playerInventory.GetPizzaAmmo(playerInventory.GetEquippedPizza()) >= 8)
-                // Throw(pizzas[1]);// Full Pizza, only thrown, when there are 8 or more pieces left.
+            {
+                GameObject.Find("Audio Source").GetComponent<AudioSource>().PlayOneShot(pizzaSound);
                 Throw(playerInventory.GetEquippedPizza(), true);
-            // TODO: Should probably refactor to only pass in whether thrown pizza is box or not
-            // TODO: Let Throw method handle which type of Pizza is thrown
+            }
             else
-                // Throw(pizzas[0]);// Slice Pizza thrown instead when 7 or less slices are left.
                 Throw(playerInventory.GetEquippedPizza(), false);
         }
     }

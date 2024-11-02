@@ -843,7 +843,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   customerUI: {fileID: 6761254423307774373}
   angryMarker: {fileID: 21300000, guid: 12730ec38f8663743bc8c8e210c77315, type: 3}
-  rageSound: {fileID: 8300000, guid: 5def2200406ff094381b5c800d2fc227, type: 3}
+  rageSound: {fileID: 8300000, guid: 5fef705a12a94434ba5fac10961aa687, type: 3}
   hurtSound: {fileID: 8300000, guid: 822cc98daac1eb7468bb0c26d1faf60b, type: 3}
   dieSound: {fileID: 8300000, guid: 5207c23dcc74c79498126fe73579633b, type: 3}
   completeSound: {fileID: 8300000, guid: 62f0ab0097269ef408d4c5432186b807, type: 3}
