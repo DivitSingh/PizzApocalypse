@@ -44,26 +44,37 @@ public class CustomerUI : MonoBehaviour
             healthBar.value = healthPercentage;
     }
 
-    public void UpdateOrderDisplay(Order orders)
+    public void UpdateOrderDisplay(Order order)
     {
         foreach (Transform child in orderPanel.transform)
             Destroy(child.gameObject);
 
-        foreach (var order in orders.GetOrders())
+        foreach (var (pizzaType, count) in order.Items)
         {
-            foreach (var item in order)
+            for (int i = 0; i < count; i++)
             {
-                PizzaType pizzaType = item.Key;
-                int count = item.Value;
-
-                for (int i = 0; i < count; i++)
-                {
-                    GameObject slot = Instantiate(slotPrefab, orderPanel.transform);
-                    Image icon = slot.GetComponent<Image>();
-                    icon.sprite = pizzaSprites[pizzaType];
-                    icon.preserveAspect = true;
-                }
+                GameObject slot = Instantiate(slotPrefab, orderPanel.transform);
+                Image icon = slot.GetComponent<Image>();
+                icon.sprite = pizzaSprites[pizzaType];
+                icon.preserveAspect = true;
             }
         }
+        
+        // foreach (var order in orders.GetOrders())
+        // {
+        //     foreach (var item in order)
+        //     {
+        //         PizzaType pizzaType = item.Key;
+        //         int count = item.Value;
+        //
+        //         for (int i = 0; i < count; i++)
+        //         {
+        //             GameObject slot = Instantiate(slotPrefab, orderPanel.transform);
+        //             Image icon = slot.GetComponent<Image>();
+        //             icon.sprite = pizzaSprites[pizzaType];
+        //             icon.preserveAspect = true;
+        //         }
+        //     }
+        // }
     }
 }

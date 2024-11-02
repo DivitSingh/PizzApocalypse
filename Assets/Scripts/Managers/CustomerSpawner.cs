@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using Random = System.Random;
 
@@ -93,7 +94,7 @@ public class CustomerSpawner : MonoBehaviour
         var customer = customerObject.GetComponent<Customer>();
         if (customer != null)
         {
-            Order order = new Order(); //generate an Order
+            var order = OrderFactory.CreateOrder(4);
             // customer.SetHealthBarCanvas(healthBarCanvas); // TODO: Move Canvas code to Customer class
             customer.Initialize(health, patience, attackDamage, order, nextId);
             nextId++;

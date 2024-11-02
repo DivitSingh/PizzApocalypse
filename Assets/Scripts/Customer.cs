@@ -170,18 +170,19 @@ public class Customer : MonoBehaviour
         else if (state == State.Hungry)
         {
             transform.LookAt(player);
-            Order.DeductPizzaFromOrder(pizza);
+            // Order.DeductPizzaFromOrder(pizza);
+            Order.Receive(pizza);
             customerUI.UpdateOrderDisplay(Order);
-            if (Order.IsOrderFulfilled() > -1)
+            if (Order.IsFulfilled())
             {
                 GameObject.Find("Audio Source").GetComponent<AudioSource>().PlayOneShot(completeSound);
                 StopAllCoroutines();
-                player.GetComponent<Player>().playerInventory.IncreaseMoney(Order.IsOrderFulfilled());
+                player.GetComponent<Player>().playerInventory.IncreaseMoney(Order.Value);
                 OnFed?.Invoke(this);
                 StartCoroutine(RemoveCustomer());
             }
-            else
-                Debug.Log($"Order not yet fulfilled, still needs: {Order.PasteOrderContents()}");
+            // else
+                // Debug.Log($"Order not yet fulfilled, still needs: {Order.PasteOrderContents()}");
         }
     }
 
