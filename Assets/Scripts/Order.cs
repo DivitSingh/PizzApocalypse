@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 public class Order
 {
@@ -41,7 +42,7 @@ public class Order
     {
         if (Items.ContainsKey(pizza.Type) && Items[pizza.Type] > 0)
         {
-            Items[pizza.Type] -= 1;
+            Items[pizza.Type] = Mathf.Max(0, Items[pizza.Type] - pizza.Quantity);
         }
     }
 }
