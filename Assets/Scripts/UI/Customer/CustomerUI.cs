@@ -59,22 +59,5 @@ public class CustomerUI : MonoBehaviour
                 icon.preserveAspect = true;
             }
         }
-        
-        // foreach (var order in orders.GetOrders())
-        // {
-        //     foreach (var item in order)
-        //     {
-        //         PizzaType pizzaType = item.Key;
-        //         int count = item.Value;
-        //
-        //         for (int i = 0; i < count; i++)
-        //         {
-        //             GameObject slot = Instantiate(slotPrefab, orderPanel.transform);
-        //             Image icon = slot.GetComponent<Image>();
-        //             icon.sprite = pizzaSprites[pizzaType];
-        //             icon.preserveAspect = true;
-        //         }
-        //     }
-        // }
     }
 }

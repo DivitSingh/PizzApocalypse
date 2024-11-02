@@ -64,7 +64,6 @@ public class OrderUI : MonoBehaviour
     
     private void ConfigureItems(Order order)
     {
-        // TODO: Refactor order to use a single dictionary and loop through mappings
         foreach (var (pizzaType, amount) in order.Items)
         {
             for (int i = 0; i < amount; i++)
@@ -75,20 +74,6 @@ public class OrderUI : MonoBehaviour
                 image.preserveAspect = true;
             }
         }
-        
-        // foreach (var dict in order.GetOrders())
-        // {
-        //     foreach (var orderItem in dict)
-        //     {
-        //         for (int i = 0; i < orderItem.Value; i++)
-        //         {
-        //             var slot = Instantiate(itemSlot, itemsGrid.transform);
-        //             var image = slot.GetComponent<Image>();
-        //             image.sprite = iconMap[orderItem.Key];
-        //             image.preserveAspect = true;
-        //         }
-        //     }
-        // }
     }
 
     private IEnumerator BeginTimer(float duration)
