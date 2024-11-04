@@ -1,7 +1,6 @@
 using System;
 using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using Random = System.Random;
 
@@ -12,11 +11,9 @@ public class CustomerSpawner : MonoBehaviour
     [SerializeField] private Canvas healthBarCanvas; // TODO: Move this to Customer class?
 
     private Transform[] spawnPoints;
-    private readonly float checkRadius = 2f;
+    private readonly float checkRadius = 1.5f;
     private readonly Random random = new Random();
-    private IEnumerator spawnCoroutine;
-    private int nextId = 1;
-
+    
     public event Action<Customer> OnSpawned; 
 
     private void Awake()
@@ -41,64 +38,58 @@ public class CustomerSpawner : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// This method is called to begin the process of spawning customers.
-    /// </summary>
-    /// <param name="spawnInterval">Rate at which customers spawn.</param>
-    /// <param name="totalSpawns">Total amount of customers to be spawned.</param>
-    /// <param name="health">The starting health for a spawned customer.</param>
-    /// <param name="patience">The patience value for a spawned customer.</param>
-    /// <param name="attackDamage">The amount of damage a customer attack deals to the player.</param>
-    public void StartSpawning(float spawnInterval, int totalSpawns, float health, float patience, float attackDamage)
+    public void StartSpawning(SpawnConfiguration spawnConfig, GenerateCustomerConfiguration customerConfig)
     {
-        nextId = 1;
-        if (spawnCoroutine != null)
-        {
-            StopCoroutine(spawnCoroutine);
-            Debug.LogError("Previous spawning did not finish before new one started.");
-        }
-
-        spawnCoroutine = SpawnCustomers(spawnInterval, totalSpawns, health, patience, attackDamage);
-        StartCoroutine(spawnCoroutine);
+        StartCoroutine(SpawnCustomers(spawnConfig, customerConfig));
     }
 
-    private IEnumerator SpawnCustomers(float spawnInterval, int totalSpawns, float health, float patience, float attackDamage)
+    private IEnumerator SpawnCustomers(SpawnConfiguration spawnConfig, GenerateCustomerConfiguration customerConfig)
     {
-        for (int i = 0; i < totalSpawns; i++)
+        // Wait a bit before beginning spawning
+        yield return new WaitForSeconds(0.5f);
+        
+        var id = 1;
+        for (int i = 0; i < spawnConfig.Count; i++)
         {
-            SpawnCustomer(health, patience, attackDamage);
-            if (i != totalSpawns - 1)
+            SpawnCustomer(customerConfig, id);
+            if (i != spawnConfig.Count - 1)
             {
-                yield return new WaitForSeconds(spawnInterval);    
+                yield return new WaitForSeconds(spawnConfig.Interval);    
             }
-        }
 
-        spawnCoroutine = null;
+            id++;
+        }
     }
 
-    private void SpawnCustomer(float health, float patience, float attackDamage)
+    private void SpawnCustomer(GenerateCustomerConfiguration config, int id)
     {
-        // TODO: What to do if availableSpawnPoints is 0, still need to spawn?
-        var availableSpawnPoints = spawnPoints
-            .Where(s => !Physics.CheckSphere(s.position, checkRadius, customerLayerMask))
-            .ToList();
-        if (availableSpawnPoints.Count == 0)
-        {
-            Debug.LogError("All spawn points are occupied.");
-            return;
-        }
-        var index = random.Next(0, availableSpawnPoints.Count);
-        var spawnPoint = availableSpawnPoints[index];
-
+        // TODO: Choose spawn point
+        var spawnPoint = PickSpawnPoint();
+        if (spawnPoint == null) return;
+        
         var customerObject = Instantiate(customerPrefab, spawnPoint.position, Quaternion.identity);
         var customer = customerObject.GetComponent<Customer>();
         if (customer != null)
         {
-            var order = OrderFactory.CreateOrder(4);
-            // customer.SetHealthBarCanvas(healthBarCanvas); // TODO: Move Canvas code to Customer class
-            customer.Initialize(health, patience, attackDamage, order, nextId);
-            nextId++;
+            var order = OrderFactory.CreateOrder(config.MaxOrderSize);
+            customer.Initialize(config.Satisfaction, config.Patience, config.Attack, order, id);
             OnSpawned?.Invoke(customer);
         }
+    }
+
+    private Transform PickSpawnPoint()
+    {
+        var availableSpawnPoints = spawnPoints
+            .Where(s => !Physics.CheckSphere(s.position, checkRadius, customerLayerMask))
+            .ToList();
+
+        if (availableSpawnPoints.Count == 0)
+        {
+            Debug.LogError("No spawn points available.");
+            return null;
+        }
+        
+        var index = random.Next(0, availableSpawnPoints.Count);
+        return availableSpawnPoints[index];
     }
 }

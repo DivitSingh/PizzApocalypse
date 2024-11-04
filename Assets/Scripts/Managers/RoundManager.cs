@@ -7,14 +7,7 @@ public class RoundManager : MonoBehaviour
     [SerializeField] private CustomerSpawner customerSpawner;
     [SerializeField] private CustomersManager customersManager;
 
-    [Header("Initial Stats")]
-    [SerializeField] private float roundDuration = 120f;
-    [SerializeField] private float spawnInterval = 5f;
-    [SerializeField] private int totalCustomers = 20;
-    [SerializeField] private int passScore = 3;
-    [SerializeField] private float customerHealth = 100f;
-    [SerializeField] private float customerPatience = 8f;
-    [SerializeField] private float customerAttackDmg = 20f;
+    private RoundProgression roundProgression = new RoundProgression();
 
     public int Score { get; private set; }
     public int Round { get; private set; } = 1;
@@ -36,11 +29,11 @@ public class RoundManager : MonoBehaviour
 
     private void Start()
     {
-        timeRemaining = roundDuration;
+        timeRemaining = roundProgression.Configuration.Duration;
         OnTimeRemainingChanged?.Invoke(timeRemaining);
-        OnProgressChanged?.Invoke(Score, passScore);
-        customerSpawner.StartSpawning(spawnInterval, totalCustomers, customerHealth, customerPatience, customerAttackDmg);
-        customersManager.Configure(totalCustomers);
+        OnProgressChanged?.Invoke(Score, roundProgression.Configuration.PassScore);
+        customerSpawner.StartSpawning(roundProgression.Configuration.SpawnConfiguration, roundProgression.Configuration.CustomerConfiguration);
+        customersManager.Configure(roundProgression.Configuration.SpawnConfiguration.Count);
     }
 
     private void Update()
@@ -62,61 +55,33 @@ public class RoundManager : MonoBehaviour
     {
         if (!success) return;
         Score++;
-        OnProgressChanged?.Invoke(Score, passScore);
+        OnProgressChanged?.Invoke(Score, roundProgression.Configuration.PassScore);
     }
 
     private void HandleRoundEnd()
     {
         customersManager.Reset();
-        var didPass = Score >= passScore;
+        var didPass = Score >= roundProgression.Configuration.PassScore;
         OnRoundEnd?.Invoke(didPass);
     }
 
     public void NextRound()
     {
-        // TODO: Need to fine tune these values, make sure round is still possible
-        // NOTE: Values are currently temporary, anything past first round should be ignored
         Score = 0;
         Round++;
-        // TODO: Temporary hardcoded values
-        switch (Round)
-        {
-            case 2:
-                passScore = 4;
-                customerPatience = 8;
-                totalCustomers = 10;
-                spawnInterval = 6;
-                timeRemaining = 60;
-                customerHealth += 15;
-                break;
-            case 3:
-                passScore = 6;
-                customerPatience = 6;
-                totalCustomers = 12;
-                spawnInterval = 5;
-                timeRemaining = 60;
-                customerAttackDmg += 5;
-                customerHealth += 25;
-                break;
-            default:
-                // TODO: Figure out formula for future rounds
-                passScore++;
-                timeRemaining = roundDuration + 5;
-                totalCustomers++;
-                customerAttackDmg += 5;
-                customerHealth += 10;
-                break;
-        };
+        roundProgression.Next();
         
-
-        // TODO: Modify other customer stats
-        customersManager.Configure(totalCustomers);
+        // Invoke delegates
         OnNewRound?.Invoke(Round);
-        OnProgressChanged?.Invoke(Score, passScore);
+        OnProgressChanged?.Invoke(Score, roundProgression.Configuration.PassScore);
         OnTimeRemainingChanged?.Invoke(timeRemaining);
+        
         GameObject.Find("Audio Source").GetComponent<AudioSource>().Stop();
         GameObject.Find("Audio Source").GetComponent<AudioSource>().Play();
-        customerSpawner.StartSpawning(spawnInterval, totalCustomers, customerHealth, customerPatience, customerAttackDmg);
+        
+        customersManager.Configure(roundProgression.Configuration.SpawnConfiguration.Count);
+        customerSpawner.StartSpawning(roundProgression.Configuration.SpawnConfiguration, roundProgression.Configuration.CustomerConfiguration);
+        timeRemaining = roundProgression.Configuration.Duration;
     }
 
     private void HandleCustomerSpawned(Customer customer)
