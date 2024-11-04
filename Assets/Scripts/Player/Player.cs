@@ -26,7 +26,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float counterMovement = 0.175f;
     private Rigidbody rb;
     private float xRotation;
-    private float sensitivity = 100f;
+    [SerializeField] private float sensitivity = 100f;
     private float sensMultiplier = 1f;
     private float threshold = 0.01f;
     private float timer = 0.00f;
@@ -75,6 +75,11 @@ public class Player : MonoBehaviour
         swapBackwardControls.Disable();
     }
 
+    public void SetSensitivity(float newSensitivity)
+    {
+        sensitivity = newSensitivity;
+    }
+
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
@@ -85,6 +90,10 @@ public class Player : MonoBehaviour
         playerInventory = GetComponent<PlayerInventory>();
         playerHealth = GetComponent<PlayerHealth>();
         playerInventory.InitializeInventory();
+
+        // Load saved sensitivity on start
+        float savedSensitivity = PlayerPrefs.GetFloat("CameraSensitivity", 100f);
+        SetSensitivity(savedSensitivity);
     }
 
     private void FixedUpdate()
