@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems; // Add this for UI event handling
+
 public class MainMenu : MonoBehaviour
 {
     public RectTransform[] menuItems;
@@ -13,6 +15,37 @@ public class MainMenu : MonoBehaviour
     {
         Canvas.ForceUpdateCanvases();
         currentIndex = 0;
+
+        // Add event triggers to each menu item
+        for (int i = 0; i < menuItems.Length; i++)
+        {
+            int index = i; // Capture the index for use in lambda expressions
+
+            // Add EventTrigger component if it doesn't exist
+            EventTrigger trigger = menuItems[i].gameObject.GetComponent<EventTrigger>();
+            if (trigger == null)
+            {
+                trigger = menuItems[i].gameObject.AddComponent<EventTrigger>();
+            }
+
+            // Add pointer enter (hover) event
+            EventTrigger.Entry enterEntry = new EventTrigger.Entry();
+            enterEntry.eventID = EventTriggerType.PointerEnter;
+            enterEntry.callback.AddListener((data) => {
+                currentIndex = index;
+                UpdateSelectionHighlight();
+            });
+            trigger.triggers.Add(enterEntry);
+
+            // Add click event
+            EventTrigger.Entry clickEntry = new EventTrigger.Entry();
+            clickEntry.eventID = EventTriggerType.PointerClick;
+            clickEntry.callback.AddListener((data) => {
+                currentIndex = index;
+                SelectMenuItem();
+            });
+            trigger.triggers.Add(clickEntry);
+        }
     }
 
     void LateUpdate()
