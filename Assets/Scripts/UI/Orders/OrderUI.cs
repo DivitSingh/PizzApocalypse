@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,7 +10,7 @@ using UnityEngine.UI;
 /// </summary>
 public class OrderUI : MonoBehaviour
 {
-    [Header("Local UI Elements")] 
+    [Header("Local UI Elements")]
     [SerializeField] private CanvasGroup canvasGroup;
     [SerializeField] private Image panel;
     [SerializeField] private Slider slider;
@@ -26,7 +25,7 @@ public class OrderUI : MonoBehaviour
     [SerializeField] private Sprite mushroomIcon;
     [SerializeField] private GameObject itemSlot;
     private Dictionary<PizzaType, Sprite> iconMap;
-    
+
     private static readonly Color LowTimerColor = new(217f / 255, 35f / 255, 11f / 225);
     private static readonly Color MidTimerColor = new(254f / 255, 215f / 255, 50f / 255);
     private static readonly Color HighTimerColor = new(57f / 255, 229f / 255, 5f / 255);
@@ -39,7 +38,7 @@ public class OrderUI : MonoBehaviour
     private const float RemoveDuration = 0.4f;
     private static readonly Color FailedOrderColor = new(241f / 255, 86f / 255, 49f / 225);
     private static readonly Color CompletedOrderColor = new(57f / 255, 229f / 255, 5f / 255);
-    
+
     private void Awake()
     {
         sliderFill = slider.GetComponentsInChildren<Image>().FirstOrDefault(c => c.name == "Fill");
@@ -61,7 +60,7 @@ public class OrderUI : MonoBehaviour
         ConfigureItems(customer.Order);
         StartCoroutine(BeginTimer(customer.Patience));
     }
-    
+
     private void ConfigureItems(Order order)
     {
         foreach (var (pizzaType, amount) in order.Items)
@@ -88,7 +87,7 @@ public class OrderUI : MonoBehaviour
         }
     }
 
-    private void UpdateSlider(float timeRemaining, float initialTime) 
+    private void UpdateSlider(float timeRemaining, float initialTime)
     {
         var pct = timeRemaining / initialTime;
         sliderFill.color = pct switch
@@ -99,7 +98,7 @@ public class OrderUI : MonoBehaviour
         };
         slider.value = pct;
     }
-    
+
     public void Remove(bool success)
     {
         StopAllCoroutines();
@@ -112,7 +111,7 @@ public class OrderUI : MonoBehaviour
     {
         var innerContainer = transform.GetChild(0).GetComponent<RectTransform>();
         innerContainer.anchoredPosition = SlideStartPosition;
-        
+
         var elapsedTime = 0f;
         while (elapsedTime < SlideDuration)
         {
@@ -131,7 +130,7 @@ public class OrderUI : MonoBehaviour
         var shadows = panel.gameObject.GetComponents<Shadow>();
         foreach (var shadow in shadows) { shadow.effectColor = color; }
         panel.color = color;
-        
+
         // Play fade animation
         var elapsedTime = 0f;
         while (elapsedTime < RemoveDuration)
