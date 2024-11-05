@@ -91,8 +91,14 @@ public class Customer : MonoBehaviour
     {
         state = State.Hungry;
         GetComponentInChildren<SkinnedMeshRenderer>().material.mainTexture = idleTexture;
-        yield return new WaitForSeconds(Patience);
-        // circularTimer.gameObject.SetActive(false);
+        while (Patience > 0)
+        {
+            Patience -= Time.deltaTime;
+            yield return null;
+        }
+
+        Patience = 0;
+        // yield return new WaitForSeconds(Patience);
         customerUI.timerImage.gameObject.SetActive(false);
         BecomeAngry();
     }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,6 +40,9 @@ public class OrderUI : MonoBehaviour
     private static readonly Color FailedOrderColor = new(241f / 255, 86f / 255, 49f / 225);
     private static readonly Color CompletedOrderColor = new(57f / 255, 229f / 255, 5f / 255);
 
+    private Customer customer;
+    private float initialPatience;
+
     private void Awake()
     {
         sliderFill = slider.GetComponentsInChildren<Image>().FirstOrDefault(c => c.name == "Fill");
@@ -58,7 +62,8 @@ public class OrderUI : MonoBehaviour
         moneyLabel.text = $"${order.Value}";
         numberLabel.text = customer.Id.ToString();
         ConfigureItems(customer.Order);
-        StartCoroutine(BeginTimer(customer.Patience));
+        this.customer = customer;
+        initialPatience = customer.Patience;
     }
 
     private void ConfigureItems(Order order)
@@ -75,16 +80,9 @@ public class OrderUI : MonoBehaviour
         }
     }
 
-    private IEnumerator BeginTimer(float duration)
+    private void Update()
     {
-        var updateInterval = 0.1f;
-        var remaining = duration;
-        while (remaining > 0)
-        {
-            yield return new WaitForSeconds(updateInterval);
-            remaining -= updateInterval;
-            UpdateSlider(remaining, duration);
-        }
+        UpdateSlider(customer.Patience, initialPatience);
     }
 
     private void UpdateSlider(float timeRemaining, float initialTime)
@@ -102,6 +100,7 @@ public class OrderUI : MonoBehaviour
     public void Remove(bool success)
     {
         StopAllCoroutines();
+        if (!success) slider.value = 0;
         var animColor = success ? CompletedOrderColor : FailedOrderColor;
         StartCoroutine(FadeOut(animColor));
     }
