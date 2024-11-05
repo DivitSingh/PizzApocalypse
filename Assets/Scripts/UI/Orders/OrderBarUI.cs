@@ -18,6 +18,7 @@ public class OrderBarUI : MonoBehaviour
         customersManager.OnCustomerAdded += AddOrder;
         customersManager.OnOrderStatusChanged += RemoveOrder;
         customersManager.OnReset += Reset;
+        GameManager.Instance.OnGameOver += Reset;
     }
 
     private void AddOrder(Customer customer)
@@ -30,9 +31,12 @@ public class OrderBarUI : MonoBehaviour
 
     private void RemoveOrder(Customer customer, bool success)
     {
-        var container = customerObjectMap[customer];
-        customerObjectMap.Remove(customer);
-        container.Remove(success);
+        if (customerObjectMap.ContainsKey(customer))
+        {
+            var container = customerObjectMap[customer];
+            customerObjectMap.Remove(customer);
+            container.Remove(success);
+        }
     }
 
     private void Reset()
