@@ -14,11 +14,12 @@ public class Player : MonoBehaviour
     [SerializeField] private Transform attackPoint;
     [SerializeField] private GameObject pizzaSlicePrefab;
     [SerializeField] private GameObject pizzaBoxPrefab;
-    [SerializeField] private InputAction shootControls;
-    [SerializeField] private InputAction eatControls;
-    [SerializeField] private InputAction swapForwardControls;
-    [SerializeField] private InputAction swapBackwardControls;
+    [SerializeField] public InputAction shootControls;
+    [SerializeField] public InputAction eatControls;
+    [SerializeField] public InputAction swapForwardControls;
+    [SerializeField] public InputAction swapBackwardControls;
     [SerializeField] private TextMeshProUGUI moneyText;
+    public bool IsGamePaused { get; private set; } = false;
 
     [Header("Movement")]
     [SerializeField] private float moveSpeed = 4500;
@@ -66,7 +67,10 @@ public class Player : MonoBehaviour
         swapBackwardControls.Enable();
         swapBackwardControls.performed += SwapBackward;
     }
-
+    public void SetPauseState(bool isPaused)
+    {
+        IsGamePaused = isPaused;
+    }
     private void OnDisable()
     {
         shootControls.Disable();
@@ -103,6 +107,7 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
+        if (IsGamePaused) return;
         playerCam.position = transform.position + new Vector3(0, 0.5f, 0);
         if (Time.timeScale == 0) return;
         Look();
@@ -162,6 +167,7 @@ public class Player : MonoBehaviour
 
     private void Movement()
     {
+        if (IsGamePaused) return;
         //Extra gravity
         rb.AddForce(Vector3.down * Time.deltaTime * 10);
 
@@ -191,6 +197,7 @@ public class Player : MonoBehaviour
 
     private void Look()
     {
+        if (IsGamePaused) return;
         x = Input.GetAxisRaw("Horizontal");
         y = Input.GetAxisRaw("Vertical");
         float mouseX = Input.GetAxis("Mouse X") * sensitivity * Time.fixedDeltaTime * sensMultiplier;
