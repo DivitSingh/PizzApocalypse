@@ -90,6 +90,7 @@ public class GameManager : MonoBehaviour
     public void Restart()
     {
         GameObject.FindWithTag("Player").GetComponent<PlayerHealth>().OnDeath -= HandleGameOver;
-        SceneManager.LoadScene(0);
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("StartScene");
     }
 }
