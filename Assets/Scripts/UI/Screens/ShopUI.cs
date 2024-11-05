@@ -9,7 +9,6 @@ public class ShopUI : MonoBehaviour
 {
     [SerializeField] private ShopManager shopManager;
 
-    // TODO: Refactor
     [Header("UI Elements")]
     [SerializeField] private TMP_Text balanceText;
     [SerializeField] private GameObject healthContainer;
