@@ -135,9 +135,10 @@ public class Customer : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (state == State.Angry)
-            if (other.GetComponent<Player>() != null)
-                other.GetComponent<PlayerHealth>().TakeDamage(attackDamage);
+        if (state == State.Angry && other.GetComponent<PlayerHealth>() != null)
+        {
+            other.GetComponent<PlayerHealth>().TakeDamage(attackDamage);
+        }
     }
 
     private void BecomeAngry()
@@ -194,6 +195,7 @@ public class Customer : MonoBehaviour
 
     private IEnumerator RemoveCustomer()
     {
+        boxCollider.enabled = false;
         Destroy(GetComponent<CustomerIndicator>());
         agent.enabled = false;
         GetComponent<CapsuleCollider>().enabled = false;
