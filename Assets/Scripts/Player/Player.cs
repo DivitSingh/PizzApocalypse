@@ -5,7 +5,6 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using TMPro;
-using Unity.VisualScripting;
 
 public class Player : MonoBehaviour
 {
@@ -209,7 +208,7 @@ public class Player : MonoBehaviour
         Vector2 moveInput = moveControls.ReadValue<Vector2>();
         x = moveInput.x;
         y = moveInput.y;
-        float currentSensitivity = lookControls.activeControl.device is Gamepad ? sensitivity : sensitivity * 0.25f;
+        float currentSensitivity = lookControls.activeControl?.device is Gamepad ? sensitivity : sensitivity * 0.25f;
         horizontalRotation += lookControls.ReadValue<float>() * currentSensitivity * Time.fixedDeltaTime;
         playerCam.localRotation = Quaternion.Euler(0f, horizontalRotation, 0f);
         orientation.localRotation = playerCam.localRotation;
