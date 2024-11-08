@@ -19507,6 +19507,89 @@ MonoBehaviour:
     type: 3}
   pizzaBoxPrefab: {fileID: 7381785348282878827, guid: 5232de6fa82056642989b44326b2a89c,
     type: 3}
+  moneyText: {fileID: 1016070199}
+  moveControls:
+    m_Name: Move Controls
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 10d84f4c-99a9-4adc-8cbd-575c18579632
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: fd8596dd-b655-4045-b468-2d4575a84510
+      m_Path: <Gamepad>/leftStick
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Move Controls
+      m_Flags: 0
+    - m_Name: 2D Vector
+      m_Id: 77254acb-557e-4ef6-8612-54cac09f466a
+      m_Path: 2DVector
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Move Controls
+      m_Flags: 4
+    - m_Name: up
+      m_Id: bc7f48af-b0c8-4ec6-a3d8-9c7b20fc7de8
+      m_Path: <Keyboard>/upArrow
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Move Controls
+      m_Flags: 8
+    - m_Name: down
+      m_Id: 2848358d-8b1f-4030-8d61-1223b6f3e815
+      m_Path: <Keyboard>/downArrow
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Move Controls
+      m_Flags: 8
+    - m_Name: left
+      m_Id: 74acc7bd-ff4e-4ef5-ace4-2b39ed11bd6f
+      m_Path: <Keyboard>/leftArrow
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Move Controls
+      m_Flags: 8
+    - m_Name: right
+      m_Id: ab32d881-fcd9-4daf-85f4-b99bdcb41590
+      m_Path: <Keyboard>/rightArrow
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Move Controls
+      m_Flags: 8
+    m_Flags: 0
+  lookControls:
+    m_Name: Look Controls
+    m_Type: 0
+    m_ExpectedControlType: Axis
+    m_Id: 63a855a8-3121-40c4-af44-d1f180ab2f91
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 263e424f-59ec-4930-ac50-48c6e4a80d2f
+      m_Path: <Gamepad>/rightStick/x
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Look Controls
+      m_Flags: 0
+    - m_Name: 
+      m_Id: 570b89a0-f8b7-484d-96be-273bd1939cb0
+      m_Path: <Pointer>/delta/x
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Look Controls
+      m_Flags: 0
+    m_Flags: 0
   shootControls:
     m_Name: Shoot Controls
     m_Type: 1
@@ -19623,7 +19706,6 @@ MonoBehaviour:
       m_Action: Swap Backward Controls
       m_Flags: 0
     m_Flags: 0
-  moneyText: {fileID: 1016070199}
   moveSpeed: 4500
   maxSpeed: 20
   counterMovement: 0.175

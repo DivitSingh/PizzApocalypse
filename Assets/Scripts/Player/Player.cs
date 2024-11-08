@@ -5,6 +5,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using TMPro;
+using Unity.VisualScripting;
 
 public class Player : MonoBehaviour
 {
@@ -14,21 +15,24 @@ public class Player : MonoBehaviour
     [SerializeField] private Transform attackPoint;
     [SerializeField] private GameObject pizzaSlicePrefab;
     [SerializeField] private GameObject pizzaBoxPrefab;
+    [SerializeField] private TextMeshProUGUI moneyText;
+    public bool IsGamePaused { get; private set; } = false;
+
+    [Header("Input Actions")]
+    [SerializeField] private InputAction moveControls;
+    [SerializeField] private InputAction lookControls;
     [SerializeField] public InputAction shootControls;
     [SerializeField] public InputAction eatControls;
     [SerializeField] public InputAction swapForwardControls;
     [SerializeField] public InputAction swapBackwardControls;
-    [SerializeField] private TextMeshProUGUI moneyText;
-    public bool IsGamePaused { get; private set; } = false;
 
     [Header("Movement")]
     [SerializeField] private float moveSpeed = 4500;
     [SerializeField] private float maxSpeed = 20;
     [SerializeField] private float counterMovement = 0.175f;
     private Rigidbody rb;
-    private float xRotation;
-    [SerializeField] private float sensitivity = 100f;
-    private float sensMultiplier = 1f;
+    [SerializeField] private float sensitivity = 50f;
+    private float horizontalRotation = 0.0f;
     private float threshold = 0.01f;
     private float timer = 0.00f;
     private float x, y;
@@ -57,6 +61,8 @@ public class Player : MonoBehaviour
 
     private void OnEnable()
     {
+        moveControls.Enable();
+        lookControls.Enable();
         shootControls.Enable();
         shootControls.performed += FirePerformed;
         shootControls.canceled += FireCanceled;
@@ -73,6 +79,8 @@ public class Player : MonoBehaviour
     }
     private void OnDisable()
     {
+        moveControls.Disable();
+        lookControls.Disable();
         shootControls.Disable();
         eatControls.Disable();
         swapForwardControls.Disable();
@@ -198,21 +206,13 @@ public class Player : MonoBehaviour
     private void Look()
     {
         if (IsGamePaused) return;
-        x = Input.GetAxisRaw("Horizontal");
-        y = Input.GetAxisRaw("Vertical");
-        float mouseX = Input.GetAxis("Mouse X") * sensitivity * Time.fixedDeltaTime * sensMultiplier;
-        float mouseY = Input.GetAxis("Mouse Y") * sensitivity * Time.fixedDeltaTime * sensMultiplier;
-        float desiredX;
-        Vector3 rot = playerCam.transform.localRotation.eulerAngles;
-        desiredX = rot.y + mouseX;
-        xRotation -= mouseY;
-        xRotation = Mathf.Clamp(xRotation, -90f, 90f);
-
-        if (Gamepad.current == null)
-            playerCam.transform.localRotation = Quaternion.Euler(xRotation, desiredX, 0);
-        else
-            playerCam.transform.Rotate(Input.GetAxis("Joystick X") * Vector3.up * Time.fixedDeltaTime * sensitivity);
-        orientation.transform.localRotation = Quaternion.Euler(0, desiredX, 0);
+        Vector2 moveInput = moveControls.ReadValue<Vector2>();
+        x = moveInput.x;
+        y = moveInput.y;
+        float currentSensitivity = lookControls.activeControl.device is Gamepad ? sensitivity : sensitivity * 0.25f;
+        horizontalRotation += lookControls.ReadValue<float>() * currentSensitivity * Time.fixedDeltaTime;
+        playerCam.localRotation = Quaternion.Euler(0f, horizontalRotation, 0f);
+        orientation.localRotation = playerCam.localRotation;
     }
 
     private void CounterMovement(float x, float y, Vector2 mag)
