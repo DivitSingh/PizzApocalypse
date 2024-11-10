@@ -67,7 +67,7 @@ public class CustomerSpawner : MonoBehaviour
         var spawnPoint = PickSpawnPoint();
         if (spawnPoint == null) return;
         
-        var customerObject = Instantiate(customerPrefab, spawnPoint.position, Quaternion.identity);
+        var customerObject = Instantiate(customerPrefab, spawnPoint.position, spawnPoint.rotation);
         var customer = customerObject.GetComponent<Customer>();
         if (customer != null)
         {

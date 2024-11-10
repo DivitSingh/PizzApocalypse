@@ -177,7 +177,7 @@ public class Customer : MonoBehaviour
         else if (state == State.Hungry)
         {
             transform.LookAt(player);
-            // Order.DeductPizzaFromOrder(pizza);
+            StartCoroutine(Eat());
             Order.Receive(pizza);
             customerUI.UpdateOrderDisplay(Order);
             if (Order.IsFulfilled())
