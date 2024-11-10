@@ -37,7 +37,9 @@ public class Customer : MonoBehaviour
     [SerializeField] private Texture idleTexture;
     [SerializeField] private Texture walkTexture;
     [SerializeField] private Texture attackTexture;
-    [SerializeField] private Texture eatTexture;
+    [SerializeField] private Texture eatTexture_angry;
+    [SerializeField] private Texture eatTexture_hungry1;
+    [SerializeField] private Texture eatTexture_hungry2;
 
     private enum State
     {
@@ -108,7 +110,7 @@ public class Customer : MonoBehaviour
     {
         agent.isStopped = false;
         agent.SetDestination(player.position);
-        if (GetComponentInChildren<SkinnedMeshRenderer>().material.mainTexture != eatTexture)
+        if (GetComponentInChildren<SkinnedMeshRenderer>().material.mainTexture != eatTexture_angry)
             GetComponentInChildren<SkinnedMeshRenderer>().material.mainTexture = walkTexture;
         animator.SetBool("isChasing", true);
     }
@@ -211,10 +213,30 @@ public class Customer : MonoBehaviour
 
     private IEnumerator Eat()
     {
-        Texture originalTexture = GetComponentInChildren<SkinnedMeshRenderer>().material.mainTexture;
-        GetComponentInChildren<SkinnedMeshRenderer>().material.mainTexture = eatTexture;
-        yield return new WaitForSeconds(0.25f);
-        GetComponentInChildren<SkinnedMeshRenderer>().material.mainTexture = originalTexture;
+        if (state == State.Angry)
+        {
+            Texture originalTexture = GetComponentInChildren<SkinnedMeshRenderer>().material.mainTexture;
+            GetComponentInChildren<SkinnedMeshRenderer>().material.mainTexture = eatTexture_angry;
+            yield return new WaitForSeconds(0.25f);
+            GetComponentInChildren<SkinnedMeshRenderer>().material.mainTexture = originalTexture;
+        }
+        else if (state == State.Hungry)
+        {
+            Texture originalTexture = GetComponentInChildren<SkinnedMeshRenderer>().material.mainTexture;
+            //Eating texture loop:
+            float eatingDuration = 1f; 
+            float elapsedTime = 0f;
+            float eatingSwtichTimeTextures = 0.3f;
+            while (elapsedTime < eatingDuration)
+            {
+                GetComponentInChildren<SkinnedMeshRenderer>().material.mainTexture = eatTexture_hungry2;
+                yield return new WaitForSeconds(eatingSwtichTimeTextures);
+                GetComponentInChildren<SkinnedMeshRenderer>().material.mainTexture = eatTexture_hungry1;
+                yield return new WaitForSeconds(eatingSwtichTimeTextures);
+                elapsedTime += 2*eatingSwtichTimeTextures; 
+            }
+            GetComponentInChildren<SkinnedMeshRenderer>().material.mainTexture = originalTexture;
+        }
     }
 
     #region Effects
