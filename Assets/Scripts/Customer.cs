@@ -18,7 +18,24 @@ public class Customer : MonoBehaviour
 
     [Header("Stats")]
     private float maxHealth;
-    private float health;
+    private float _health;
+
+    private float Health
+    {
+        get => _health;
+        set
+        {
+            _health = value;
+            customerUI.UpdateHealthBar((float) Health / maxHealth);
+            if (Health <= 0)
+            {
+                GameObject.Find("Audio Source").GetComponent<AudioSource>().PlayOneShot(dieSound);
+                OnDeath?.Invoke(this);
+                StartCoroutine(RemoveCustomer());
+            }
+        }
+    }
+    
     private float attackDamage;
     public float Patience { get; private set; }
     private State state = State.Hungry;
@@ -64,7 +81,7 @@ public class Customer : MonoBehaviour
     public void Initialize(float health, float patience, float attackDamage, Order order, int id)
     {
         maxHealth = health;
-        this.health = health;
+        this.Health = health;
         Patience = patience;
         this.attackDamage = attackDamage;
         Order = order;
@@ -77,7 +94,7 @@ public class Customer : MonoBehaviour
 
     private void Update()
     {
-        if (state != State.Angry) return;
+        if (state != State.Angry || Health <= 0) return;
 
         Vector3 direction = (player.position - transform.position).normalized;
         Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
@@ -161,15 +178,8 @@ public class Customer : MonoBehaviour
         if (state == State.Angry)
         {
             StartCoroutine(Eat());
-            health -= pizza.Damage;
-            customerUI.UpdateHealthBar((float)health / maxHealth);
-            if (health <= 0)
-            {
-                GameObject.Find("Audio Source").GetComponent<AudioSource>().PlayOneShot(dieSound);
-                OnDeath?.Invoke(this);
-                StartCoroutine(RemoveCustomer());
-            }
-            else
+            Health -= pizza.Damage;
+            if (Health > 0)
             {
                 if (pizza.CustomerEffect != null)
                     StartCoroutine(StartEffect(pizza.CustomerEffect));
@@ -311,9 +321,7 @@ public class Customer : MonoBehaviour
         {
             case Stat.Health:
                 if (effect.Type == EffectType.Multiplier) return; // This should not be possible, assuming only decrease
-                if (effect.Type == EffectType.ConstantDecrease) health -= effect.Value;
-                if (effect.Type == EffectType.ConstantIncrease) health += effect.Value;
-                customerUI.UpdateHealthBar((float)health / maxHealth);
+                if (effect.Type == EffectType.ConstantDecrease) Health -= effect.Value;
                 break;
             case Stat.Speed:
                 if (effect.Type == EffectType.Multiplier)
