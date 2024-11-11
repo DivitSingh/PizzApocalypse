@@ -136,19 +136,19 @@ public class PlayerInventory : MonoBehaviour
         switch (equippedPizza)
         {
             case PizzaType.Cheese:
-                pizzaReticule.sprite = cheeseIcon;
+                pizzaReticule.sprite = cheeseReticule;
                 pizzaIcon.sprite = cheeseIcon;
                 pizzaIconUnequipped_2.sprite = pineappleIcon;
                 pizzaIconUnequipped_3.sprite = mushroomIcon;
                 break;
             case PizzaType.Pineapple:
-                pizzaReticule.sprite = pineappleIcon;
+                pizzaReticule.sprite = pineappleReticule;
                 pizzaIcon.sprite = pineappleIcon;
                 pizzaIconUnequipped_2.sprite = mushroomIcon;
                 pizzaIconUnequipped_3.sprite = cheeseIcon;
                 break;
             case PizzaType.Mushroom:
-                pizzaReticule.sprite = mushroomIcon;
+                pizzaReticule.sprite = mushroomReticule;
                 pizzaIcon.sprite = mushroomIcon;
                 pizzaIconUnequipped_2.sprite = cheeseIcon;
                 pizzaIconUnequipped_3.sprite = pineappleIcon;
