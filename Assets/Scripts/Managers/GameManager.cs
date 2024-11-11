@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject roundUI;
 
     public event Action OnGameOver;
+    public event Action OnRoundStarting;
 
     private void Awake()
     {
@@ -61,6 +62,7 @@ public class GameManager : MonoBehaviour
         roundUI.SetActive(true);
         shopUI.Hide();
         roundManager.NextRound();
+        OnRoundStarting?.Invoke();
         Unpause();
     }
 

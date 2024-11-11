@@ -30,6 +30,7 @@ public class PlayerHealth: MonoBehaviour
     {
         _currentHealth = startingHealth;
         OnHpPctChanged?.Invoke(CurrentHpPct);
+        GameManager.Instance.OnRoundStarting += () => CurrentHealth = startingHealth;
     }
 
     public void TakeDamage(float damage)

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -33,6 +34,11 @@ public class PlayerInventory : MonoBehaviour
     public Sprite cheeseReticule;
     public Sprite pineappleReticule;
     public Sprite mushroomReticule;
+
+    private void Awake()
+    {
+        GameManager.Instance.OnRoundStarting += RestockPizzas;
+    }
 
     public void InitializeInventory()
     {
