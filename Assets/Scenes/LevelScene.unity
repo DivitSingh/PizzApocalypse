@@ -620,8 +620,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddbd359b9d76407699134185d43f72ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  customerPrefab: {fileID: 7098117905227372616, guid: 81980c07a907eea4ca6067704fbadb75,
-    type: 3}
+  customerPrefabs:
+  - {fileID: 7098117905227372616, guid: 81980c07a907eea4ca6067704fbadb75, type: 3}
+  - {fileID: 2512279034401604283, guid: 46f8efff1d337a540bc056680ca324ad, type: 3}
   customerLayerMask:
     serializedVersion: 2
     m_Bits: 256
