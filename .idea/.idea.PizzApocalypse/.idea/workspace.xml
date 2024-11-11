@@ -5,13 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fe648da1-4e18-4187-bf7f-b948f2246c1d" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/Assets/Fonts/HARLOWSI_1 SDF.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Fonts/HARLOWSI_1 SDF.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Fonts/Pervitina-Dex-FFP SDF.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Fonts/Pervitina-Dex-FFP SDF.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Fonts/Poppins-ExtraLight SDF.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Fonts/Poppins-ExtraLight SDF.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Fonts/Poppins-Thin SDF.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Fonts/Poppins-Thin SDF.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/UI/BuffContainer.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/UI/BuffContainer.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/UI/OrderBarItem.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/UI/OrderBarItem.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/TextMesh Pro/Resources/Fonts &amp; Materials/LiberationSans SDF - Fallback.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TextMesh Pro/Resources/Fonts &amp; Materials/LiberationSans SDF - Fallback.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.PizzApocalypse/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.PizzApocalypse/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -22,8 +16,8 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="mock:///Users/milosabcd/Documents/CSC404/alpha/PizzApocalypse/Assets/Scripts/Managers/AudioManager.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Users/milosabcd/Documents/CSC404/alpha/PizzApocalypse/Assets/Scripts/Managers/RoundManager.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Users/milosabcd/Documents/CSC404/alpha/PizzApocalypse/Assets/Fonts/HARLOWSI_1 SDF.asset" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Users/milosabcd/Documents/CSC404/alpha/PizzApocalypse/Assets/Fonts/HARLOWSI_1 SDF.asset" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Pizza/Types/MushroomPizza.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.ai.navigation@1.1.5/Editor/ConversionSystem/SystemConvertersEditor.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.ai.navigation@1.1.5/Editor/NavigationWindow.cs" root0="SKIP_HIGHLIGHTING" />
@@ -194,7 +188,7 @@
       <workItem from="1730740539006" duration="652000" />
       <workItem from="1730749908377" duration="2635000" />
       <workItem from="1730767595598" duration="3530000" />
-      <workItem from="1731343102259" duration="1293000" />
+      <workItem from="1731343102259" duration="2448000" />
     </task>
     <servers />
   </component>
