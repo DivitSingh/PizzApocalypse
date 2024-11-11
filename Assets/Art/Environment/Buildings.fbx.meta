@@ -3,7 +3,67 @@ guid: fffb2f1f56bd3e444aaeadb9a7a7688d
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: M_Cars_01
+    second: {fileID: 2100000, guid: 8283666affe874c449b4a9212d1700d1, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: M_Cars_02
+    second: {fileID: 2100000, guid: f1832dd0958f43d49aa7ac0dfc16b376, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: M_House01
+    second: {fileID: 2100000, guid: f8404077fa3310645b94ce8abb722b2a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: M_House02
+    second: {fileID: 2100000, guid: b41a8073a3da6ff4aa249b7d86391aaf, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: M_House03
+    second: {fileID: 2100000, guid: 05a50d7055f2dcb4085dd90f66c68517, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: M_House04
+    second: {fileID: 2100000, guid: 65f201b1ae8837f4fa2c285b15f9c9b3, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: M_Light
+    second: {fileID: 2100000, guid: 8f5bf235bc6938f43be0ae1ab6af6fb1, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: M_PizzaRestaurant
+    second: {fileID: 2100000, guid: b321a9a000d04334eabeee39728e85e5, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: M_PizzaRestaurant02
+    second: {fileID: 2100000, guid: d6b8085d5f46b114b9bd7c0161f3d372, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: M_Props
+    second: {fileID: 2100000, guid: 0bea028c34c232d4b88c98d0b3213972, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: M_Trees
+    second: {fileID: 2100000, guid: 73e6e124d3230a34b80dc4fa1e2de49b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: M_Trees2
+    second: {fileID: 2100000, guid: 73e6e124d3230a34b80dc4fa1e2de49b, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
