@@ -76,9 +76,6 @@ public class RoundManager : MonoBehaviour
         OnProgressChanged?.Invoke(Score, roundProgression.Configuration.PassScore);
         OnTimeRemainingChanged?.Invoke(timeRemaining);
         
-        GameObject.Find("Audio Source").GetComponent<AudioSource>().Stop();
-        GameObject.Find("Audio Source").GetComponent<AudioSource>().Play();
-        
         customersManager.Configure(roundProgression.Configuration.SpawnConfiguration.Count);
         customerSpawner.StartSpawning(roundProgression.Configuration.SpawnConfiguration, roundProgression.Configuration.CustomerConfiguration);
         timeRemaining = roundProgression.Configuration.Duration;

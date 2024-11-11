@@ -69,7 +69,6 @@ public class GameManager : MonoBehaviour
     private void Pause()
     {
         Time.timeScale = 0;
-        AudioListener.pause = true;
         Cursor.lockState = CursorLockMode.Confined;
         Cursor.visible = true;
     }
@@ -77,7 +76,6 @@ public class GameManager : MonoBehaviour
     private void Unpause()
     {
         Time.timeScale = 1;
-        AudioListener.pause = false;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = true;
     }
