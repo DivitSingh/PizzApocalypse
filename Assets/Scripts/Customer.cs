@@ -197,19 +197,54 @@ public class Customer : MonoBehaviour
 
     private IEnumerator RemoveCustomer()
     {
-        boxCollider.enabled = false;
-        Destroy(GetComponent<CustomerIndicator>());
-        agent.enabled = false;
-        GetComponent<CapsuleCollider>().enabled = false;
+        LogComponentStatus();
+        if (boxCollider != null)
+            boxCollider.enabled = false;
+
+        var customerIndicator = GetComponent<CustomerIndicator>();
+        if (customerIndicator != null)
+            Destroy(customerIndicator);
+
+        if (agent != null)
+            agent.enabled = false;
+
+        var capsuleCollider = GetComponent<CapsuleCollider>();
+        if (capsuleCollider != null)
+            capsuleCollider.enabled = false;
+
         if (state == State.Angry)
-            GetComponentInChildren<SkinnedMeshRenderer>().material.mainTexture = idleTexture;
-        animator.Play("Celebrate");
-        customerUI.healthBar.gameObject.SetActive(false);
-        customerUI.timerImage.gameObject.SetActive(false);
-        // DestroyOrderDisplay();
+        {
+            var renderer = GetComponentInChildren<SkinnedMeshRenderer>();
+            if (renderer != null && idleTexture != null)
+                renderer.material.mainTexture = idleTexture;
+        }
+
+        if (animator != null)
+            animator.Play("Celebrate");
+
+        if (customerUI != null)
+        {
+            if (customerUI.healthBar != null)
+                customerUI.healthBar.gameObject.SetActive(false);
+
+            if (customerUI.timerImage != null)
+                customerUI.timerImage.gameObject.SetActive(false);
+        }
+
         yield return new WaitForSeconds(1.2f);
         StopAllCoroutines();
         Destroy(gameObject);
+    }
+
+    // Add a separate method for debugging if needed
+    private void LogComponentStatus()
+    {
+        Debug.Log($"CustomerUI: {customerUI}, BoxCollider: {boxCollider}, Agent: {agent}, Animator: {animator}");
+
+        if (customerUI == null) Debug.LogError("customerUI is null!");
+        if (boxCollider == null) Debug.LogError("boxCollider is null!");
+        if (agent == null) Debug.LogError("agent is null!");
+        if (animator == null) Debug.LogError("animator is null!");
     }
 
     private IEnumerator Eat()
