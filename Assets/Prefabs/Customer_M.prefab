@@ -3739,7 +3739,7 @@ MonoBehaviour:
   idleTexture: {fileID: 2800000, guid: 6574e9c35783cad459ed32f19a39cff0, type: 3}
   walkTexture: {fileID: 2800000, guid: d5b73ef72908c0347af96aa6619a8d11, type: 3}
   attackTexture: {fileID: 2800000, guid: c841793f51eb62640838fa8fe8e6a197, type: 3}
-  eatTexture_angry: {fileID: 2800000, guid: c841793f51eb62640838fa8fe8e6a197, type: 3}
+  eatTexture_angry: {fileID: 2800000, guid: dd342f9ace36bde4398e333259cf5da2, type: 3}
   eatTexture_hungry1: {fileID: 2800000, guid: 5f85589095a229043ae10522c03b30c2, type: 3}
   eatTexture_hungry2: {fileID: 2800000, guid: a86281609b472404898cfbb34177e724, type: 3}
 --- !u!114 &3906922957094320093
