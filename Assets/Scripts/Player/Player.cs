@@ -216,7 +216,7 @@ public class Player : MonoBehaviour
         horizontalRotation += lookControls.ReadValue<float>() * currentSensitivity * Time.fixedDeltaTime;
         playerCam.localRotation = Quaternion.Euler(0f, horizontalRotation, 0f);
         orientation.localRotation = playerCam.localRotation;
-        transform.Find("Model").localRotation = playerCam.localRotation;//new Quaternion(0f, playerCam.localRotation.y, transform.Find("Model").localRotation.z, transform.Find("Model").localRotation.w);
+        transform.Find("Model Container").localRotation = playerCam.localRotation;//new Quaternion(0f, playerCam.localRotation.y, transform.Find("Model").localRotation.z, transform.Find("Model").localRotation.w);
     }
 
     private void CounterMovement(float x, float y, Vector2 mag)
