@@ -6,7 +6,7 @@ using Random = System.Random;
 
 public class CustomerSpawner : MonoBehaviour
 {
-    [SerializeField] private GameObject customerPrefab;
+    [SerializeField] private GameObject[] customerPrefabs;
     [SerializeField] private LayerMask customerLayerMask;
     [SerializeField] private Canvas healthBarCanvas; // TODO: Move this to Customer class?
 
@@ -27,9 +27,9 @@ public class CustomerSpawner : MonoBehaviour
             Debug.LogError("No spawn points found! Make sure your spawn points are tagged with 'SpawnPoint'");
         }
 
-        if (customerPrefab == null)
+        if (customerPrefabs == null || customerPrefabs.Length == 0)
         {
-            Debug.LogError("Enemy prefab is not assigned in the CustomerSpawner!");
+            Debug.LogError("No customer prefabs assigned in the CustomerSpawner!");
         }
 
         if (healthBarCanvas == null)
@@ -66,8 +66,11 @@ public class CustomerSpawner : MonoBehaviour
         // TODO: Choose spawn point
         var spawnPoint = PickSpawnPoint();
         if (spawnPoint == null) return;
-        
-        var customerObject = Instantiate(customerPrefab, spawnPoint.position, spawnPoint.rotation);
+
+        // Randomly select a prefab
+        var selectedPrefab = customerPrefabs[random.Next(customerPrefabs.Length)];
+
+        var customerObject = Instantiate(selectedPrefab, spawnPoint.position, spawnPoint.rotation);
         var customer = customerObject.GetComponent<Customer>();
         if (customer != null)
         {
