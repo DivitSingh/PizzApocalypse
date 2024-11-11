@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -11,7 +10,7 @@ public class ShopUI : MonoBehaviour
 
     [Header("UI Elements")]
     [SerializeField] private TMP_Text balanceText;
-    [SerializeField] private GameObject healthContainer;
+    [SerializeField] private GameObject speedContainer;
     [SerializeField] private GameObject damageContainer;
     [SerializeField] private GameObject capacityContainer;
 
@@ -29,7 +28,7 @@ public class ShopUI : MonoBehaviour
         }
     }
 
-    private BuffComponents healthComponents;
+    private BuffComponents speedComponents;
     private BuffComponents damageComponents;
     private BuffComponents capacityComponents;
 
@@ -50,7 +49,7 @@ public class ShopUI : MonoBehaviour
         // Update UI on first load
         if (firstLoad)
         {
-            healthComponents = ExtractComponents(healthContainer);
+            speedComponents = ExtractComponents(speedContainer);
             damageComponents = ExtractComponents(damageContainer);
             capacityComponents = ExtractComponents(capacityContainer);
             foreach (var buff in shopManager.Buffs)
@@ -84,9 +83,9 @@ public class ShopUI : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    public void HandleHealthClicked()
+    public void HandleSpeedClicked()
     {
-        shopManager.UpgradeHealth();
+        shopManager.UpgradeSpeed();
     }
 
     public void HandleAttackClicked()
@@ -117,6 +116,9 @@ public class ShopUI : MonoBehaviour
         levelText.text = buff.Level.ToString();
         costText.text = $"${buff.Cost}";
         UpdateDescription(buff);
+        
+        // Disable Buff if max level reached
+        if (buff.IsMaxed) DisableBuff(buff);
     }
 
     #endregion
@@ -126,7 +128,7 @@ public class ShopUI : MonoBehaviour
     {
         return type switch
         {
-            BuffType.Health => healthComponents.LevelText,
+            BuffType.Speed => speedComponents.LevelText,
             BuffType.Capacity => capacityComponents.LevelText,
             BuffType.Damage => damageComponents.LevelText
         };
@@ -136,7 +138,7 @@ public class ShopUI : MonoBehaviour
     {
         return type switch
         {
-            BuffType.Health => healthComponents.CostText,
+            BuffType.Speed => speedComponents.CostText,
             BuffType.Capacity => capacityComponents.CostText,
             BuffType.Damage => damageComponents.CostText
         };
@@ -146,8 +148,8 @@ public class ShopUI : MonoBehaviour
     {
         switch (buff.Type)
         {
-            case BuffType.Health:
-                healthComponents.DescriptionText.text = $"+{buff.IncreaseAmount} Max Health";
+            case BuffType.Speed:
+                speedComponents.DescriptionText.text = "Run Around Faster";
                 break;
             case BuffType.Capacity:
                 capacityComponents.DescriptionText.text = $"+{buff.IncreaseAmount} Pizza Capacity";
@@ -156,5 +158,25 @@ public class ShopUI : MonoBehaviour
                 damageComponents.DescriptionText.text = $"+{buff.IncreaseAmount} Base Damage";
                 break;
         }
+    }
+
+    private void DisableBuff(Buff buff)
+    {
+        var container = buff.Type switch
+        {
+            BuffType.Speed => speedContainer,
+            BuffType.Damage => damageContainer,
+            BuffType.Capacity => capacityContainer
+        };
+        var costText = buff.Type switch
+        {
+            BuffType.Speed => speedComponents.CostText,
+            BuffType.Damage => damageComponents.CostText,
+            BuffType.Capacity => capacityComponents.CostText
+        };
+        
+        var button = GetComponentInChildren<Button>(container);
+        button.interactable = false;
+        costText.text = "";
     }
 }

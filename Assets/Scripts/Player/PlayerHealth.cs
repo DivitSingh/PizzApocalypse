@@ -42,10 +42,4 @@ public class PlayerHealth: MonoBehaviour
     {
         CurrentHealth += amount;
     }
-
-    public void UpgradeMaxHealth(float amount)
-    {
-        startingHealth += amount;
-        CurrentHealth = startingHealth;
-    }
 }

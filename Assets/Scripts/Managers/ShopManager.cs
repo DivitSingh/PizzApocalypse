@@ -8,7 +8,6 @@ using UnityEngine;
 public class ShopManager : MonoBehaviour
 {
     [SerializeField] private Player player;
-    [SerializeField] private PlayerHealth playerHealth;
     [SerializeField] private PlayerInventory playerInventory;
 
     public int Balance
@@ -22,7 +21,7 @@ public class ShopManager : MonoBehaviour
     }
 
     // Store current statuses of buffs
-    private Buff healthBuff = new Buff(5, 5, BuffType.Health);
+    private Buff speedBuff = new Buff(5, 250, BuffType.Speed, 5);
     private Buff damageBuff = new Buff(5, 3, BuffType.Damage);
     private Buff capacityBuff = new Buff(5, 5, BuffType.Capacity);
     public List<Buff> Buffs { get; private set; }
@@ -33,17 +32,18 @@ public class ShopManager : MonoBehaviour
 
     private void Start()
     {
-        Buffs = new List<Buff> { healthBuff, damageBuff, capacityBuff };
+        Buffs = new List<Buff> { speedBuff, damageBuff, capacityBuff };
     }
 
-    public void UpgradeHealth()
+    public void UpgradeSpeed()
     {
-        if (Balance < healthBuff.Cost) return;
+        if (Balance < speedBuff.Cost || speedBuff.IsMaxed) return;
 
-        Balance -= healthBuff.Cost;
-        playerHealth.UpgradeMaxHealth(healthBuff.IncreaseAmount);
-        healthBuff.Upgrade();
-        OnBuffPurchased?.Invoke(healthBuff);
+        Balance -= speedBuff.Cost;
+        player.IncreaseSpeed(speedBuff.IncreaseAmount);
+        speedBuff.Upgrade();
+        OnBuffPurchased?.Invoke(speedBuff);
+
     }
 
     public void UpgradeDamage()
@@ -67,22 +67,24 @@ public class ShopManager : MonoBehaviour
     }
 }
 
-// TODO: Should IncreaseAmount change over time or be constant?
 public class Buff
 {
     public int Level { get; private set; }
     public int Cost { get; private set; }
 
+    private int MaxLevel { get; } = 0;
+
     public readonly int IncreaseAmount;
 
     public readonly BuffType Type;
 
-    public Buff(int initialCost, int incAmount, BuffType buffType)
+    public Buff(int initialCost, int incAmount, BuffType buffType, int maxLevel = 0)
     {
         Level = 1;
         Cost = initialCost;
         IncreaseAmount = incAmount;
         Type = buffType;
+        MaxLevel = maxLevel;
     }
 
     public void Upgrade()
@@ -90,11 +92,13 @@ public class Buff
         Level += 1;
         Cost = (int)(Cost * 1.25);
     }
+
+    public bool IsMaxed => MaxLevel != 0 && Level == MaxLevel;
 }
 
 public enum BuffType
 {
-    Health,
+    Speed,
     Damage,
     Capacity
 }

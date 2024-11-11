@@ -27,7 +27,7 @@ public class Player : MonoBehaviour
     [SerializeField] public InputAction swapBackwardControls;
 
     [Header("Movement")]
-    [SerializeField] private float moveSpeed = 4500;
+    private float moveSpeed = 3500;
     [SerializeField] private float maxSpeed = 20;
     [SerializeField] private float counterMovement = 0.175f;
     private Rigidbody rb;
@@ -347,5 +347,10 @@ public class Player : MonoBehaviour
     public void IncreaseAttack(int amount)
     {
         baseAttack += amount;
+    }
+
+    public void IncreaseSpeed(int amount)
+    {
+        moveSpeed += amount;
     }
 }
