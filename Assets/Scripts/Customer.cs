@@ -46,7 +46,7 @@ public class Customer : MonoBehaviour
         Angry,
         Hungry
     }
-    
+
     // Events
     public event Action<Customer> OnBecameAngry;
     public event Action<Customer> OnFed;
@@ -191,7 +191,7 @@ public class Customer : MonoBehaviour
                 StartCoroutine(RemoveCustomer());
             }
             // else
-                // Debug.Log($"Order not yet fulfilled, still needs: {Order.PasteOrderContents()}");
+            // Debug.Log($"Order not yet fulfilled, still needs: {Order.PasteOrderContents()}");
         }
     }
 
@@ -201,7 +201,8 @@ public class Customer : MonoBehaviour
         Destroy(GetComponent<CustomerIndicator>());
         agent.enabled = false;
         GetComponent<CapsuleCollider>().enabled = false;
-        GetComponentInChildren<SkinnedMeshRenderer>().material.mainTexture = idleTexture;
+        if (state == State.Angry)
+            GetComponentInChildren<SkinnedMeshRenderer>().material.mainTexture = idleTexture;
         animator.Play("Celebrate");
         customerUI.healthBar.gameObject.SetActive(false);
         customerUI.timerImage.gameObject.SetActive(false);
@@ -224,7 +225,7 @@ public class Customer : MonoBehaviour
         {
             Texture originalTexture = GetComponentInChildren<SkinnedMeshRenderer>().material.mainTexture;
             //Eating texture loop:
-            float eatingDuration = 1f; 
+            float eatingDuration = 1f;
             float elapsedTime = 0f;
             float eatingSwtichTimeTextures = 0.3f;
             while (elapsedTime < eatingDuration)
@@ -233,7 +234,7 @@ public class Customer : MonoBehaviour
                 yield return new WaitForSeconds(eatingSwtichTimeTextures);
                 GetComponentInChildren<SkinnedMeshRenderer>().material.mainTexture = eatTexture_hungry1;
                 yield return new WaitForSeconds(eatingSwtichTimeTextures);
-                elapsedTime += 2*eatingSwtichTimeTextures; 
+                elapsedTime += 2 * eatingSwtichTimeTextures;
             }
             GetComponentInChildren<SkinnedMeshRenderer>().material.mainTexture = originalTexture;
         }

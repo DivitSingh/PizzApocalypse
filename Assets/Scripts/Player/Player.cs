@@ -15,6 +15,7 @@ public class Player : MonoBehaviour
     [SerializeField] private GameObject pizzaSlicePrefab;
     [SerializeField] private GameObject pizzaBoxPrefab;
     [SerializeField] private TextMeshProUGUI moneyText;
+    private Animator animator;
     public bool IsGamePaused { get; private set; } = false;
 
     [Header("Input Actions")]
@@ -93,6 +94,7 @@ public class Player : MonoBehaviour
 
     void Start()
     {
+        animator = GetComponentInChildren<Animator>();
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         readyToThrow = true;
@@ -130,6 +132,7 @@ public class Player : MonoBehaviour
     private void FireCanceled(InputAction.CallbackContext context)
     {
         if (Time.timeScale == 0 || playerInventory.GetPizzaAmmo(playerInventory.GetEquippedPizza()) < 1) return;
+        animator.SetTrigger("IsThrowing");
 
         if (Time.time - timer < 1.00f)
         {
@@ -151,6 +154,7 @@ public class Player : MonoBehaviour
     private void Consume(InputAction.CallbackContext context)
     {
         if (Time.timeScale == 0) return;
+        animator.SetTrigger("IsEating");
         GameObject.Find("Audio Source").GetComponent<AudioSource>().PlayOneShot(consumeSound);
         var pizzaType = playerInventory.GetEquippedPizza();
         if (playerInventory.GetPizzaAmmo(pizzaType) == 0) return;
@@ -212,7 +216,7 @@ public class Player : MonoBehaviour
         horizontalRotation += lookControls.ReadValue<float>() * currentSensitivity * Time.fixedDeltaTime;
         playerCam.localRotation = Quaternion.Euler(0f, horizontalRotation, 0f);
         orientation.localRotation = playerCam.localRotation;
-        transform.Find("Model").localRotation = playerCam.localRotation;
+        transform.Find("Model").localRotation = playerCam.localRotation;//new Quaternion(0f, playerCam.localRotation.y, transform.Find("Model").localRotation.z, transform.Find("Model").localRotation.w);
     }
 
     private void CounterMovement(float x, float y, Vector2 mag)
