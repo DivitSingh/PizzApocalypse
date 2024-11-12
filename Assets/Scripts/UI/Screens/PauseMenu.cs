@@ -11,6 +11,11 @@ public class PauseMenu : MonoBehaviour
     public GameObject pauseMenuUI;
     public GameObject optionsMenuUI;
 
+    [Header("Audio Feedback")]
+    public AudioSource audioSource;
+    public AudioClip hoverSound;
+    public AudioClip selectSound;
+
     [Header("Pause Menu Elements")]
     public RectTransform[] pauseMenuItems;
     public RectTransform pauseSelectionHighlight;
@@ -107,6 +112,11 @@ public class PauseMenu : MonoBehaviour
         mouseClickAction = new InputAction("MouseClick", InputActionType.Button);
         mouseClickAction.AddBinding("<Mouse>/leftButton");
 
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
+
         // Set initial states
         isPaused = false;
         inOptionsMenu = false;
@@ -150,6 +160,22 @@ public class PauseMenu : MonoBehaviour
                     }
                 }
             }
+        }
+    }
+
+    private void PlayHoverSound()
+    {
+        if (hoverSound != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(hoverSound);
+        }
+    }
+
+    private void PlaySelectSound()
+    {
+        if (selectSound != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(selectSound);
         }
     }
 
@@ -373,6 +399,7 @@ public class PauseMenu : MonoBehaviour
 
     private void NavigatePauseMenu(bool moveDown)
     {
+        PlayHoverSound(); // Add sound feedback
         if (moveDown)
             currentPauseIndex = (currentPauseIndex + 1) % pauseMenuItems.Length;
         else
@@ -390,6 +417,7 @@ public class PauseMenu : MonoBehaviour
 
     private void NavigateOptions(bool moveDown)
     {
+        PlayHoverSound(); // Add sound feedback
         if (moveDown)
             currentOptionsIndex = (currentOptionsIndex + 1) % optionsItems.Length;
         else
@@ -400,6 +428,7 @@ public class PauseMenu : MonoBehaviour
 
     private void HandlePauseSelection()
     {
+        PlaySelectSound(); // Add sound feedback
         switch (currentPauseIndex)
         {
             case 0: // Resume
@@ -416,6 +445,7 @@ public class PauseMenu : MonoBehaviour
     {
         if (!isSliderSelected)
         {
+            PlaySelectSound(); // Add sound feedback
             if (currentOptionsIndex == optionsItems.Length - 1) // Back button
             {
                 ShowPauseMenu();
@@ -481,6 +511,10 @@ public class PauseMenu : MonoBehaviour
                 eventID = EventTriggerType.PointerEnter
             };
             enterEntry.callback.AddListener((data) => {
+                if (currentPauseIndex != index) // Only play sound if hovering over a new item
+                {
+                    PlayHoverSound();
+                }
                 currentPauseIndex = index;
                 UpdatePauseHighlight();
             });
@@ -493,6 +527,7 @@ public class PauseMenu : MonoBehaviour
             };
             clickEntry.callback.AddListener((data) => {
                 currentPauseIndex = index;
+                PlaySelectSound();
                 HandlePauseSelection();
             });
             trigger.triggers.Add(clickEntry);
@@ -514,6 +549,10 @@ public class PauseMenu : MonoBehaviour
                 eventID = EventTriggerType.PointerEnter
             };
             enterEntry.callback.AddListener((data) => {
+                if (currentOptionsIndex != index) // Only play sound if hovering over a new item
+                {
+                    PlayHoverSound();
+                }
                 currentOptionsIndex = index;
                 UpdateOptionsHighlight();
             });
@@ -526,6 +565,10 @@ public class PauseMenu : MonoBehaviour
             };
             clickEntry.callback.AddListener((data) => {
                 currentOptionsIndex = index;
+                if (!isSliderSelected)
+                {
+                    PlaySelectSound();
+                }
                 HandleOptionsSelection();
             });
             trigger.triggers.Add(clickEntry);
