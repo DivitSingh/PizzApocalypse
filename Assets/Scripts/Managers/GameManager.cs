@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject gameOverScreen;
     [SerializeField] private TMP_Text scoreText;
     [SerializeField] private ShopUI shopUI;
-    
+
     // TODO: Move this to menu manager to set active again?
     [SerializeField] private GameObject roundUI;
 
@@ -35,7 +35,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            HandleGameOver();;
+            HandleGameOver(); ;
         }
     }
 
@@ -84,7 +84,7 @@ public class GameManager : MonoBehaviour
     {
         //old score text:
         //scoreText.text = $"You made it to round {round} and delivered {score} {(score == 1 ? "delivery" : "deliveries")}.";
-        scoreText.text = $"You made it to Round {round} \nCongrats see if you can beat that score next time.";
+        scoreText.text = $"You made it to Round {round} \nCongratulations! See if you can beat that score next time.";
         gameOverScreen.SetActive(true);
         EventSystem.current.SetSelectedGameObject(gameOverScreen.transform.Find("RestartButton").gameObject);
     }
