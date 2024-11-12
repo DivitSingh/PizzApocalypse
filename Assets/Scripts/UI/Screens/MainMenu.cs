@@ -1,7 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using UnityEngine.EventSystems; // Add this for UI event handling
+using UnityEngine.EventSystems;
+using System.Collections; // Add this for UI event handling
 
 public class MainMenu : MonoBehaviour
 {
@@ -10,6 +11,11 @@ public class MainMenu : MonoBehaviour
     private int currentIndex = 0;
     private bool hasInitialized = false;
     private bool wasVerticalPressed = false;
+    
+    [Header("Transition")]
+    public Animator transition;
+    private float transitionTime; 
+    public Text loadingText;  
 
     void Start()
     {
@@ -91,7 +97,9 @@ public class MainMenu : MonoBehaviour
         switch (currentIndex)
         {
             case 0:
-                SceneManager.LoadScene("LevelScene");
+                StartCoroutine(LoadLevelSceneWithTransition());
+                // old code below
+                // SceneManager.LoadScene("LevelScene");
                 break;
             case 1:
                 SceneManager.LoadScene("OptionsScene");
@@ -101,5 +109,15 @@ public class MainMenu : MonoBehaviour
                 Debug.Log("Exit selected");
                 break;
         }
+    }
+
+    IEnumerator LoadLevelSceneWithTransition()
+    {
+        transitionTime = 2f;
+        transition.SetTrigger("Start");
+        loadingText.text = "Round starts in 3.. 2.. 1..";
+        yield return new WaitForSeconds(transitionTime);
+        loadingText.text = "";
+        SceneManager.LoadScene("LevelScene");
     }
 }
