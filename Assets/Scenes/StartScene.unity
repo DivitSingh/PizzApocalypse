@@ -420,13 +420,13 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 200633e40a3314bfdb3b531336915853, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.01
   m_Pitch: 1
   Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
-  Priority: 128
+  Priority: 194
   DopplerLevel: 1
   MinDistance: 1
   MaxDistance: 500
@@ -906,6 +906,9 @@ MonoBehaviour:
   - {fileID: 481756208}
   - {fileID: 1751513327}
   selectionHighlight: {fileID: 2049412787}
+  audioSource: {fileID: 413988033}
+  hoverSound: {fileID: 8300000, guid: d8993a4534987eb4aa322adf14034074, type: 3}
+  selectSound: {fileID: 8300000, guid: f4237736c1569eb47b1d4f5f01de11b5, type: 3}
   transition: {fileID: 792176916}
   loadingText: {fileID: 630526210}
 --- !u!1 &1229513146

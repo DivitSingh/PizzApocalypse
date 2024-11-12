@@ -2,12 +2,19 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
-using System.Collections; // Add this for UI event handling
+using System.Collections;
 
 public class MainMenu : MonoBehaviour
 {
     public RectTransform[] menuItems;
     public RectTransform selectionHighlight;
+
+    // Add these new audio-related fields
+    [Header("Audio")]
+    public AudioSource audioSource;
+    public AudioClip hoverSound;
+    public AudioClip selectSound;
+
     private int currentIndex = 0;
     private bool hasInitialized = false;
     private bool wasVerticalPressed = false;
@@ -19,35 +26,43 @@ public class MainMenu : MonoBehaviour
 
     void Start()
     {
+        // If audioSource isn't assigned in inspector, add it automatically
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
+
         Canvas.ForceUpdateCanvases();
         currentIndex = 0;
 
-        // Add event triggers to each menu item
         for (int i = 0; i < menuItems.Length; i++)
         {
-            int index = i; // Capture the index for use in lambda expressions
-
-            // Add EventTrigger component if it doesn't exist
+            int index = i;
             EventTrigger trigger = menuItems[i].gameObject.GetComponent<EventTrigger>();
             if (trigger == null)
             {
                 trigger = menuItems[i].gameObject.AddComponent<EventTrigger>();
             }
 
-            // Add pointer enter (hover) event
+            // Modify hover event to include sound
             EventTrigger.Entry enterEntry = new EventTrigger.Entry();
             enterEntry.eventID = EventTriggerType.PointerEnter;
             enterEntry.callback.AddListener((data) => {
+                if (currentIndex != index) // Only play sound if hovering over a new item
+                {
+                    PlayHoverSound();
+                }
                 currentIndex = index;
                 UpdateSelectionHighlight();
             });
             trigger.triggers.Add(enterEntry);
 
-            // Add click event
+            // Modify click event to include sound
             EventTrigger.Entry clickEntry = new EventTrigger.Entry();
             clickEntry.eventID = EventTriggerType.PointerClick;
             clickEntry.callback.AddListener((data) => {
                 currentIndex = index;
+                PlaySelectSound();
                 SelectMenuItem();
             });
             trigger.triggers.Add(clickEntry);
@@ -62,26 +77,47 @@ public class MainMenu : MonoBehaviour
             hasInitialized = true;
         }
 
-        // Get gamepad/keyboard vertical input
         bool upPressed = Input.GetKeyDown(KeyCode.UpArrow) || (Input.GetAxisRaw("Vertical") > 0.5f && !wasVerticalPressed);
         bool downPressed = Input.GetKeyDown(KeyCode.DownArrow) || (Input.GetAxisRaw("Vertical") < -0.5f && !wasVerticalPressed);
 
-        // Track if vertical was pressed this frame
         wasVerticalPressed = Mathf.Abs(Input.GetAxisRaw("Vertical")) > 0.5f;
 
-        if (downPressed)
+        if (downPressed || upPressed)
         {
-            currentIndex = (currentIndex + 1) % menuItems.Length;
-            UpdateSelectionHighlight();
-        }
-        else if (upPressed)
-        {
-            currentIndex = (currentIndex - 1 + menuItems.Length) % menuItems.Length;
+            // Play hover sound when using keyboard/gamepad navigation
+            PlayHoverSound();
+
+            if (downPressed)
+            {
+                currentIndex = (currentIndex + 1) % menuItems.Length;
+            }
+            else
+            {
+                currentIndex = (currentIndex - 1 + menuItems.Length) % menuItems.Length;
+            }
             UpdateSelectionHighlight();
         }
         else if (Input.GetKeyDown(KeyCode.Return) || Input.GetButtonDown("Submit"))
         {
+            PlaySelectSound();
             SelectMenuItem();
+        }
+    }
+
+    // Add these new methods for playing sounds
+    private void PlayHoverSound()
+    {
+        if (hoverSound != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(hoverSound);
+        }
+    }
+
+    private void PlaySelectSound()
+    {
+        if (selectSound != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(selectSound);
         }
     }
 
