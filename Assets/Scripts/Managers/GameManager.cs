@@ -48,7 +48,7 @@ public class GameManager : MonoBehaviour
 
         Pause();
         OnGameOver?.Invoke();
-        Show(roundManager.Score);
+        Show(roundManager.Score, roundManager.Round);
     }
 
     private void HandleRoundPassed()
@@ -82,9 +82,11 @@ public class GameManager : MonoBehaviour
         Cursor.visible = true;
     }
 
-    public void Show(int score)
+    public void Show(int score, int round)
     {
-        scoreText.text = $"You made {score} {(score == 1 ? "delivery" : "deliveries")}.";
+        //old score text:
+        //scoreText.text = $"You made it to round {round} and delivered {score} {(score == 1 ? "delivery" : "deliveries")}.";
+        scoreText.text = $"You made it to Round {round} \nCongrats see if you can beat that score next time.";
         gameOverScreen.SetActive(true);
         EventSystem.current.SetSelectedGameObject(gameOverScreen.transform.Find("RestartButton").gameObject);
     }
