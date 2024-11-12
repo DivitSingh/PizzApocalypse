@@ -25,6 +25,15 @@ public class OptionsMenu : MonoBehaviour
     public Image keyboardMappingImage;
     public TextMeshProUGUI toggleButtonText;
 
+    // Add new audio section
+    [Header("Audio Feedback")]
+    public AudioSource audioSource;
+    public AudioClip hoverSound;
+    public AudioClip selectSound;
+    public AudioClip sliderSound;  // Optional: specific sound for slider movement
+
+    // Existing headers and fields remain the same...
+
     [Header("Layout")]
     public RectTransform[] selectableItems;
     public RectTransform selectionHighlight;
@@ -62,6 +71,11 @@ public class OptionsMenu : MonoBehaviour
         float savedVolume = PlayerPrefs.GetFloat("GameVolume", 1f);
         volumeSlider.value = savedVolume;
         volumeSlider.onValueChanged.AddListener(OnVolumeChanged);
+
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
 
         // Set up sensitivity slider range
         sensitivitySlider.minValue = 0f;  // We'll use 0-1 range and interpolate
@@ -126,6 +140,34 @@ public class OptionsMenu : MonoBehaviour
         UpdateInputDisplay();
     }
 
+    private void PlayHoverSound()
+    {
+        if (hoverSound != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(hoverSound);
+        }
+    }
+
+    private void PlaySelectSound()
+    {
+        if (selectSound != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(selectSound);
+        }
+    }
+
+    private void PlaySliderSound()
+    {
+        if (sliderSound != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(sliderSound);
+        }
+        else if (hoverSound != null && audioSource != null) // Fall back to hover sound if no slider sound
+        {
+            audioSource.PlayOneShot(hoverSound);
+        }
+    }
+
     void SetupEventTriggers()
     {
         for (int i = 0; i < selectableItems.Length; i++)
@@ -137,20 +179,25 @@ public class OptionsMenu : MonoBehaviour
                 trigger = selectableItems[i].gameObject.AddComponent<EventTrigger>();
             }
 
-            // Add pointer enter (hover) event
+            // Modified hover event to include sound
             EventTrigger.Entry enterEntry = new EventTrigger.Entry();
             enterEntry.eventID = EventTriggerType.PointerEnter;
             enterEntry.callback.AddListener((data) => {
+                if (currentIndex != index) // Only play sound if hovering over a new item
+                {
+                    PlayHoverSound();
+                }
                 currentIndex = index;
                 UpdateSelectionHighlight();
             });
             trigger.triggers.Add(enterEntry);
 
-            // Add click event
+            // Modified click event to include sound
             EventTrigger.Entry clickEntry = new EventTrigger.Entry();
             clickEntry.eventID = EventTriggerType.PointerClick;
             clickEntry.callback.AddListener((data) => {
                 currentIndex = index;
+                PlaySelectSound();
                 HandleSelection();
             });
             trigger.triggers.Add(clickEntry);
@@ -165,14 +212,17 @@ public class OptionsMenu : MonoBehaviour
         bool downPressed = Input.GetKeyDown(KeyCode.DownArrow) || (Input.GetAxisRaw("Vertical") < -0.5f && !wasVerticalPressed);
         wasVerticalPressed = Mathf.Abs(Input.GetAxisRaw("Vertical")) > 0.5f;
 
-        if (downPressed)
+        if (downPressed || upPressed)
         {
-            currentIndex = (currentIndex + 1) % selectableItems.Length;
-            UpdateSelectionHighlight();
-        }
-        else if (upPressed)
-        {
-            currentIndex = (currentIndex - 1 + selectableItems.Length) % selectableItems.Length;
+            PlayHoverSound(); // Add sound feedback for navigation
+            if (downPressed)
+            {
+                currentIndex = (currentIndex + 1) % selectableItems.Length;
+            }
+            else
+            {
+                currentIndex = (currentIndex - 1 + selectableItems.Length) % selectableItems.Length;
+            }
             UpdateSelectionHighlight();
         }
     }
@@ -188,18 +238,16 @@ public class OptionsMenu : MonoBehaviour
         {
             if (!wasHorizontalPressed || horizontalInputTimer <= 0)
             {
-                // Increased base slider speed multiplier
+                PlaySliderSound(); // Add sound feedback for slider movement
                 float deltaChange = Mathf.Sign(horizontalInput) * (sliderSpeed * 10f * Time.deltaTime);
 
                 if (currentIndex == 0)
                 {
-                    // Volume slider
                     volumeSlider.value += deltaChange * 4f;
                 }
                 else if (currentIndex == 1)
                 {
-                    // Sensitivity slider
-                    float sensitivityDelta = deltaChange * 4f; 
+                    float sensitivityDelta = deltaChange * 4f;
                     float newValue = Mathf.Clamp01(sensitivitySlider.value + sensitivityDelta);
                     sensitivitySlider.value = newValue;
                 }
@@ -220,6 +268,7 @@ public class OptionsMenu : MonoBehaviour
     {
         if (!isSliderSelected)
         {
+            PlaySelectSound(); // Add sound feedback for selection
             if (currentIndex == 3)
                 BackToMainMenu();
             else if (currentIndex == 2)
