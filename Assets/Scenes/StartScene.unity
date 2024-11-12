@@ -686,12 +686,17 @@ PrefabInstance:
     - target: {fileID: 2540612366656529052, guid: 6e3ec0b44e8bb3c46b9a044d03aa13a9,
         type: 3}
       propertyPath: m_BlocksRaycasts
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2864723705473779147, guid: 6e3ec0b44e8bb3c46b9a044d03aa13a9,
         type: 3}
       propertyPath: m_Name
       value: Transition Scene
+      objectReference: {fileID: 0}
+    - target: {fileID: 2864723705473779147, guid: 6e3ec0b44e8bb3c46b9a044d03aa13a9,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3152384500676747344, guid: 6e3ec0b44e8bb3c46b9a044d03aa13a9,
         type: 3}
@@ -1574,3 +1579,4 @@ SceneRoots:
   - {fileID: 1197658885}
   - {fileID: 352410886}
   - {fileID: 413988034}
+  - {fileID: 792176915}
