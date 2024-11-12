@@ -27,7 +27,7 @@ public class Player : MonoBehaviour
     [SerializeField] public InputAction swapBackwardControls;
 
     [Header("Movement")]
-    private float moveSpeed = 3500;
+    private float moveSpeed = 3000; //old was 3500
     [SerializeField] private float maxSpeed = 20;
     [SerializeField] private float counterMovement = 0.175f;
     private Rigidbody rb;
