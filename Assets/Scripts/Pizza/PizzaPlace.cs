@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 using TMPro; 
 using UnityEngine;
 
@@ -12,6 +13,8 @@ public class PizzaPlace : MonoBehaviour
     private AudioSource audioSource;
     private Coroutine restockingCoroutine;
     private bool isRestocking = false;
+    public Slider restockProgressSlider; // Reference to the restocking progress slider
+
 
     private void Start()
     {
@@ -25,7 +28,7 @@ public class PizzaPlace : MonoBehaviour
         audioSource.clip = restockSound;
         audioSource.playOnAwake = false;
 
-        //hider restocking text       
+        //hide restocking text       
         if (restockingText != null)
         {
             restockingText.gameObject.SetActive(false);
@@ -67,6 +70,11 @@ public class PizzaPlace : MonoBehaviour
             restockingText.gameObject.SetActive(false);
             audioSource.Stop();
         }
+
+        if (restockProgressSlider != null)
+        {
+            restockProgressSlider.gameObject.SetActive(false);
+        }
     }
 
     private IEnumerator RestockWithLoopingSound(GameObject player)
@@ -75,12 +83,16 @@ public class PizzaPlace : MonoBehaviour
         audioSource.Play();
         // Start to display the restocking text
         restockingText.gameObject.SetActive(true);
+        // Activate and initialize the slider
+        restockProgressSlider.gameObject.SetActive(true);
+        restockProgressSlider.value = 0f;
 
         // Wait for the specified restock time
         float elapsedTime = 0f;
         while (isRestocking && elapsedTime < restockTime)
         {
             elapsedTime += Time.deltaTime;
+            restockProgressSlider.value = Mathf.Clamp01(elapsedTime / restockTime); // Update slider progress
             yield return null;
         }
         
@@ -92,9 +104,12 @@ public class PizzaPlace : MonoBehaviour
             audioSource.Stop();
             // Stop to display restocking text
             restockingText.gameObject.SetActive(false);
+            // Stop to display the slider
+            restockProgressSlider.gameObject.SetActive(false);
             // Perform the restocking
             Player thePlayer = player.GetComponent<Player>();
             thePlayer.Restocking();
+            restockingCoroutine = null;
         }
     }
 }
