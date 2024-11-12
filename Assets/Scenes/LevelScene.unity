@@ -3965,6 +3965,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pauseMenuUI: {fileID: 1521376248}
   optionsMenuUI: {fileID: 510159160}
+  audioSource: {fileID: 2144460499}
+  hoverSound: {fileID: 8300000, guid: d8993a4534987eb4aa322adf14034074, type: 3}
+  selectSound: {fileID: 8300000, guid: f4237736c1569eb47b1d4f5f01de11b5, type: 3}
   pauseMenuItems:
   - {fileID: 1105796241}
   - {fileID: 2115520328}
@@ -22411,7 +22414,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 088ee910d7c7f4ae28a12554496b8516, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.091
   m_Pitch: 1
   Loop: 1
   Mute: 0
