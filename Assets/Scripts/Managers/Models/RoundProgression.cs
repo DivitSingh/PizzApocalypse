@@ -29,7 +29,7 @@ public class RoundProgression
 
     private static int GetDuration(GenerateCustomerConfiguration customerConfig, SpawnConfiguration spawnConfig)
     {
-        var duration = 1 + (int) ((spawnConfig.Count - 1) * spawnConfig.Interval + (customerConfig.Patience * 1.2) / 1.5);
+        var duration = 1 + (int) ((spawnConfig.Count - 1) * spawnConfig.Interval + (customerConfig.Patience * 1.2));
         duration = RoundUp(duration);
         return duration;
     }
@@ -58,28 +58,28 @@ public class RoundProgression
     }
 
 
-    private float Patience => round switch
-    {
-        <= 1 => 25f,
-        2 => 24f,
-        3 => 23f,
-        < 5 => 20f,
-        < 7 => 17.5f,
-        < 10 => 15f,
-        >= 10 => PatienceCap
-    };
-
-    // Old config:   
     // private float Patience => round switch
     // {
-    //     <= 1 => 10f,
-    //     2 => 9.25f,
-    //     3 => 8.75f,
-    //     < 5 => 8f,
-    //     < 7 => 7f,
-    //     < 10 => 6f,
+    //     <= 1 => 25f,
+    //     2 => 24f,
+    //     3 => 23f,
+    //     < 5 => 20f,
+    //     < 7 => 17.5f,
+    //     < 10 => 15f,
     //     >= 10 => PatienceCap
     // };
+
+    // Old config: below   
+    private float Patience => round switch
+    {
+        <= 1 => 10f,
+        2 => 9.25f,
+        3 => 8.75f,
+        < 5 => 8f,
+        < 7 => 7f,
+        < 10 => 6f,
+        >= 10 => PatienceCap
+    };
 
     private const float BaseSatisfaction = 60f;
     private const float SatisfactionIncrease = 10f;
@@ -110,13 +110,13 @@ public class RoundProgression
         var intervalCap = patience / numSpawnPoints; // Can't spawn faster than patience runs out for initial spawn
         var interval = round switch
         {
-            <= 3 => 5f * intervalCap,
-            <= 6 => 4f * intervalCap,
-            _ => 3.5f * intervalCap
+            // <= 3 => 5f * intervalCap,
+            // <= 6 => 4f * intervalCap,
+            // _ => 3.5f * intervalCap
             // old values below
-            // <= 3 => 4.5f * intervalCap,
-            // <= 6 => 3.5f * intervalCap,
-            // _ => 2.75f * intervalCap
+            <= 3 => 4.5f * intervalCap,
+            <= 6 => 3.5f * intervalCap,
+            _ => 2.75f * intervalCap
         };
         return interval;
     }

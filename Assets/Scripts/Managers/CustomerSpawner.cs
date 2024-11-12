@@ -53,7 +53,8 @@ public class CustomerSpawner : MonoBehaviour
         {
             SpawnCustomer(customerConfig, id);
             // new spawn customers as rounds
-            SpawnCustomer(customerConfig, id);
+            // id++;
+            // SpawnCustomer(customerConfig, id);
             if (i != spawnConfig.Count - 1)
             {
                 yield return new WaitForSeconds(spawnConfig.Interval);    
