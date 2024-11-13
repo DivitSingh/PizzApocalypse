@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
-using TMPro; 
+using TMPro;
 using UnityEngine;
 
 public class PizzaPlace : MonoBehaviour
@@ -15,6 +15,10 @@ public class PizzaPlace : MonoBehaviour
     private bool isRestocking = false;
     public Slider restockProgressSlider; // Reference to the restocking progress slider
 
+    private void Awake()
+    {
+        GameManager.Instance.OnGameOver += InterruptRestocking;
+    }
 
     private void Start()
     {
@@ -28,7 +32,7 @@ public class PizzaPlace : MonoBehaviour
         audioSource.clip = restockSound;
         audioSource.playOnAwake = false;
 
-        //hide restocking text       
+        //hide restocking text
         if (restockingText != null)
         {
             restockingText.gameObject.SetActive(false);
@@ -95,7 +99,7 @@ public class PizzaPlace : MonoBehaviour
             restockProgressSlider.value = Mathf.Clamp01(elapsedTime / restockTime); // Update slider progress
             yield return null;
         }
-        
+
         if (isRestocking)
         {
             // Reset restocking var

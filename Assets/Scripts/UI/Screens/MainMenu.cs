@@ -18,19 +18,19 @@ public class MainMenu : MonoBehaviour
     private int currentIndex = 0;
     private bool hasInitialized = false;
     private bool wasVerticalPressed = false;
-    
+
     [Header("Transition")]
+    [SerializeField] private GameObject transitionCanvas;
     public Animator transition;
-    private float transitionTime; 
-    public Text loadingText;  
+    private float transitionTime;
+    public Text loadingText;
 
     void Start()
     {
+        transitionCanvas.SetActive(false);
         // If audioSource isn't assigned in inspector, add it automatically
         if (audioSource == null)
-        {
             audioSource = gameObject.AddComponent<AudioSource>();
-        }
 
         Canvas.ForceUpdateCanvases();
         currentIndex = 0;
@@ -47,7 +47,8 @@ public class MainMenu : MonoBehaviour
             // Modify hover event to include sound
             EventTrigger.Entry enterEntry = new EventTrigger.Entry();
             enterEntry.eventID = EventTriggerType.PointerEnter;
-            enterEntry.callback.AddListener((data) => {
+            enterEntry.callback.AddListener((data) =>
+            {
                 if (currentIndex != index) // Only play sound if hovering over a new item
                 {
                     PlayHoverSound();
@@ -60,7 +61,8 @@ public class MainMenu : MonoBehaviour
             // Modify click event to include sound
             EventTrigger.Entry clickEntry = new EventTrigger.Entry();
             clickEntry.eventID = EventTriggerType.PointerClick;
-            clickEntry.callback.AddListener((data) => {
+            clickEntry.callback.AddListener((data) =>
+            {
                 currentIndex = index;
                 PlaySelectSound();
                 SelectMenuItem();
@@ -149,6 +151,7 @@ public class MainMenu : MonoBehaviour
 
     IEnumerator LoadLevelSceneWithTransition()
     {
+        transitionCanvas.SetActive(true);
         transitionTime = 2.5f;
         transition.SetTrigger("Start");
         loadingText.text = "Round starts in 3.. 2.. 1..";

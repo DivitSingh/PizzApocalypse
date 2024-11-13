@@ -116,7 +116,7 @@ public class ShopUI : MonoBehaviour
         levelText.text = buff.Level.ToString();
         costText.text = $"${buff.Cost}";
         UpdateDescription(buff);
-        
+
         // Disable Buff if max level reached
         if (buff.IsMaxed) DisableBuff(buff);
     }
@@ -174,9 +174,10 @@ public class ShopUI : MonoBehaviour
             BuffType.Damage => damageComponents.CostText,
             BuffType.Capacity => capacityComponents.CostText
         };
-        
+
         var button = GetComponentInChildren<Button>(container);
         button.interactable = false;
+        EventSystem.current.SetSelectedGameObject(transform.Find("Continue Button").gameObject);
         costText.text = "";
     }
 }
