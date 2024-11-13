@@ -154,6 +154,7 @@ public class MainMenu : MonoBehaviour
         transitionCanvas.SetActive(true);
         transitionTime = 2.5f;
         transition.SetTrigger("Start");
+        Time.timeScale = 1;
         loadingText.text = "Round starts in 3.. 2.. 1..";
         yield return new WaitForSeconds(transitionTime);
         loadingText.text = "";
