@@ -130,7 +130,8 @@ public class ShopUI : MonoBehaviour
         {
             BuffType.Speed => speedComponents.LevelText,
             BuffType.Capacity => capacityComponents.LevelText,
-            BuffType.Damage => damageComponents.LevelText
+            BuffType.Damage => damageComponents.LevelText,
+            _ => throw new System.NotImplementedException()
         };
     }
 
@@ -140,7 +141,8 @@ public class ShopUI : MonoBehaviour
         {
             BuffType.Speed => speedComponents.CostText,
             BuffType.Capacity => capacityComponents.CostText,
-            BuffType.Damage => damageComponents.CostText
+            BuffType.Damage => damageComponents.CostText,
+            _ => throw new System.NotImplementedException()
         };
     }
 
@@ -166,13 +168,15 @@ public class ShopUI : MonoBehaviour
         {
             BuffType.Speed => speedContainer,
             BuffType.Damage => damageContainer,
-            BuffType.Capacity => capacityContainer
+            BuffType.Capacity => capacityContainer,
+            _ => throw new System.NotImplementedException()
         };
         var costText = buff.Type switch
         {
             BuffType.Speed => speedComponents.CostText,
             BuffType.Damage => damageComponents.CostText,
-            BuffType.Capacity => capacityComponents.CostText
+            BuffType.Capacity => capacityComponents.CostText,
+            _ => throw new System.NotImplementedException()
         };
 
         var button = GetComponentInChildren<Button>(container);
