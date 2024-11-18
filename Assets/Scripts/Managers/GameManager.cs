@@ -9,11 +9,10 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get; private set; }
 
     [SerializeField] private RoundManager roundManager;
-    [SerializeField] private GameObject gameOverScreen;
-    [SerializeField] private TMP_Text scoreText;
-    [SerializeField] private ShopUI shopUI;
 
-    // TODO: Move this to menu manager to set active again?
+    [Header("UI Screens")]
+    [SerializeField] private GameOverScreen gameOverScreen;
+    [SerializeField] private ShopUI shopUI;
     [SerializeField] private GameObject roundUI;
 
     public event Action OnGameOver;
@@ -48,7 +47,7 @@ public class GameManager : MonoBehaviour
 
         Pause();
         OnGameOver?.Invoke();
-        Show(roundManager.Score, roundManager.Round);
+        gameOverScreen.Show(roundManager.Round);
     }
 
     private void HandleRoundPassed()
@@ -80,16 +79,16 @@ public class GameManager : MonoBehaviour
         Cursor.visible = true;
     }
 
-    public void Show(int score, int round)
+    public void Restart()
     {
-        //old score text:
-        //scoreText.text = $"You made it to round {round} and delivered {score} {(score == 1 ? "delivery" : "deliveries")}.";
-        scoreText.text = $"You made it to Round {round} \nCongratulations! See if you can beat that score next time.";
-        gameOverScreen.SetActive(true);
-        EventSystem.current.SetSelectedGameObject(gameOverScreen.transform.Find("RestartButton").gameObject);
+        GameObject.FindWithTag("Player").GetComponent<PlayerHealth>().OnDeath -= HandleGameOver;
+        SceneManager.LoadScene("LevelScene");
     }
 
-    public void Restart()
+    /// <summary>
+    /// Exits the scene and loads the main menu.
+    /// </summary>
+    public void Exit()
     {
         GameObject.FindWithTag("Player").GetComponent<PlayerHealth>().OnDeath -= HandleGameOver;
         Time.timeScale = 1f;

@@ -44,6 +44,11 @@ public class ShopUI : MonoBehaviour
         return new BuffComponents(levelText, descriptionText, costText);
     }
 
+    private void Awake()
+    {
+        Debug.Log("Awake called");
+    }
+
     private void OnEnable()
     {
         // Update UI on first load
@@ -59,23 +64,51 @@ public class ShopUI : MonoBehaviour
 
             firstLoad = false;
         }
-
+        
         HandleBalanceChanged(shopManager.Balance); // Need to update each time screen is shown
         shopManager.OnBuffPurchased += HandlePurchasedBuff;
         shopManager.OnBalanceChanged += HandleBalanceChanged;
+        
+        // Listen to input changes
+        InputDeviceManager.Instance.OnGamepadStatusChanged += HandleDeviceChange;
+        Cursor.visible = !InputDeviceManager.Instance.IsGamepad;
     }
 
     private void OnDisable()
     {
         shopManager.OnBuffPurchased -= HandlePurchasedBuff;
         shopManager.OnBalanceChanged -= HandleBalanceChanged;
+        InputDeviceManager.Instance.OnGamepadStatusChanged -= HandleDeviceChange;
+    }
+
+    private void HandleDeviceChange(bool isGamepad)
+    {
+        if (isGamepad)
+        {
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+            // Ensure that screen remains navigable when switching between inputs
+            if (EventSystem.current.currentSelectedGameObject == null)
+            {
+                EventSystem.current.SetSelectedGameObject(GetComponentsInChildren<Button>()[1].gameObject);    
+            } 
+        }
+        else
+        {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+        }
     }
 
     public void Show()
     {
-        var firstButton = GetComponentsInChildren<Button>()[0];
-        EventSystem.current.SetSelectedGameObject(firstButton.gameObject);
         gameObject.SetActive(true);
+        HandleDeviceChange(InputDeviceManager.Instance.IsGamepad);
+        if (InputDeviceManager.Instance.IsGamepad)
+        {
+            var firstButton = GetComponentsInChildren<Button>()[0];
+            EventSystem.current.SetSelectedGameObject(firstButton.gameObject);
+        }
     }
 
     public void Hide()
