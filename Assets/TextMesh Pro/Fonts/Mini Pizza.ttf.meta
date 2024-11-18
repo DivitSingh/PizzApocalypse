@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 8b442333caf174e46b25aa66f712b5ff
+guid: 326a40f5260de424eb2e54ff95472883
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -9,7 +9,7 @@ TrueTypeFontImporter:
   characterPadding: 1
   includeFontData: 1
   fontNames:
-  - Pervitina Dex
+  - Mini Pizza
   fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0
