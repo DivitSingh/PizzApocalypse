@@ -16,12 +16,14 @@ public class RoundConfiguration
 
 public class SpawnConfiguration
 {
-    public int Count { get; } 
+    public int TotalCustomerCount { get; } 
+    public int CustomerPerWave { get; }
     public float Interval { get; }
 
-    public SpawnConfiguration(int count, float interval)
+    public SpawnConfiguration(int totalCustomerCount, int customerPerWave, float interval)
     {
-        Count = count;
+        TotalCustomerCount = totalCustomerCount;
+        CustomerPerWave = customerPerWave;
         Interval = interval;
     }
 }

@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Collections;
 using System.Linq;
 using Random = System.Random;
+using UnityEngine.AI;
 
 public class CustomerSpawner : MonoBehaviour
 {
@@ -46,23 +47,46 @@ public class CustomerSpawner : MonoBehaviour
     private IEnumerator SpawnCustomers(SpawnConfiguration spawnConfig, GenerateCustomerConfiguration customerConfig)
     {
         // Wait a bit before beginning spawning
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1f);
+        Debug.Log($"Spawn Interval: {spawnConfig.Interval}");
         
         var id = 1;
-        for (int i = 0; i < spawnConfig.Count; i++)
+
+        for (int i = 0; i < spawnConfig.TotalCustomerCount; i++)
         {
-            SpawnCustomer(customerConfig, id);
-            // new spawn customers as rounds
-            // id++;
-            // SpawnCustomer(customerConfig, id);
-            if (i != spawnConfig.Count - 1)
+            // Spawn amount of customers for wave
+            for (int ii = 0; ii < spawnConfig.CustomerPerWave; ii++)
+            {
+                SpawnCustomer(customerConfig, id);
+                id++;
+            }
+            if (i != spawnConfig.TotalCustomerCount - 1)
             {
                 yield return new WaitForSeconds(spawnConfig.Interval);    
             }
-
-            id++;
         }
     }
+// old SpawnCustomers below
+//     private IEnumerator SpawnCustomers(int round, SpawnConfiguration spawnConfig, GenerateCustomerConfiguration customerConfig)
+//     {
+//         // Wait a bit before beginning spawning
+//         yield return new WaitForSeconds(1f);
+        
+//         var id = 1;
+//         for (int i = 0; i < spawnConfig.Count; i++)
+//         {
+//             SpawnCustomer(customerConfig, id);
+//             // new spawn customers as rounds
+//             // id++;
+//             // SpawnCustomer(customerConfig, id);
+//             if (i != spawnConfig.Count - 1)
+//             {
+//                 yield return new WaitForSeconds(spawnConfig.Interval);    
+//             }
+
+//             id++;
+//         }
+//     }
 
     private void SpawnCustomer(GenerateCustomerConfiguration config, int id)
     {

@@ -33,7 +33,7 @@ public class RoundManager : MonoBehaviour
         OnTimeRemainingChanged?.Invoke(timeRemaining);
         OnProgressChanged?.Invoke(Score, roundProgression.Configuration.PassScore);
         customerSpawner.StartSpawning(roundProgression.Configuration.SpawnConfiguration, roundProgression.Configuration.CustomerConfiguration);
-        customersManager.Configure(roundProgression.Configuration.SpawnConfiguration.Count);
+        customersManager.Configure(roundProgression.Configuration.SpawnConfiguration.TotalCustomerCount);
     }
 
     private void Update()
@@ -76,7 +76,7 @@ public class RoundManager : MonoBehaviour
         OnProgressChanged?.Invoke(Score, roundProgression.Configuration.PassScore);
         OnTimeRemainingChanged?.Invoke(timeRemaining);
         
-        customersManager.Configure(roundProgression.Configuration.SpawnConfiguration.Count);
+        customersManager.Configure(roundProgression.Configuration.SpawnConfiguration.TotalCustomerCount);
         customerSpawner.StartSpawning(roundProgression.Configuration.SpawnConfiguration, roundProgression.Configuration.CustomerConfiguration);
         timeRemaining = roundProgression.Configuration.Duration;
     }

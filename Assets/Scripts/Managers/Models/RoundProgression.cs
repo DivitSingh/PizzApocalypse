@@ -1,4 +1,7 @@
+using System.Diagnostics;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AI;
 
 /// <summary>
 /// Handles the scaling of round configuration values as the game progresses.
@@ -20,24 +23,55 @@ public class RoundProgression
     {
         round++;
         var customerConfig = CreateCustomerConfiguration();
-        var spawnConfig = CreateSpawnConfiguration(customerConfig.Patience, 5);
+        var spawnConfig = CreateSpawnConfiguration(round);
         
-        var duration = GetDuration(customerConfig, spawnConfig);
-        var passScore = GetPassScore(spawnConfig.Count);
+        var duration = GetDuration(round);
+        var passScore = GetPassScore(round);
         Configuration = new RoundConfiguration(passScore, duration, spawnConfig, customerConfig);
     }
 
-    private static int GetDuration(GenerateCustomerConfiguration customerConfig, SpawnConfiguration spawnConfig)
+    private static int GetDuration(int round)
     {
-        var duration = 1 + (int) ((spawnConfig.Count - 1) * spawnConfig.Interval + (customerConfig.Patience * 1.2));
-        duration = RoundUp(duration);
-        return duration;
+        int durationInSeconds = round switch
+        {
+            1 => 45,
+            2 or 3 => 60,
+            4 or 5 => 90,
+            6 or 7 => 105,
+            _ => 120 // For round 8 and beyond
+        };
+        return durationInSeconds;
     }
 
-    private int GetPassScore(int numCustomers)
+    // Old GetDuration below
+    // private static int GetDuration(GenerateCustomerConfiguration customerConfig, SpawnConfiguration spawnConfig)
+    // {
+    //     var duration = 1 + (int) ((spawnConfig.Count - 1) * spawnConfig.Interval + (customerConfig.Patience * 1.2));
+    //     duration = RoundUp(duration);
+    //     return duration;
+    // }
+
+    private int GetPassScore(int round)
     {
-        if (round == 1) return 1;
-        return (int) (0.5 * numCustomers);
+        // passScore equals round count, expect after round 10.
+        if (round > 9)
+        {
+            return 10;
+        }
+        return round;
+    }
+
+    //  old GetPassScore below
+    // private int GetPassScore(int numCustomers)
+    // {
+    //     if (round == 1) return 1;
+    //     return (int) (0.5 * numCustomers);
+    // }
+
+    private int TotalCustomerCount(int round)
+    {
+        int totalCustomerCount = (int)(GetDuration(round) / SpawnInterval);
+        return totalCustomerCount;
     }
     
     /// <summary>
@@ -72,13 +106,24 @@ public class RoundProgression
     // Old config: below   
     private float Patience => round switch
     {
-        <= 1 => 10f,
-        2 => 9.25f,
-        3 => 8.75f,
-        < 5 => 8f,
-        < 7 => 7f,
-        < 10 => 6f,
-        >= 10 => PatienceCap
+        <= 1 => 25f,
+        2 => 22f,
+        3 => 20f,
+        4 => 20f,
+        5 => 17f,
+        6 => 15f,
+        7 => 13f,
+        8 => 12f,
+        9 => 10f,
+        >= 10 => PatienceCap, //10f
+        // old values below
+        // <= 1 => 10f,
+        // 2 => 9.25f,
+        // 3 => 8.75f,
+        // < 5 => 8f,
+        // < 7 => 7f,
+        // < 10 => 6f,
+        // >= 10 => PatienceCap
     };
 
     private const float BaseSatisfaction = 60f;
@@ -92,40 +137,66 @@ public class RoundProgression
     private int OrderSize => round switch
     {
         <= 1 => 1,
-        < 4 => 2,
-        < 6 => 3,
-        >= 6 => OrderSizeCap,
+        <= 3 => 2,
+        <= 6 => 3,
+        >= 7 => OrderSizeCap,
     };
 
     #endregion
 
     #region Spawn Configuration
-    private SpawnConfiguration CreateSpawnConfiguration(float patience, int numSpawnPoints)
+    private SpawnConfiguration CreateSpawnConfiguration(int round)
     {
-        return new SpawnConfiguration(CustomerCount, SpawnInterval(patience, numSpawnPoints));
+        return new SpawnConfiguration(TotalCustomerCount(round), CustomerPerRound, SpawnInterval);
     }
+    // old SpawnConfiguration below
+    // private SpawnConfiguration CreateSpawnConfiguration(float patience, int numSpawnPoints)
+    // {
+    //     return new SpawnConfiguration(Count, SpawnInterval(patience, numSpawnPoints));
+    // }
 
-    private float SpawnInterval(float patience, int numSpawnPoints)
+    private float SpawnInterval => round switch
     {
-        var intervalCap = patience / numSpawnPoints; // Can't spawn faster than patience runs out for initial spawn
-        var interval = round switch
-        {
-            // <= 3 => 5f * intervalCap,
-            // <= 6 => 4f * intervalCap,
-            // _ => 3.5f * intervalCap
-            // old values below
-            <= 3 => 4.5f * intervalCap,
-            <= 6 => 3.5f * intervalCap,
-            _ => 2.75f * intervalCap
-        };
-        return interval;
-    }
-    
-    private int CustomerCount => round switch
-    {
-        <= 3 => 3 + round,
-        > 3 => 2 * round
+        <= 1 => 25f,
+        2 => 22f,
+        3 => 17f,
+        4 => 20f,
+        5 => 17f,
+        6 => 13f,
+        7 => 10f,
+        8 => 10f,
+        9 => 8f,
+        >= 10 => 8f,
     };
+    // old SpawnInterval below
+    // private float SpawnInterval(float patience, int numSpawnPoints)
+    // {
+    //     var intervalCap = patience / numSpawnPoints; // Can't spawn faster than patience runs out for initial spawn
+    //     var interval = round switch
+    //     {
+    //         // old values 
+    //         // <= 3 => 4.5f * intervalCap,
+    //         // <= 6 => 3.5f * intervalCap,
+    //         // _ => 2.75f * intervalCap
+    //     };
+    //     return interval;
+    // } 
+
+
+    
+    private int CustomerPerRound => round switch
+    {
+        <= 1 => 1,
+        <= 3 => 2,
+        <= 6 => 3,
+        >= 7 => 4 // For round 8 and beyond 4 customers max
+    };
+    // old CustomerCount below
+    // private int CustomerCount => round switch
+    // {
+    //     <= 3 => 3 + round,
+    //     > 3 => 2 * round
+    // };
     #endregion
 
 }
