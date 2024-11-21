@@ -66,15 +66,15 @@ public class CustomersManager: MonoBehaviour
 
     private void HandleFed(Customer customer)
     {
-        HandledCount++;
         OnOrderStatusChanged?.Invoke(customer, true);
         Cleanup(customer);
+        HandledCount++;
     }
 
     private void HandleDeath(Customer customer)
     {
-        HandledCount++;
         Cleanup(customer);
+        HandledCount++;
     }
 
     public void Reset()
