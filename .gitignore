@@ -26,6 +26,9 @@
 # Visual Studio cache directory
 .vs/
 
+# .idea folder contains IDE configuration files and is usually not relevant for the project itself
+.idea/
+
 # Gradle cache directory
 .gradle/
 
