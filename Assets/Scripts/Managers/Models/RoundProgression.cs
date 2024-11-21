@@ -12,7 +12,7 @@ public class RoundProgression
     public RoundConfiguration Configuration { get; private set; }
 
     private const int OrderSizeCap = 4;
-    private const float PatienceCap = 10f; // old was 5f
+    private const float PatienceCap = 8f; // old was 5f
 
     public RoundProgression()
     {
@@ -70,7 +70,7 @@ public class RoundProgression
 
     private int TotalCustomerCount(int round)
     {
-        int totalCustomerCount = (int)(GetDuration(round) / SpawnInterval);
+        int totalCustomerCount = (int)(GetDuration(round) / SpawnInterval) + 1;
         return totalCustomerCount;
     }
     
@@ -159,13 +159,13 @@ public class RoundProgression
     {
         <= 1 => 25f,
         2 => 22f,
-        3 => 17f,
+        3 => 20f,
         4 => 20f,
         5 => 17f,
-        6 => 13f,
-        7 => 10f,
-        8 => 10f,
-        9 => 8f,
+        6 => 15f,
+        7 => 13f,
+        8 => 12f,
+        9 => 10f,
         >= 10 => 8f,
     };
     // old SpawnInterval below

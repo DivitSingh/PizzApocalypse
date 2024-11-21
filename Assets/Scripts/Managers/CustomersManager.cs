@@ -18,7 +18,7 @@ public class CustomersManager: MonoBehaviour
         set
         {
             _handledCount = value;
-            if (_handledCount == expectedCount)
+            if (_handledCount == expectedCount + 1) //Bug fix, remove later!
             {
                 OnAllCustomersHandled?.Invoke();
             }
