@@ -41,6 +41,8 @@ public class CustomerSpawner : MonoBehaviour
 
     public void StartSpawning(SpawnConfiguration spawnConfig, GenerateCustomerConfiguration customerConfig)
     {
+        // Stop all coroutines right before - DONE
+        StopAllCoroutines();
         StartCoroutine(SpawnCustomers(spawnConfig, customerConfig));
     }
 
@@ -52,7 +54,7 @@ public class CustomerSpawner : MonoBehaviour
         
         var id = 1;
 
-        for (int i = 0; i < spawnConfig.TotalCustomerCount; i++)
+        for (int i = 0; i < spawnConfig.TotalCustomerCount; i++) // Bug here end coroutine, make for loop per wave
         {
             // Spawn amount of customers for wave
             for (int ii = 0; ii < spawnConfig.CustomerPerWave; ii++)

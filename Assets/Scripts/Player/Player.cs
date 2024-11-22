@@ -49,7 +49,7 @@ public class Player : MonoBehaviour
     private PlayerHealth playerHealth;
     public PlayerInventory playerInventory;
     public static int money = 0;
-    [SerializeField] private int baseAttack = 10;
+    [SerializeField] private int baseAttack = 15;
     private List<IEffect> activeEffects = new List<IEffect>();
 
     [Header("Audio")]

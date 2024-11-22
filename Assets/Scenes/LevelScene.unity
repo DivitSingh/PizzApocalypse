@@ -20336,7 +20336,7 @@ MonoBehaviour:
   maxThrows: 2
   throwCooldown: 0.15
   playerInventory: {fileID: 1917263827}
-  baseAttack: 10
+  baseAttack: 15
   sliceSound: {fileID: 8300000, guid: f6d04ca3689b30740a62cf3d31168169, type: 3}
   pizzaSound: {fileID: 8300000, guid: 7731379bfb3424a489475cdf6f7c44b1, type: 3}
   swapSound: {fileID: 8300000, guid: 7e3f43689ef9f4f4fb058492037d6557, type: 3}
@@ -20474,7 +20474,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   money: 0
-  maxAmmo: 25
+  maxAmmo: 5
   pizzaIcon: {fileID: 505862210}
   pizzaIconUnequipped_2: {fileID: 2067643067}
   pizzaIconUnequipped_3: {fileID: 1525455529}

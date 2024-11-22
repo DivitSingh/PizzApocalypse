@@ -12,7 +12,7 @@ public class RoundProgression
     public RoundConfiguration Configuration { get; private set; }
 
     private const int OrderSizeCap = 4;
-    private const float PatienceCap = 8f; // old was 5f
+    private const float PatienceCap = 7f; // old was 5f
 
     public RoundProgression()
     {
@@ -68,10 +68,10 @@ public class RoundProgression
     //     return (int) (0.5 * numCustomers);
     // }
 
-    private int TotalCustomerCount(int round)
+    private int customerWavesCount(int round)
     {
-        int totalCustomerCount = (int)(GetDuration(round) / SpawnInterval) + 1;
-        return totalCustomerCount;
+        int totalCustomerWavesCount = (int)(GetDuration(round) / SpawnInterval) + 1;
+        return totalCustomerWavesCount;
     }
     
     /// <summary>
@@ -106,16 +106,16 @@ public class RoundProgression
     // Old config: below   
     private float Patience => round switch
     {
-        <= 1 => 25f,
-        2 => 22f,
+        <= 1 => 20f,
+        2 => 20f,
         3 => 20f,
         4 => 20f,
         5 => 17f,
         6 => 15f,
         7 => 13f,
-        8 => 12f,
-        9 => 10f,
-        >= 10 => PatienceCap, //10f
+        8 => 11f,
+        9 => 9f,
+        >= 10 => PatienceCap, //7f
         // old values below
         // <= 1 => 10f,
         // 2 => 9.25f,
@@ -147,7 +147,7 @@ public class RoundProgression
     #region Spawn Configuration
     private SpawnConfiguration CreateSpawnConfiguration(int round)
     {
-        return new SpawnConfiguration(TotalCustomerCount(round), CustomerPerRound, SpawnInterval);
+        return new SpawnConfiguration(customerWavesCount(round), CustomerPerRound, SpawnInterval);
     }
     // old SpawnConfiguration below
     // private SpawnConfiguration CreateSpawnConfiguration(float patience, int numSpawnPoints)
@@ -155,15 +155,16 @@ public class RoundProgression
     //     return new SpawnConfiguration(Count, SpawnInterval(patience, numSpawnPoints));
     // }
 
+// Can't spawn faster than patience runs out for initial spawn. Otherwise spawn points occupied when trying to spawn.
     private float SpawnInterval => round switch
     {
-        <= 1 => 25f,
-        2 => 22f,
-        3 => 20f,
-        4 => 20f,
-        5 => 17f,
-        6 => 15f,
-        7 => 13f,
+        <= 1 => 21f,
+        2 => 21f,
+        3 => 21f,
+        4 => 21f,
+        5 => 18f,
+        6 => 16f,
+        7 => 14f,
         8 => 12f,
         9 => 10f,
         >= 10 => 8f,

@@ -18,11 +18,14 @@ public class SpawnConfiguration
 {
     public int TotalCustomerCount { get; } 
     public int CustomerPerWave { get; }
+    public int WavesCount { get; }
+
     public float Interval { get; }
 
-    public SpawnConfiguration(int totalCustomerCount, int customerPerWave, float interval)
+    public SpawnConfiguration(int wavesCount, int customerPerWave, float interval)
     {
-        TotalCustomerCount = totalCustomerCount;
+        WavesCount = wavesCount;
+        TotalCustomerCount = wavesCount * customerPerWave;
         CustomerPerWave = customerPerWave;
         Interval = interval;
     }

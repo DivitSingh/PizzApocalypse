@@ -17,9 +17,10 @@ public class Order
     private int CalculateValue()
     {
         // Calculate value based on number of pizza types and number of total pizzas
+        var baseMoneyRate = 2;
         var quantity = Items.Values.Sum();
         var modifier = CalculateModifier(Items.Count);
-        return (int)(quantity * modifier);
+        return (int)(quantity * modifier + baseMoneyRate);
     }
 
     private static float CalculateModifier(int pizzaTypes)
