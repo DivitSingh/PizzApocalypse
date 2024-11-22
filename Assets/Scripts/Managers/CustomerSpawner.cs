@@ -8,13 +8,11 @@ public class CustomerSpawner : MonoBehaviour
 {
     [SerializeField] private GameObject[] customerPrefabs;
     [SerializeField] private LayerMask customerLayerMask;
-    [SerializeField] private Canvas healthBarCanvas; // TODO: Move this to Customer class?
-
     private Transform[] spawnPoints;
     private readonly float checkRadius = 1.5f;
     private readonly Random random = new Random();
-    
-    public event Action<Customer> OnSpawned; 
+
+    public event Action<Customer> OnSpawned;
 
     private void Awake()
     {
@@ -31,11 +29,6 @@ public class CustomerSpawner : MonoBehaviour
         {
             Debug.LogError("No customer prefabs assigned in the CustomerSpawner!");
         }
-
-        if (healthBarCanvas == null)
-        {
-            Debug.LogError("HealthBar Canvas cannot be null.");
-        }
     }
 
     public void StartSpawning(SpawnConfiguration spawnConfig, GenerateCustomerConfiguration customerConfig)
@@ -47,7 +40,7 @@ public class CustomerSpawner : MonoBehaviour
     {
         // Wait a bit before beginning spawning
         yield return new WaitForSeconds(0.5f);
-        
+
         var id = 1;
         for (int i = 0; i < spawnConfig.Count; i++)
         {
@@ -57,7 +50,7 @@ public class CustomerSpawner : MonoBehaviour
             // SpawnCustomer(customerConfig, id);
             if (i != spawnConfig.Count - 1)
             {
-                yield return new WaitForSeconds(spawnConfig.Interval);    
+                yield return new WaitForSeconds(spawnConfig.Interval);
             }
 
             id++;
@@ -94,7 +87,7 @@ public class CustomerSpawner : MonoBehaviour
             Debug.LogError("No spawn points available.");
             return null;
         }
-        
+
         var index = random.Next(0, availableSpawnPoints.Count);
         return availableSpawnPoints[index];
     }
