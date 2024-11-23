@@ -46,7 +46,11 @@ public class ShopUI : MonoBehaviour
         var textComponents = buffContainer.GetComponentsInChildren<TMP_Text>();
         var levelText = textComponents.FirstOrDefault(t => t.name == "LevelText");
         var descriptionText = textComponents.FirstOrDefault(t => t.name == "BuffDescriptionText");
-        var costText = buffContainer.GetComponentInChildren<Button>().GetComponentInChildren<TMP_Text>();
+        
+        // Add hover sound to buttons and extract cost text
+        var button = buffContainer.GetComponentInChildren<Button>();
+        var costText = button.GetComponentInChildren<TMP_Text>();
+        
         return new BuffComponents(levelText, descriptionText, costText);
     }
 
@@ -96,7 +100,7 @@ public class ShopUI : MonoBehaviour
             // Ensure that screen remains navigable when switching between inputs
             if (EventSystem.current.currentSelectedGameObject == null)
             {
-                EventSystem.current.SetSelectedGameObject(GetComponentsInChildren<Button>()[1].gameObject);    
+                EventSystem.current.SetSelectedGameObject(GetComponentsInChildren<Button>()[1].gameObject); 
             } 
         }
         else
@@ -138,6 +142,11 @@ public class ShopUI : MonoBehaviour
     }
 
     #region Event Handlers
+
+    public void PlayHoverSound(BaseEventData data)
+    {
+        audioSource.PlayOneShot(hoverSound);
+    }
 
     private void HandleBalanceChanged(int newBalance)
     {
