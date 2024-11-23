@@ -11,7 +11,8 @@ public class SoundTrackManager: MonoBehaviour
     [SerializeField] private AudioClip[] clips;
     [SerializeField] private AudioClip shopClip;
     [SerializeField] private RoundManager roundManager;
-    private Random random = new Random();
+
+    private int clipIndex = 0;
 
     private void Awake()
     {
@@ -30,14 +31,9 @@ public class SoundTrackManager: MonoBehaviour
     private void ChangeTrack()
     {
         audioSource.Stop();
-        var clip = SelectRandomClip();
+        clipIndex = (clipIndex + 1) % clips.Length;
+        var clip = clips[clipIndex];
         audioSource.clip = clip;
         audioSource.Play();
-    }
-
-    private AudioClip SelectRandomClip()
-    {
-        var index = random.Next(0, clips.Length);
-        return clips[index];
     }
 }
