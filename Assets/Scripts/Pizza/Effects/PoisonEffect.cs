@@ -1,7 +1,6 @@
 public class PoisonEffect: IEffect
 {
-    public Stat AffectedStat => Stat.Health;
-    public EffectType Type => EffectType.ConstantDecrease;
+    public EffectType Type => EffectType.Poison;
     public float Value { get; }
     public int Duration { get; set; }
 

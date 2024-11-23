@@ -41,6 +41,8 @@ public class Customer : MonoBehaviour
     private State state = State.Hungry;
     public Order Order { get; private set; }
     private List<IEffect> activeEffects = new List<IEffect>();
+    private ParticleSystem poisonParticles;
+    
     [SerializeField] private CustomerUI customerUI;
     [SerializeField] private Sprite angryMarker;
 
@@ -75,6 +77,7 @@ public class Customer : MonoBehaviour
         animator = GetComponent<Animator>();
         boxCollider = GetComponentInChildren<BoxCollider>();
         player = GameObject.Find("Player").transform;
+        poisonParticles = GetComponentInChildren<ParticleSystem>();
         agentBaseSpeed = agent.speed;
     }
 
@@ -291,7 +294,7 @@ public class Customer : MonoBehaviour
     {
         // Check if effect is duplicate
         var existingEffect = activeEffects
-            .FirstOrDefault(t => t.Type == effect.Type && t.AffectedStat == effect.AffectedStat);
+            .FirstOrDefault(t => t.Type == effect.Type);
         if (existingEffect != null)
         {
             existingEffect.Duration = Math.Max(existingEffect.Duration, effect.Duration);
@@ -317,21 +320,15 @@ public class Customer : MonoBehaviour
     /// <param name="effect"></param>
     private void ApplyEffect(IEffect effect)
     {
-        switch (effect.AffectedStat)
+        switch (effect.Type)
         {
-            case Stat.Health:
-                if (effect.Type == EffectType.Multiplier) return; // This should not be possible, assuming only decrease
-                if (effect.Type == EffectType.ConstantDecrease) Health -= effect.Value;
+            case EffectType.Poison:
+                poisonParticles.Play();
+                Health -= effect.Value;
                 break;
-            case Stat.Speed:
-                if (effect.Type == EffectType.Multiplier)
-                {
-                    // TODO: If slowness is eventually added, will need to modify animator speed instead of disabling it
-                    agent.speed *= effect.Value;
-                    // FIXME: Remove this
-                    animator.SetTrigger("stun");
-                    // animator.enabled = false;
-                }
+            case EffectType.Stun:
+                agent.speed *= effect.Value;
+                animator.SetTrigger("stun");
                 break;
         }
     }
@@ -343,7 +340,7 @@ public class Customer : MonoBehaviour
     private void CleanupEffect(IEffect effect)
     {
         // NOTE: This is currently only for stun effect, may be extended later
-        if (effect.AffectedStat == Stat.Speed && effect.Value == 0)
+        if (effect.Type == EffectType.Stun)
         {
             agent.speed = agentBaseSpeed;
             animator.enabled = true;

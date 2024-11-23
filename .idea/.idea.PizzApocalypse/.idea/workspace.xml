@@ -6,9 +6,14 @@
   <component name="ChangeListManager">
     <list default="true" id="fe648da1-4e18-4187-bf7f-b948f2246c1d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.PizzApocalypse/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.PizzApocalypse/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Art/Customer_F/Customer_F.controller" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Art/Customer_F/Customer_F.controller" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Customer_F.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Customer_F.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Customer_M.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Customer_M.prefab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/Customer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Customer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Pizza/Effects/IEffect.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Pizza/Effects/IEffect.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Pizza/Effects/PoisonEffect.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Pizza/Effects/PoisonEffect.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Pizza/Effects/RegenEffect.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Pizza/Effects/RegenEffect.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Pizza/Effects/StunEffect.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Pizza/Effects/StunEffect.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Player/Player.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Player/Player.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -212,7 +217,7 @@
       <workItem from="1731544056664" duration="780000" />
       <workItem from="1731690044748" duration="1887000" />
       <workItem from="1732294313974" duration="4680000" />
-      <workItem from="1732326914632" duration="351000" />
+      <workItem from="1732326914632" duration="2765000" />
     </task>
     <servers />
   </component>
