@@ -1,5 +1,3 @@
-using UnityEngine;
-
 /// <summary>
 /// Handles the scaling of round configuration values as the game progresses.
 /// </summary>
@@ -21,7 +19,7 @@ public class RoundProgression
         round++;
         var customerConfig = CreateCustomerConfiguration();
         var spawnConfig = CreateSpawnConfiguration(customerConfig.Patience, 5);
-        
+
         var duration = GetDuration(customerConfig, spawnConfig);
         var passScore = GetPassScore(spawnConfig.Count);
         Configuration = new RoundConfiguration(passScore, duration, spawnConfig, customerConfig);
@@ -29,7 +27,7 @@ public class RoundProgression
 
     private static int GetDuration(GenerateCustomerConfiguration customerConfig, SpawnConfiguration spawnConfig)
     {
-        var duration = 1 + (int) ((spawnConfig.Count - 1) * spawnConfig.Interval + (customerConfig.Patience * 1.2));
+        var duration = 1 + (int)((spawnConfig.Count - 1) * spawnConfig.Interval + (customerConfig.Patience * 1.2));
         duration = RoundUp(duration);
         return duration;
     }
@@ -37,9 +35,9 @@ public class RoundProgression
     private int GetPassScore(int numCustomers)
     {
         if (round == 1) return 1;
-        return (int) (0.5 * numCustomers);
+        return (int)(0.5 * numCustomers);
     }
-    
+
     /// <summary>
     /// Rounds the given number up to the nearest multiple of 5 that is >= num.
     /// </summary>
@@ -50,7 +48,7 @@ public class RoundProgression
         if (num % 5 == 0) return num;
         return (10 - num % 10) + num;
     }
-    
+
     #region Customer Configuration
     private GenerateCustomerConfiguration CreateCustomerConfiguration()
     {
@@ -69,7 +67,7 @@ public class RoundProgression
     //     >= 10 => PatienceCap
     // };
 
-    // Old config: below   
+    // Old config: below
     private float Patience => round switch
     {
         <= 1 => 10f,
@@ -88,7 +86,7 @@ public class RoundProgression
     private const float BaseAttack = 15f;
     private const float AttackIncrease = 5f;
     private float Attack => BaseAttack + (round / 2) * AttackIncrease;  // Increase every 2 rounds
-    
+
     private int OrderSize => round switch
     {
         <= 1 => 1,
@@ -120,7 +118,7 @@ public class RoundProgression
         };
         return interval;
     }
-    
+
     private int CustomerCount => round switch
     {
         <= 3 => 3 + round,
@@ -129,4 +127,3 @@ public class RoundProgression
     #endregion
 
 }
-
