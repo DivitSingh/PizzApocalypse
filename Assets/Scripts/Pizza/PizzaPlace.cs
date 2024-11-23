@@ -104,8 +104,6 @@ public class PizzaPlace : MonoBehaviour
         {
             // Reset restocking var
             isRestocking = false;
-            // Stop the looping sound
-            audioSource.Stop();
             // Stop to display restocking text
             restockingText.gameObject.SetActive(false);
             // Stop to display the slider
