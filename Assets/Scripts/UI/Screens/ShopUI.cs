@@ -8,6 +8,12 @@ public class ShopUI : MonoBehaviour
 {
     [SerializeField] private ShopManager shopManager;
 
+    // Add these new audio-related fields
+    [Header("Audio")]
+    public AudioSource audioSource;
+    public AudioClip hoverSound;
+    public AudioClip completeSound;
+
     [Header("UI Elements")]
     [SerializeField] private TMP_Text balanceText;
     [SerializeField] private GameObject speedContainer;
@@ -156,6 +162,22 @@ public class ShopUI : MonoBehaviour
 
     #endregion
 
+    // Add these new methods for playing sounds
+    private void PlayHoverSound()
+    {
+        if (hoverSound != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(hoverSound);
+        }
+    }
+
+    private void PlayCompleteSound()
+    {
+        if (completeSound != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(completeSound);
+        }
+    }
 
     private TMP_Text GetLevelText(BuffType type)
     {
