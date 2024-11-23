@@ -1,7 +1,5 @@
 using System;
-using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
@@ -38,7 +36,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void HandleGameOver()
+    public void HandleGameOver()
     {
         foreach (var customer in FindObjectsOfType<Customer>())
         {

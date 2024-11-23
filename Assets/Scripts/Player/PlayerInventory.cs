@@ -176,4 +176,9 @@ public class PlayerInventory : MonoBehaviour
     {
         money += amount;
     }
+
+    public bool PizzasAreFull()
+    {
+        return pizzaInventory[PizzaType.Cheese] == maxAmmo && pizzaInventory[PizzaType.Pineapple] == maxAmmo && pizzaInventory[PizzaType.Mushroom] == maxAmmo;
+    }
 }

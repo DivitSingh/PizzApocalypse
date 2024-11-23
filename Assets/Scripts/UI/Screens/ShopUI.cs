@@ -8,6 +8,12 @@ public class ShopUI : MonoBehaviour
 {
     [SerializeField] private ShopManager shopManager;
 
+    // Add these new audio-related fields
+    [Header("Audio")]
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip hoverSound;
+    [SerializeField] private AudioClip completeSound;
+
     [Header("UI Elements")]
     [SerializeField] private TMP_Text balanceText;
     [SerializeField] private GameObject speedContainer;
@@ -40,7 +46,11 @@ public class ShopUI : MonoBehaviour
         var textComponents = buffContainer.GetComponentsInChildren<TMP_Text>();
         var levelText = textComponents.FirstOrDefault(t => t.name == "LevelText");
         var descriptionText = textComponents.FirstOrDefault(t => t.name == "BuffDescriptionText");
-        var costText = buffContainer.GetComponentInChildren<Button>().GetComponentInChildren<TMP_Text>();
+        
+        // Add hover sound to buttons and extract cost text
+        var button = buffContainer.GetComponentInChildren<Button>();
+        var costText = button.GetComponentInChildren<TMP_Text>();
+        
         return new BuffComponents(levelText, descriptionText, costText);
     }
 
@@ -90,7 +100,7 @@ public class ShopUI : MonoBehaviour
             // Ensure that screen remains navigable when switching between inputs
             if (EventSystem.current.currentSelectedGameObject == null)
             {
-                EventSystem.current.SetSelectedGameObject(GetComponentsInChildren<Button>()[1].gameObject);    
+                EventSystem.current.SetSelectedGameObject(GetComponentsInChildren<Button>()[1].gameObject); 
             } 
         }
         else
@@ -133,6 +143,11 @@ public class ShopUI : MonoBehaviour
 
     #region Event Handlers
 
+    public void PlayHoverSound(BaseEventData data)
+    {
+        audioSource.PlayOneShot(hoverSound);
+    }
+
     private void HandleBalanceChanged(int newBalance)
     {
         balanceText.text = $"${newBalance}";
@@ -144,6 +159,7 @@ public class ShopUI : MonoBehaviour
     /// <param name="buff">The newly upgraded buff.</param>
     private void HandlePurchasedBuff(Buff buff)
     {
+        audioSource.PlayOneShot(completeSound);
         var levelText = GetLevelText(buff.Type);
         var costText = GetCostText(buff.Type);
         levelText.text = buff.Level.ToString();
@@ -156,6 +172,22 @@ public class ShopUI : MonoBehaviour
 
     #endregion
 
+    // Add these new methods for playing sounds
+    private void PlayHoverSound()
+    {
+        if (hoverSound != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(hoverSound);
+        }
+    }
+
+    private void PlayCompleteSound()
+    {
+        if (completeSound != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(completeSound);
+        }
+    }
 
     private TMP_Text GetLevelText(BuffType type)
     {
