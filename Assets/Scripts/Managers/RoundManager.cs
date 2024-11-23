@@ -31,6 +31,7 @@ public class RoundManager : MonoBehaviour
         FindCustomer,
         FeedCustomer,
         Restock,
+        RecoverHealth,
         AngryCustomer,
         Complete
     }
@@ -83,6 +84,15 @@ public class RoundManager : MonoBehaviour
                 tutorialText.text = "There are 2 Pizza Centres, located in the North and South of the town. Go to one of these centres and stand on the pizza icon to restock pizzas.";
                 if (GameObject.Find("Player").GetComponent<PlayerInventory>().PizzasAreFull())
                 {
+                    GameObject.Find("Player").GetComponent<PlayerHealth>().TakeDamage(5);
+                    currentTutorialState = TutorialState.RecoverHealth;
+                }
+            }
+            else if (currentTutorialState == TutorialState.RecoverHealth)
+            {
+                tutorialText.text = "You can eat a pizza using the eat key to recover health. Mushroom pizzas have a heal-over-time effect, while the other two give a one-time heal. Eat a pizza to get back to full health.";
+                if (GameObject.Find("Player").GetComponent<PlayerHealth>().currentHealth == GameObject.Find("Player").GetComponent<PlayerHealth>().startingHealth)
+                {
                     customerSpawner.SpawnAngryCustomer();
                     currentTutorialState = TutorialState.AngryCustomer;
                 }
@@ -102,7 +112,7 @@ public class RoundManager : MonoBehaviour
         else
         {
             if (Time.timeScale == 0) return;
-            
+
             if (timeRemaining > 0)
             {
                 timeRemaining -= Time.deltaTime;

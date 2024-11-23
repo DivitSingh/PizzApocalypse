@@ -28,7 +28,7 @@ public class PizzaPlace : MonoBehaviour
         {
             audioSource = gameObject.AddComponent<AudioSource>();
         }
-        audioSource.loop = true;
+        audioSource.loop = false;
         audioSource.clip = restockSound;
         audioSource.playOnAwake = false;
 

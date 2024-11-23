@@ -1,21 +1,21 @@
 using System;
 using UnityEngine;
 
-public class PlayerHealth: MonoBehaviour
+public class PlayerHealth : MonoBehaviour
 {
-    [SerializeField] private float startingHealth = 100f;
+    [SerializeField] public float startingHealth = 100f;
 
-    private float _currentHealth;
+    public float currentHealth;
     private float CurrentHpPct => Mathf.Max(0, CurrentHealth / startingHealth);
 
     private float CurrentHealth
     {
-        get => _currentHealth;
+        get => currentHealth;
         set
         {
-            _currentHealth = value;
+            currentHealth = value;
             OnHpPctChanged?.Invoke(CurrentHpPct);
-            if (_currentHealth <= 0)
+            if (currentHealth <= 0)
             {
                 OnDeath?.Invoke();
             }
@@ -28,7 +28,7 @@ public class PlayerHealth: MonoBehaviour
 
     public void Start()
     {
-        _currentHealth = startingHealth;
+        currentHealth = startingHealth;
         OnHpPctChanged?.Invoke(CurrentHpPct);
         GameManager.Instance.OnRoundStarting += () => CurrentHealth = startingHealth;
     }
@@ -42,5 +42,7 @@ public class PlayerHealth: MonoBehaviour
     public void Heal(float amount)
     {
         CurrentHealth += amount;
+        if (currentHealth > startingHealth)
+            currentHealth = startingHealth;
     }
 }
