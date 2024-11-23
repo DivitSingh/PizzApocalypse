@@ -3644,6 +3644,7 @@ MonoBehaviour:
   restockSound: {fileID: 8300000, guid: fda9c89e0a349e14193ae0d9bea13a36, type: 3}
   restockTime: 2.5
   restockingText: {fileID: 1604308609}
+  roundManager: {fileID: 83333102}
   restockProgressSlider: {fileID: 2080214372}
 --- !u!64 &490274678
 MeshCollider:
@@ -20473,6 +20474,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startingHealth: 100
+  currentHealth: 0
 --- !u!64 &1932889600
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -21188,6 +21190,7 @@ MonoBehaviour:
   restockSound: {fileID: 8300000, guid: fda9c89e0a349e14193ae0d9bea13a36, type: 3}
   restockTime: 2.5
   restockingText: {fileID: 1604308609}
+  roundManager: {fileID: 83333102}
   restockProgressSlider: {fileID: 2080214372}
 --- !u!65 &1999931893
 BoxCollider:
