@@ -172,23 +172,6 @@ public class ShopUI : MonoBehaviour
 
     #endregion
 
-    // Add these new methods for playing sounds
-    private void PlayHoverSound()
-    {
-        if (hoverSound != null && audioSource != null)
-        {
-            audioSource.PlayOneShot(hoverSound);
-        }
-    }
-
-    private void PlayCompleteSound()
-    {
-        if (completeSound != null && audioSource != null)
-        {
-            audioSource.PlayOneShot(completeSound);
-        }
-    }
-
     private TMP_Text GetLevelText(BuffType type)
     {
         return type switch
