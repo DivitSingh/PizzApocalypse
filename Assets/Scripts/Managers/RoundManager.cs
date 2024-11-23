@@ -98,9 +98,11 @@ public class RoundManager : MonoBehaviour
                 else
                     tutorialText.text = "An angry customer has arrived! Normally, a customer only becomes angry if you don't deliver on time. Fire at the customer to increase their satisfaction so they no longer bother you. Different pizzas have different effects!";
             }
-
-            if (Time.timeScale == 0 || timeRemaining == -1) return;
-
+        }
+        else
+        {
+            if (Time.timeScale == 0) return;
+            
             if (timeRemaining > 0)
             {
                 timeRemaining -= Time.deltaTime;

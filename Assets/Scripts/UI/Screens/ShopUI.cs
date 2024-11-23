@@ -10,9 +10,9 @@ public class ShopUI : MonoBehaviour
 
     // Add these new audio-related fields
     [Header("Audio")]
-    public AudioSource audioSource;
-    public AudioClip hoverSound;
-    public AudioClip completeSound;
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip hoverSound;
+    [SerializeField] private AudioClip completeSound;
 
     [Header("UI Elements")]
     [SerializeField] private TMP_Text balanceText;
@@ -150,6 +150,7 @@ public class ShopUI : MonoBehaviour
     /// <param name="buff">The newly upgraded buff.</param>
     private void HandlePurchasedBuff(Buff buff)
     {
+        audioSource.PlayOneShot(completeSound);
         var levelText = GetLevelText(buff.Type);
         var costText = GetCostText(buff.Type);
         levelText.text = buff.Level.ToString();
