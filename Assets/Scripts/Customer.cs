@@ -328,7 +328,9 @@ public class Customer : MonoBehaviour
                 {
                     // TODO: If slowness is eventually added, will need to modify animator speed instead of disabling it
                     agent.speed *= effect.Value;
-                    animator.enabled = false;
+                    // FIXME: Remove this
+                    animator.SetTrigger("stun");
+                    // animator.enabled = false;
                 }
                 break;
         }
@@ -345,6 +347,7 @@ public class Customer : MonoBehaviour
         {
             agent.speed = agentBaseSpeed;
             animator.enabled = true;
+            animator.SetTrigger("stopStun");
         }
     }
 
