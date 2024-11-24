@@ -25,6 +25,11 @@ public class RoundUI : MonoBehaviour
         roundManager.OnProgressChanged += UpdateProgress;
         roundManager.OnNewRound += UpdateRound;
         roundManager.OnRoundEnd += (_ => Hide());
+    }
+
+    private void Start()
+    {
+        // NOTE: Cannot be moved to Awake due to instance being null
         GameManager.Instance.OnGameOver += Hide;
     }
 
@@ -43,7 +48,7 @@ public class RoundUI : MonoBehaviour
 
     private void UpdateProgress(int score, int passScore)
     {
-        progressText.text = $"{score} / {passScore}";
+        progressText.text = $"{score}/{passScore}";
         var progress = Mathf.InverseLerp(0, passScore, score);
         progressSlider.value = progress;
 
