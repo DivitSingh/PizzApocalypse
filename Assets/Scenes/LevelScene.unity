@@ -599,8 +599,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   customerPrefabs:
-  - {fileID: 7098117905227372616, guid: 81980c07a907eea4ca6067704fbadb75, type: 3}
-  - {fileID: 2512279034401604283, guid: 46f8efff1d337a540bc056680ca324ad, type: 3}
+  - {fileID: 7098117905227372616, guid: f50756f34a0176d46bc3eb1de7486111, type: 3}
+  - {fileID: 7098117905227372616, guid: f2cba5304a1530d4cb5fb38395e7a7cb, type: 3}
+  - {fileID: 7098117905227372616, guid: 2719fd7167849904ea4b1d1f54a743d8, type: 3}
+  - {fileID: 7098117905227372616, guid: 9853bd37236d7e547935721c489f82ea, type: 3}
+  - {fileID: 2512279034401604283, guid: 0dba521e77f50d9488c96e017730a02d, type: 3}
+  - {fileID: 2512279034401604283, guid: 7dcaeb59da295774d93cf2b138a26403, type: 3}
+  - {fileID: 2512279034401604283, guid: 472925f5b0b7f6345b8b1035ae77f91f, type: 3}
+  - {fileID: 2512279034401604283, guid: 4eccb4374e8ef054ba74125817c6ee7d, type: 3}
   customerLayerMask:
     serializedVersion: 2
     m_Bits: 256
