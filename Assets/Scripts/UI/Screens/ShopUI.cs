@@ -3,6 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
 public class ShopUI : MonoBehaviour
 {
@@ -19,6 +20,10 @@ public class ShopUI : MonoBehaviour
     [SerializeField] private GameObject speedContainer;
     [SerializeField] private GameObject damageContainer;
     [SerializeField] private GameObject capacityContainer;
+
+    private bool usingGamepad = false;
+    private float lastMouseMoveTime;
+    private Vector2 lastMousePosition;
 
     private class BuffComponents
     {
@@ -59,6 +64,36 @@ public class ShopUI : MonoBehaviour
         Debug.Log("Awake called");
     }
 
+    private void Update()
+    {
+        // Check for keyboard input
+        if (Keyboard.current != null && Keyboard.current.anyKey.wasPressedThisFrame)
+        {
+            SetMouseKeyboardMode();
+        }
+
+        // Check for mouse movement
+        if (Mouse.current != null)
+        {
+            Vector2 currentMousePos = Mouse.current.position.ReadValue();
+            if (currentMousePos != lastMousePosition)
+            {
+                SetMouseKeyboardMode();
+                lastMousePosition = currentMousePos;
+            }
+        }
+    }
+
+    private void SetMouseKeyboardMode()
+    {
+        if (usingGamepad)
+        {
+            usingGamepad = false;
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+        }
+    }
+
     private void OnEnable()
     {
         // Update UI on first load
@@ -74,14 +109,17 @@ public class ShopUI : MonoBehaviour
 
             firstLoad = false;
         }
-        
-        HandleBalanceChanged(shopManager.Balance); // Need to update each time screen is shown
+
+        HandleBalanceChanged(shopManager.Balance);
         shopManager.OnBuffPurchased += HandlePurchasedBuff;
         shopManager.OnBalanceChanged += HandleBalanceChanged;
-        
+
         // Listen to input changes
         InputDeviceManager.Instance.OnGamepadStatusChanged += HandleDeviceChange;
-        Cursor.visible = !InputDeviceManager.Instance.IsGamepad;
+        lastMousePosition = Mouse.current != null ? Mouse.current.position.ReadValue() : Vector2.zero;
+
+        // Set initial state based on current input device
+        HandleDeviceChange(InputDeviceManager.Instance.IsGamepad);
     }
 
     private void OnDisable()
