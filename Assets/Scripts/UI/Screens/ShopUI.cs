@@ -82,6 +82,14 @@ public class ShopUI : MonoBehaviour
         // Listen to input changes
         InputDeviceManager.Instance.OnGamepadStatusChanged += HandleDeviceChange;
         Cursor.visible = !InputDeviceManager.Instance.IsGamepad;
+        
+        // Update UI to match control scheme
+        HandleDeviceChange(InputDeviceManager.Instance.IsGamepad);
+        if (InputDeviceManager.Instance.IsGamepad)
+        {
+            var firstButton = GetComponentsInChildren<Button>()[0];
+            EventSystem.current.SetSelectedGameObject(firstButton.gameObject);
+        }
     }
 
     private void OnDisable()
@@ -108,22 +116,6 @@ public class ShopUI : MonoBehaviour
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
         }
-    }
-
-    public void Show()
-    {
-        gameObject.SetActive(true);
-        HandleDeviceChange(InputDeviceManager.Instance.IsGamepad);
-        if (InputDeviceManager.Instance.IsGamepad)
-        {
-            var firstButton = GetComponentsInChildren<Button>()[0];
-            EventSystem.current.SetSelectedGameObject(firstButton.gameObject);
-        }
-    }
-
-    public void Hide()
-    {
-        gameObject.SetActive(false);
     }
 
     public void HandleSpeedClicked()

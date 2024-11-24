@@ -24,13 +24,6 @@ public class RoundUI : MonoBehaviour
         roundManager.OnTimeRemainingChanged += UpdateTimer;
         roundManager.OnProgressChanged += UpdateProgress;
         roundManager.OnNewRound += UpdateRound;
-        roundManager.OnRoundEnd += (_ => Hide());
-    }
-
-    private void Start()
-    {
-        // NOTE: Cannot be moved to Awake due to instance being null
-        GameManager.Instance.OnGameOver += Hide;
     }
 
     private void UpdateTimer(float timeRemaining)
@@ -69,10 +62,5 @@ public class RoundUI : MonoBehaviour
     {
         gameObject.SetActive(true);
         roundText.text = $"Round {round}";
-    }
-
-    public void Hide()
-    {
-        gameObject.SetActive(false);
     }
 }
