@@ -9,6 +9,7 @@ public class PizzaPlace : MonoBehaviour
     [SerializeField] private AudioClip restockSound;
     [SerializeField] private float restockTime = 2.5f; // Time in seconds for restocking
     [SerializeField] private TMP_Text restockingText; // Text displaying while restocking
+    [SerializeField] private RoundManager roundManager;
 
     private AudioSource audioSource;
     private Coroutine restockingCoroutine;
@@ -18,6 +19,7 @@ public class PizzaPlace : MonoBehaviour
     private void Awake()
     {
         GameManager.Instance.OnGameOver += InterruptRestocking;
+        roundManager.OnRoundEnd += _ => InterruptRestocking();
     }
 
     private void Start()
@@ -28,7 +30,7 @@ public class PizzaPlace : MonoBehaviour
         {
             audioSource = gameObject.AddComponent<AudioSource>();
         }
-        audioSource.loop = true;
+        audioSource.loop = false;
         audioSource.clip = restockSound;
         audioSource.playOnAwake = false;
 
@@ -104,8 +106,6 @@ public class PizzaPlace : MonoBehaviour
         {
             // Reset restocking var
             isRestocking = false;
-            // Stop the looping sound
-            audioSource.Stop();
             // Stop to display restocking text
             restockingText.gameObject.SetActive(false);
             // Stop to display the slider

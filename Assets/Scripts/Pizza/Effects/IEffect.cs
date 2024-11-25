@@ -1,21 +1,13 @@
 public interface IEffect
 {
-    public Stat AffectedStat { get; }
     public EffectType Type { get; }
     public float Value { get; } // Strength of effect
     public int Duration { get; set; } // Duration in seconds
 }
 
-public enum Stat
-{
-    Health,
-    Speed,
-    Damage
-}
-
 public enum EffectType
 {
-    Multiplier,
-    ConstantDecrease,
-    ConstantIncrease
+    Poison,
+    Stun,
+    Regen
 }

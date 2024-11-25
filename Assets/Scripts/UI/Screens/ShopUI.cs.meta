@@ -1,3 +1,19 @@
 fileFormatVersion: 2
 guid: 446e314d71384db4b1a1ad07c0c161b7
-timeCreated: 1729378211
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - shopManager: {instanceID: 0}
+  - audioSource: {instanceID: 0}
+  - hoverSound: {fileID: 8300000, guid: d8993a4534987eb4aa322adf14034074, type: 3}
+  - completeSound: {fileID: 8300000, guid: 62f0ab0097269ef408d4c5432186b807, type: 3}
+  - balanceText: {instanceID: 0}
+  - speedContainer: {instanceID: 0}
+  - damageContainer: {instanceID: 0}
+  - capacityContainer: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

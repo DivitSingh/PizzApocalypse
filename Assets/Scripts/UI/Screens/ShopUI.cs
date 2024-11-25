@@ -3,16 +3,27 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
 public class ShopUI : MonoBehaviour
 {
     [SerializeField] private ShopManager shopManager;
+
+    // Add these new audio-related fields
+    [Header("Audio")]
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip hoverSound;
+    [SerializeField] private AudioClip completeSound;
 
     [Header("UI Elements")]
     [SerializeField] private TMP_Text balanceText;
     [SerializeField] private GameObject speedContainer;
     [SerializeField] private GameObject damageContainer;
     [SerializeField] private GameObject capacityContainer;
+
+    private bool usingGamepad = false;
+    private float lastMouseMoveTime;
+    private Vector2 lastMousePosition;
 
     private class BuffComponents
     {
@@ -40,13 +51,47 @@ public class ShopUI : MonoBehaviour
         var textComponents = buffContainer.GetComponentsInChildren<TMP_Text>();
         var levelText = textComponents.FirstOrDefault(t => t.name == "LevelText");
         var descriptionText = textComponents.FirstOrDefault(t => t.name == "BuffDescriptionText");
-        var costText = buffContainer.GetComponentInChildren<Button>().GetComponentInChildren<TMP_Text>();
+        
+        // Add hover sound to buttons and extract cost text
+        var button = buffContainer.GetComponentInChildren<Button>();
+        var costText = button.GetComponentInChildren<TMP_Text>();
+        
         return new BuffComponents(levelText, descriptionText, costText);
     }
 
     private void Awake()
     {
         Debug.Log("Awake called");
+    }
+
+    private void Update()
+    {
+        // Check for keyboard input
+        if (Keyboard.current != null && Keyboard.current.anyKey.wasPressedThisFrame)
+        {
+            SetMouseKeyboardMode();
+        }
+
+        // Check for mouse movement
+        if (Mouse.current != null)
+        {
+            Vector2 currentMousePos = Mouse.current.position.ReadValue();
+            if (currentMousePos != lastMousePosition)
+            {
+                SetMouseKeyboardMode();
+                lastMousePosition = currentMousePos;
+            }
+        }
+    }
+
+    private void SetMouseKeyboardMode()
+    {
+        if (usingGamepad)
+        {
+            usingGamepad = false;
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+        }
     }
 
     private void OnEnable()
@@ -64,14 +109,26 @@ public class ShopUI : MonoBehaviour
 
             firstLoad = false;
         }
-        
-        HandleBalanceChanged(shopManager.Balance); // Need to update each time screen is shown
+
+        HandleBalanceChanged(shopManager.Balance);
         shopManager.OnBuffPurchased += HandlePurchasedBuff;
         shopManager.OnBalanceChanged += HandleBalanceChanged;
-        
+
         // Listen to input changes
         InputDeviceManager.Instance.OnGamepadStatusChanged += HandleDeviceChange;
+        lastMousePosition = Mouse.current != null ? Mouse.current.position.ReadValue() : Vector2.zero;
         Cursor.visible = !InputDeviceManager.Instance.IsGamepad;
+        
+        // Update UI to match control scheme
+        HandleDeviceChange(InputDeviceManager.Instance.IsGamepad);
+        if (InputDeviceManager.Instance.IsGamepad)
+        {
+            var firstButton = GetComponentsInChildren<Button>()[0];
+            EventSystem.current.SetSelectedGameObject(firstButton.gameObject);
+        }
+
+        // Set initial state based on current input device
+        HandleDeviceChange(InputDeviceManager.Instance.IsGamepad);
     }
 
     private void OnDisable()
@@ -90,7 +147,7 @@ public class ShopUI : MonoBehaviour
             // Ensure that screen remains navigable when switching between inputs
             if (EventSystem.current.currentSelectedGameObject == null)
             {
-                EventSystem.current.SetSelectedGameObject(GetComponentsInChildren<Button>()[1].gameObject);    
+                EventSystem.current.SetSelectedGameObject(GetComponentsInChildren<Button>()[1].gameObject); 
             } 
         }
         else
@@ -98,22 +155,6 @@ public class ShopUI : MonoBehaviour
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
         }
-    }
-
-    public void Show()
-    {
-        gameObject.SetActive(true);
-        HandleDeviceChange(InputDeviceManager.Instance.IsGamepad);
-        if (InputDeviceManager.Instance.IsGamepad)
-        {
-            var firstButton = GetComponentsInChildren<Button>()[0];
-            EventSystem.current.SetSelectedGameObject(firstButton.gameObject);
-        }
-    }
-
-    public void Hide()
-    {
-        gameObject.SetActive(false);
     }
 
     public void HandleSpeedClicked()
@@ -133,6 +174,11 @@ public class ShopUI : MonoBehaviour
 
     #region Event Handlers
 
+    public void PlayHoverSound(BaseEventData data)
+    {
+        audioSource.PlayOneShot(hoverSound);
+    }
+
     private void HandleBalanceChanged(int newBalance)
     {
         balanceText.text = $"${newBalance}";
@@ -144,6 +190,7 @@ public class ShopUI : MonoBehaviour
     /// <param name="buff">The newly upgraded buff.</param>
     private void HandlePurchasedBuff(Buff buff)
     {
+        audioSource.PlayOneShot(completeSound);
         var levelText = GetLevelText(buff.Type);
         var costText = GetCostText(buff.Type);
         levelText.text = buff.Level.ToString();
@@ -155,7 +202,6 @@ public class ShopUI : MonoBehaviour
     }
 
     #endregion
-
 
     private TMP_Text GetLevelText(BuffType type)
     {

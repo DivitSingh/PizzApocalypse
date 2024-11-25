@@ -140,9 +140,12 @@ public class MainMenu : MonoBehaviour
                 // SceneManager.LoadScene("LevelScene");
                 break;
             case 1:
-                SceneManager.LoadScene("OptionsScene");
+                SceneManager.LoadScene("TutorialScene");
                 break;
             case 2:
+                SceneManager.LoadScene("OptionsScene");
+                break;
+            case 3:
                 Application.Quit();
                 Debug.Log("Exit selected");
                 break;

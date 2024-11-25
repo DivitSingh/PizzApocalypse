@@ -14,7 +14,6 @@ public class Player : MonoBehaviour
     [SerializeField] private Transform attackPoint;
     [SerializeField] private GameObject pizzaSlicePrefab;
     [SerializeField] private GameObject pizzaBoxPrefab;
-    [SerializeField] private TextMeshProUGUI moneyText;
     private Animator animator;
     public bool IsGamePaused { get; private set; } = false;
 
@@ -120,7 +119,6 @@ public class Player : MonoBehaviour
         playerCam.position = transform.position + new Vector3(0, 0.5f, 0);
         if (Time.timeScale == 0) return;
         Look();
-        moneyText.text = "$" + playerInventory.money.ToString();
     }
 
     private void FirePerformed(InputAction.CallbackContext context)
@@ -310,7 +308,7 @@ public class Player : MonoBehaviour
 
         // Check for existing effect
         var existingEffect =
-            activeEffects.FirstOrDefault(e => e.Type == effect.Type && e.AffectedStat == effect.AffectedStat);
+            activeEffects.FirstOrDefault(e => e.Type == effect.Type);
         if (existingEffect != null)
         {
             existingEffect.Duration = Math.Max(effect.Duration, existingEffect.Duration);
@@ -335,10 +333,10 @@ public class Player : MonoBehaviour
     private void ApplyEffect(IEffect effect)
     {
         // NOTE: Currently only handles Regen
-        switch (effect.AffectedStat)
+        switch (effect.Type)
         {
-            case Stat.Health:
-                if (effect.Type == EffectType.ConstantIncrease) playerHealth.Heal(effect.Value);
+            case EffectType.Regen:
+                playerHealth.Heal(effect.Value);
                 break;
         }
     }

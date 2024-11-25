@@ -73,7 +73,7 @@ public class RoundProgression
         int totalCustomerWavesCount = (int)(GetDuration(round) / SpawnInterval) + 1;
         return totalCustomerWavesCount;
     }
-    
+
     /// <summary>
     /// Rounds the given number up to the nearest multiple of 5 that is >= num.
     /// </summary>
@@ -84,7 +84,7 @@ public class RoundProgression
         if (num % 5 == 0) return num;
         return (10 - num % 10) + num;
     }
-    
+
     #region Customer Configuration
     private GenerateCustomerConfiguration CreateCustomerConfiguration()
     {
@@ -103,7 +103,7 @@ public class RoundProgression
     //     >= 10 => PatienceCap
     // };
 
-    // Old config: below   
+    // Old config: below
     private float Patience => round switch
     {
         <= 1 => 20f,
@@ -133,7 +133,7 @@ public class RoundProgression
     private const float BaseAttack = 15f;
     private const float AttackIncrease = 5f;
     private float Attack => BaseAttack + (round / 2) * AttackIncrease;  // Increase every 2 rounds
-    
+
     private int OrderSize => round switch
     {
         <= 1 => 1,
@@ -181,9 +181,7 @@ public class RoundProgression
     //         // _ => 2.75f * intervalCap
     //     };
     //     return interval;
-    // } 
-
-
+    // }
     
     private int CustomerPerRound => round switch
     {
@@ -199,6 +197,4 @@ public class RoundProgression
     //     > 3 => 2 * round
     // };
     #endregion
-
 }
-

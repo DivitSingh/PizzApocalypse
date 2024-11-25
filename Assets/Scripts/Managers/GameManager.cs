@@ -1,7 +1,5 @@
 using System;
-using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
@@ -9,11 +7,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get; private set; }
 
     [SerializeField] private RoundManager roundManager;
-
-    [Header("UI Screens")]
-    [SerializeField] private GameOverScreen gameOverScreen;
-    [SerializeField] private ShopUI shopUI;
-    [SerializeField] private GameObject roundUI;
+    [SerializeField] private UIManager uiManager;
 
     public event Action OnGameOver;
     public event Action OnRoundStarting;
@@ -38,7 +32,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void HandleGameOver()
+    public void HandleGameOver()
     {
         foreach (var customer in FindObjectsOfType<Customer>())
         {
@@ -47,19 +41,18 @@ public class GameManager : MonoBehaviour
 
         Pause();
         OnGameOver?.Invoke();
-        gameOverScreen.Show(roundManager.Round);
+        uiManager.HandleGameOver(roundManager.Round);
     }
 
     private void HandleRoundPassed()
     {
         Pause();
-        shopUI.Show();
+        uiManager.HandleRoundPassed();
     }
 
     public void StartNextRound()
     {
-        roundUI.SetActive(true);
-        shopUI.Hide();
+        uiManager.HandleNewRound();
         roundManager.NextRound();
         OnRoundStarting?.Invoke();
         Unpause();
