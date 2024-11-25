@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Keeps track of the currently existing customers in the game, and deals with state changes such as becoming angry
 /// or death.
 /// </summary>
-public class CustomersManager: MonoBehaviour
+public class CustomersManager : MonoBehaviour
 {
     private readonly List<Customer> customers = new List<Customer>();
     private int expectedCount;
@@ -18,13 +19,13 @@ public class CustomersManager: MonoBehaviour
         set
         {
             _handledCount = value;
-            if (_handledCount == expectedCount + 1) //Bug fix, remove later!
+            if (_handledCount == expectedCount + 1 && SceneManager.GetActiveScene().name != "TutorialScene") //Bug fix, remove later!
             {
                 OnAllCustomersHandled?.Invoke();
             }
         }
     }
-    
+
     // Events
     public event Action<Customer> OnCustomerAdded;
     public event Action<Customer, bool> OnOrderStatusChanged; // Indicates that an order has expired or been completed
@@ -40,12 +41,12 @@ public class CustomersManager: MonoBehaviour
         expectedCount = expectedCustomers;
         HandledCount = 0;
     }
-    
+
     public void Add(Customer customer)
     {
         customers.Add(customer);
         OnCustomerAdded?.Invoke(customer);
-        
+
         // Listen for state changes
         customer.OnBecameAngry += HandleBecameAngry;
         customer.OnFed += HandleFed;
@@ -83,7 +84,7 @@ public class CustomersManager: MonoBehaviour
         {
             if (customer != null)
             {
-                Cleanup(customer);    
+                Cleanup(customer);
                 Destroy(customer.gameObject);
             }
         }

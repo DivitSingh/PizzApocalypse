@@ -309,9 +309,6 @@ public class PauseMenu : MonoBehaviour
         }
     }
 
-    private bool needsPauseHighlightInit = false;
-    private bool needsOptionsHighlightInit = false;
-
     public void Pause()
     {
         Debug.Log("Pausing game");
@@ -523,7 +520,8 @@ public class PauseMenu : MonoBehaviour
             {
                 eventID = EventTriggerType.PointerEnter
             };
-            enterEntry.callback.AddListener((data) => {
+            enterEntry.callback.AddListener((data) =>
+            {
                 if (currentPauseIndex != index) // Only play sound if hovering over a new item
                 {
                     PlayHoverSound();
@@ -538,7 +536,8 @@ public class PauseMenu : MonoBehaviour
             {
                 eventID = EventTriggerType.PointerClick
             };
-            clickEntry.callback.AddListener((data) => {
+            clickEntry.callback.AddListener((data) =>
+            {
                 currentPauseIndex = index;
                 PlaySelectSound();
                 HandlePauseSelection();
@@ -561,7 +560,8 @@ public class PauseMenu : MonoBehaviour
             {
                 eventID = EventTriggerType.PointerEnter
             };
-            enterEntry.callback.AddListener((data) => {
+            enterEntry.callback.AddListener((data) =>
+            {
                 if (currentOptionsIndex != index) // Only play sound if hovering over a new item
                 {
                     PlayHoverSound();
@@ -576,7 +576,8 @@ public class PauseMenu : MonoBehaviour
             {
                 eventID = EventTriggerType.PointerClick
             };
-            clickEntry.callback.AddListener((data) => {
+            clickEntry.callback.AddListener((data) =>
+            {
                 currentOptionsIndex = index;
                 if (!isSliderSelected)
                 {
@@ -607,7 +608,8 @@ public class PauseMenu : MonoBehaviour
                         {
                             eventID = EventTriggerType.BeginDrag
                         };
-                        beginDragEntry.callback.AddListener((data) => {
+                        beginDragEntry.callback.AddListener((data) =>
+                        {
                             isDraggingSlider = true;
                             currentOptionsIndex = index;
                             UpdateOptionsHighlight();
@@ -619,7 +621,8 @@ public class PauseMenu : MonoBehaviour
                         {
                             eventID = EventTriggerType.EndDrag
                         };
-                        endDragEntry.callback.AddListener((data) => {
+                        endDragEntry.callback.AddListener((data) =>
+                        {
                             isDraggingSlider = false;
                         });
                         sliderTrigger.triggers.Add(endDragEntry);

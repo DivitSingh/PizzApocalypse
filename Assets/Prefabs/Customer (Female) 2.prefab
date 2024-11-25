@@ -71,6 +71,11 @@ PrefabInstance:
         type: 3}
     - target: {fileID: 3602779168828731210, guid: b9cf626ec2cca9b4598e2196c2b6915f,
         type: 3}
+      propertyPath: idleTexture
+      value: 
+      objectReference: {fileID: 2800000, guid: 2466f8649f115de44ba72031a4a9ca5c, type: 3}
+    - target: {fileID: 3602779168828731210, guid: b9cf626ec2cca9b4598e2196c2b6915f,
+        type: 3}
       propertyPath: walkTexture
       value: 
       objectReference: {fileID: 2800000, guid: 6413bfe80b2856c4982c62a533216402, type: 3}
