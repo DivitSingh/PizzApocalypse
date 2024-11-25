@@ -1,0 +1,106 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &353917616446052068
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4263310749825591437, guid: 79cd2a1e499194a4bbcbcc8db46d731a,
+        type: 3}
+      propertyPath: faceSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 8b17bf2ee33ec4096b6ae9a0f7b578cf,
+        type: 3}
+    - target: {fileID: 4263310749825591437, guid: 79cd2a1e499194a4bbcbcc8db46d731a,
+        type: 3}
+      propertyPath: idleTexture
+      value: 
+      objectReference: {fileID: 2800000, guid: 09cc855ece0f07c43a1c3596154c6666, type: 3}
+    - target: {fileID: 4263310749825591437, guid: 79cd2a1e499194a4bbcbcc8db46d731a,
+        type: 3}
+      propertyPath: walkTexture
+      value: 
+      objectReference: {fileID: 2800000, guid: 031067831c1cf0344a6826c20ed09112, type: 3}
+    - target: {fileID: 4263310749825591437, guid: 79cd2a1e499194a4bbcbcc8db46d731a,
+        type: 3}
+      propertyPath: attackTexture
+      value: 
+      objectReference: {fileID: 2800000, guid: 36a148d7e299cc840a7516cab220690f, type: 3}
+    - target: {fileID: 4263310749825591437, guid: 79cd2a1e499194a4bbcbcc8db46d731a,
+        type: 3}
+      propertyPath: eatTexture_angry
+      value: 
+      objectReference: {fileID: 2800000, guid: d6d29d12cc54e8d45b48d23466945271, type: 3}
+    - target: {fileID: 4263310749825591437, guid: 79cd2a1e499194a4bbcbcc8db46d731a,
+        type: 3}
+      propertyPath: eatTexture_hungry1
+      value: 
+      objectReference: {fileID: 2800000, guid: 15980fa92148fc34e88524acc6e2e1ab, type: 3}
+    - target: {fileID: 4263310749825591437, guid: 79cd2a1e499194a4bbcbcc8db46d731a,
+        type: 3}
+      propertyPath: eatTexture_hungry2
+      value: 
+      objectReference: {fileID: 2800000, guid: 0540eba00dac2d2408beed85f4b9cc3a, type: 3}
+    - target: {fileID: 6001376427384098779, guid: 79cd2a1e499194a4bbcbcc8db46d731a,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6001376427384098779, guid: 79cd2a1e499194a4bbcbcc8db46d731a,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6001376427384098779, guid: 79cd2a1e499194a4bbcbcc8db46d731a,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6001376427384098779, guid: 79cd2a1e499194a4bbcbcc8db46d731a,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6001376427384098779, guid: 79cd2a1e499194a4bbcbcc8db46d731a,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6001376427384098779, guid: 79cd2a1e499194a4bbcbcc8db46d731a,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6001376427384098779, guid: 79cd2a1e499194a4bbcbcc8db46d731a,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6001376427384098779, guid: 79cd2a1e499194a4bbcbcc8db46d731a,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6001376427384098779, guid: 79cd2a1e499194a4bbcbcc8db46d731a,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6001376427384098779, guid: 79cd2a1e499194a4bbcbcc8db46d731a,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6341909113954473313, guid: 79cd2a1e499194a4bbcbcc8db46d731a,
+        type: 3}
+      propertyPath: m_Name
+      value: Customer (Male) 4
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 79cd2a1e499194a4bbcbcc8db46d731a, type: 3}
