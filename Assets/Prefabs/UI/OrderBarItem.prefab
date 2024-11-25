@@ -40,8 +40,8 @@ RectTransform:
   - {fileID: 9003041883707510329}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 270, y: 220}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -139,6 +139,7 @@ MonoBehaviour:
   canvasGroup: {fileID: 5087040746939947657}
   panel: {fileID: 954984990388194498}
   slider: {fileID: 5773829489845015813}
+  faceImage: {fileID: 2895762323613772146}
   moneyLabel: {fileID: 6086315542827691717}
   itemsGrid: {fileID: 3420636232244386019}
   numberLabel: {fileID: 6837561595154710300}

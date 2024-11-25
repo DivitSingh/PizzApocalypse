@@ -59,6 +59,7 @@ public class Customer : MonoBehaviour
     [SerializeField] private Texture eatTexture_angry;
     [SerializeField] private Texture eatTexture_hungry1;
     [SerializeField] private Texture eatTexture_hungry2;
+    [SerializeField] public Sprite faceSprite;
 
     private enum State
     {

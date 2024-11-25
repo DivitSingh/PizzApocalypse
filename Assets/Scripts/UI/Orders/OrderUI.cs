@@ -6,7 +6,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-// TODO: Handle different texture types
 /// <summary>
 /// Handles the UI for an active order in the order bar.
 /// </summary>
@@ -16,6 +15,7 @@ public class OrderUI : MonoBehaviour
     [SerializeField] private CanvasGroup canvasGroup;
     [SerializeField] private Image panel;
     [SerializeField] private Slider slider;
+    [SerializeField] private Image faceImage;
     [SerializeField] private TMP_Text moneyLabel;
     [SerializeField] private GameObject itemsGrid;
     [SerializeField] private TMP_Text numberLabel;
@@ -62,6 +62,7 @@ public class OrderUI : MonoBehaviour
         var order = customer.Order;
         moneyLabel.text = $"${order.Value}";
         numberLabel.text = customer.Id.ToString();
+        faceImage.sprite = customer.faceSprite;
         ConfigureItems(customer.Order);
         this.customer = customer;
         initialPatience = customer.Patience;
@@ -84,7 +85,6 @@ public class OrderUI : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log($"Customer = {customer}, initialPatience = {initialPatience}");
         UpdateSlider(customer.Patience, initialPatience);
     }
 

@@ -1001,6 +1001,7 @@ MonoBehaviour:
   eatTexture_angry: {fileID: 2800000, guid: 9f1bd32a527f2164b8b7fb71044bee91, type: 3}
   eatTexture_hungry1: {fileID: 2800000, guid: a023d2de1e333dc479cb831ccb45a06a, type: 3}
   eatTexture_hungry2: {fileID: 2800000, guid: 2896563629832c947b63c2ec088b084d, type: 3}
+  faceSprite: {fileID: 21300000, guid: e3ff30ce45a7d44e2b6d19281a8a6708, type: 3}
 --- !u!114 &6761254423307774373
 MonoBehaviour:
   m_ObjectHideFlags: 0
