@@ -10,7 +10,7 @@ public class PlayerInventory : MonoBehaviour
     public event Action<int> OnBalanceChanged;
 
     // Maximum ammo limit
-    [SerializeField] private int maxAmmo = 25;
+    [SerializeField] private int maxAmmo = 5;
 
     // Inventory to hold pizza amounts
     private Dictionary<PizzaType, int> pizzaInventory = new Dictionary<PizzaType, int>();

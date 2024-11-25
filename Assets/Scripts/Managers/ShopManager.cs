@@ -23,7 +23,7 @@ public class ShopManager : MonoBehaviour
     // Store current statuses of buffs
     private Buff speedBuff = new Buff(5, 250, BuffType.Speed, 5);
     private Buff damageBuff = new Buff(5, 3, BuffType.Damage);
-    private Buff capacityBuff = new Buff(5, 5, BuffType.Capacity);
+    private Buff capacityBuff = new Buff(5, 3, BuffType.Capacity);
     public List<Buff> Buffs { get; private set; }
 
     // Delegates
@@ -90,7 +90,7 @@ public class Buff
     public void Upgrade()
     {
         Level += 1;
-        Cost = (int)(Cost * 1.25);
+        Cost = (int)(Cost * 1.33); // was 1.25
     }
 
     public bool IsMaxed => MaxLevel != 0 && Level == MaxLevel;
