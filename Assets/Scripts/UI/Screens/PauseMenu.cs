@@ -57,7 +57,7 @@ public class PauseMenu : MonoBehaviour
     private InputAction mousePositionAction;
     private InputAction mouseClickAction;
 
-    public bool IsPaused { get; private set; } = false;
+    public bool isPaused { get; private set; } = false;
     private bool inOptionsMenu = false;
     private int currentPauseIndex = 0;
     private int currentOptionsIndex = 0;
@@ -118,7 +118,7 @@ public class PauseMenu : MonoBehaviour
         }
 
         // Set initial states
-        IsPaused = false;
+        isPaused = false;
         inOptionsMenu = false;
         sliderSpeed = mouseKeyboardSliderSpeed;
     }
@@ -221,7 +221,7 @@ public class PauseMenu : MonoBehaviour
 
     private void Update()
     {
-        if (IsPaused && !isDraggingSlider)
+        if (isPaused && !isDraggingSlider)
         {
             HandleMouseHover();
         }
@@ -229,7 +229,7 @@ public class PauseMenu : MonoBehaviour
 
     private void OnMouseClick(InputAction.CallbackContext context)
     {
-        if (!IsPaused) return;
+        if (!isPaused) return;
 
         if (inOptionsMenu)
         {
@@ -243,7 +243,7 @@ public class PauseMenu : MonoBehaviour
 
     private void OnBack(InputAction.CallbackContext context)
     {
-        if (!IsPaused) return;
+        if (!isPaused) return;
 
         if (inOptionsMenu)
         {
@@ -299,7 +299,7 @@ public class PauseMenu : MonoBehaviour
         {
             ShowPauseMenu();
         }
-        else if (IsPaused)
+        else if (isPaused)
         {
             Resume();
         }
@@ -315,7 +315,7 @@ public class PauseMenu : MonoBehaviour
         pauseMenuUI.SetActive(true);
         optionsMenuUI.SetActive(false);
         Time.timeScale = 0f;
-        IsPaused = true;
+        isPaused = true;
         inOptionsMenu = false;
         currentPauseIndex = 0;
 
@@ -330,7 +330,7 @@ public class PauseMenu : MonoBehaviour
 
     private void OnNavigate(InputAction.CallbackContext context)
     {
-        if (!IsPaused) return;
+        if (!isPaused) return;
 
         // Add device-specific buffer timing
         float currentBuffer = context.control.device is Gamepad ? navigationBuffer * 1.5f : navigationBuffer;
@@ -357,7 +357,7 @@ public class PauseMenu : MonoBehaviour
 
     private void OnHorizontal(InputAction.CallbackContext context)
     {
-        if (!IsPaused || !inOptionsMenu || !isSliderSelected) return;
+        if (!isPaused || !inOptionsMenu || !isSliderSelected) return;
 
         float value = context.ReadValue<float>();
 
@@ -386,7 +386,7 @@ public class PauseMenu : MonoBehaviour
 
     private void OnSubmit(InputAction.CallbackContext context)
     {
-        if (!IsPaused) return;
+        if (!isPaused) return;
 
         if (inOptionsMenu)
         {
@@ -689,7 +689,7 @@ public class PauseMenu : MonoBehaviour
         pauseMenuUI.SetActive(false);
         optionsMenuUI.SetActive(false);
         Time.timeScale = 1f;
-        IsPaused = false;
+        isPaused = false;
         inOptionsMenu = false;
 
         // Add cursor visibility management

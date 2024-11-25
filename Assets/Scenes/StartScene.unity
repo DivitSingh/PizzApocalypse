@@ -542,7 +542,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 200633e40a3314bfdb3b531336915853, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.1
+  m_Volume: 0.25
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -1882,7 +1882,7 @@ CanvasRenderer:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 1197658885}
-  - {fileID: 352410886}
   - {fileID: 413988034}
+  - {fileID: 1197658885}
   - {fileID: 792176915}
+  - {fileID: 352410886}

@@ -165,14 +165,14 @@ public class Player : MonoBehaviour
 
     private void SwapForward(InputAction.CallbackContext context)
     {
-        if (pauseMenu.IsPaused || GameManager.Instance.IsPaused) return;
+        if (pauseMenu.isPaused || GameManager.Instance.isPaused) return;
         GameObject.Find("Audio Source").GetComponent<AudioSource>().PlayOneShot(swapSound);
         playerInventory.SwitchPizzaForward();
     }
 
     private void SwapBackward(InputAction.CallbackContext context)
     {
-        if (pauseMenu.IsPaused || GameManager.Instance.IsPaused) return;
+        if (pauseMenu.isPaused || GameManager.Instance.isPaused) return;
         GameObject.Find("Audio Source").GetComponent<AudioSource>().PlayOneShot(swapSound);
         playerInventory.SwitchPizzaBackward();
     }
