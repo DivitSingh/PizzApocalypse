@@ -20451,6 +20451,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startingHealth: 100
+  currentHealth: 0
 --- !u!64 &1932889600
 MeshCollider:
   m_ObjectHideFlags: 0

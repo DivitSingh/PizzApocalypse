@@ -312,7 +312,7 @@ public class PauseMenu : MonoBehaviour
     private bool needsPauseHighlightInit = false;
     private bool needsOptionsHighlightInit = false;
 
-    private void Pause()
+    public void Pause()
     {
         Debug.Log("Pausing game");
         pauseMenuUI.SetActive(true);
@@ -321,6 +321,10 @@ public class PauseMenu : MonoBehaviour
         isPaused = true;
         inOptionsMenu = false;
         currentPauseIndex = 0;
+
+        // Add cursor visibility management
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
 
         // Force immediate highlight update
         Canvas.ForceUpdateCanvases();
@@ -464,6 +468,10 @@ public class PauseMenu : MonoBehaviour
         inOptionsMenu = true;
         currentOptionsIndex = 0;
 
+        // Add cursor visibility management
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+
         // Force immediate highlight update
         Canvas.ForceUpdateCanvases();
         UpdateOptionsHighlight();
@@ -475,6 +483,11 @@ public class PauseMenu : MonoBehaviour
         pauseMenuUI.SetActive(true);
         inOptionsMenu = false;
         currentPauseIndex = 0;
+
+        // Add cursor visibility management
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+
         NavigatePauseMenu(false); // Update highlight position
     }
 
@@ -675,5 +688,9 @@ public class PauseMenu : MonoBehaviour
         Time.timeScale = 1f;
         isPaused = false;
         inOptionsMenu = false;
+
+        // Add cursor visibility management
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 }
