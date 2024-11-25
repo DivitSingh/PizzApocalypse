@@ -11,6 +11,8 @@ public class GameManager : MonoBehaviour
 
     public event Action OnGameOver;
     public event Action OnRoundStarting;
+    
+    public bool IsPaused { get; private set; }
 
     private void Awake()
     {
@@ -60,6 +62,7 @@ public class GameManager : MonoBehaviour
 
     private void Pause()
     {
+        IsPaused = true;
         Time.timeScale = 0;
         Cursor.lockState = CursorLockMode.Confined;
         Cursor.visible = true;
@@ -67,6 +70,7 @@ public class GameManager : MonoBehaviour
 
     private void Unpause()
     {
+        IsPaused = false;
         Time.timeScale = 1;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = true;

@@ -14,6 +14,7 @@ public class Player : MonoBehaviour
     [SerializeField] private Transform attackPoint;
     [SerializeField] private GameObject pizzaSlicePrefab;
     [SerializeField] private GameObject pizzaBoxPrefab;
+    [SerializeField] private PauseMenu pauseMenu;
     private Animator animator;
     public bool IsGamePaused { get; private set; } = false;
 
@@ -164,12 +165,14 @@ public class Player : MonoBehaviour
 
     private void SwapForward(InputAction.CallbackContext context)
     {
+        if (pauseMenu.IsPaused || GameManager.Instance.IsPaused) return;
         GameObject.Find("Audio Source").GetComponent<AudioSource>().PlayOneShot(swapSound);
         playerInventory.SwitchPizzaForward();
     }
 
     private void SwapBackward(InputAction.CallbackContext context)
     {
+        if (pauseMenu.IsPaused || GameManager.Instance.IsPaused) return;
         GameObject.Find("Audio Source").GetComponent<AudioSource>().PlayOneShot(swapSound);
         playerInventory.SwitchPizzaBackward();
     }

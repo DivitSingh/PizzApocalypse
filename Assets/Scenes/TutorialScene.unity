@@ -3367,7 +3367,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 55c50a003dd085c4ea19661bd8673100, type: 3}
+  m_Sprite: {fileID: 21300000, guid: a2cbb2bb27803b54f9bd260f29a7624e, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -5112,7 +5112,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 2e6e202e983ad4e49b3af99544ddedca, type: 3}
+  m_Sprite: {fileID: 21300000, guid: a1030b0f928b7ab47885ce7038f35d27, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -19425,6 +19425,7 @@ MonoBehaviour:
     type: 3}
   pizzaBoxPrefab: {fileID: 7381785348282878827, guid: 5232de6fa82056642989b44326b2a89c,
     type: 3}
+  pauseMenu: {fileID: 538129903}
   moveControls:
     m_Name: Move Controls
     m_Type: 0

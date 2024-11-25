@@ -18682,6 +18682,7 @@ MonoBehaviour:
     type: 3}
   pizzaBoxPrefab: {fileID: 7381785348282878827, guid: 5232de6fa82056642989b44326b2a89c,
     type: 3}
+  pauseMenu: {fileID: 538129903}
   moveControls:
     m_Name: Move Controls
     m_Type: 0
