@@ -15,6 +15,7 @@ public class OrderUI : MonoBehaviour
     [SerializeField] private CanvasGroup canvasGroup;
     [SerializeField] private Image panel;
     [SerializeField] private Slider slider;
+    [SerializeField] private Image faceImage;
     [SerializeField] private TMP_Text moneyLabel;
     [SerializeField] private GameObject itemsGrid;
     [SerializeField] private TMP_Text numberLabel;
@@ -61,6 +62,7 @@ public class OrderUI : MonoBehaviour
         var order = customer.Order;
         moneyLabel.text = $"${order.Value}";
         numberLabel.text = customer.Id.ToString();
+        faceImage.sprite = customer.faceSprite;
         ConfigureItems(customer.Order);
         this.customer = customer;
         initialPatience = customer.Patience;
@@ -73,6 +75,7 @@ public class OrderUI : MonoBehaviour
             for (int i = 0; i < amount; i++)
             {
                 var slot = Instantiate(itemSlot, itemsGrid.transform);
+                slot.transform.SetSiblingIndex(0);
                 var image = slot.GetComponent<Image>();
                 image.sprite = iconMap[pizzaType];
                 image.preserveAspect = true;
@@ -108,19 +111,29 @@ public class OrderUI : MonoBehaviour
     #region Animations
     private IEnumerator PlaySlideAnimation()
     {
-        var innerContainer = transform.GetChild(0).GetComponent<RectTransform>();
-        innerContainer.anchoredPosition = SlideStartPosition;
-
+        // NOTE: Temporarily replaced as fade animation
         var elapsedTime = 0f;
+        canvasGroup.alpha = 0;
         while (elapsedTime < SlideDuration)
         {
-            innerContainer.anchoredPosition =
-                Vector2.Lerp(SlideStartPosition, SlideEndPosition, elapsedTime / SlideDuration);
+            canvasGroup.alpha = elapsedTime / SlideDuration;
             elapsedTime += Time.deltaTime;
             yield return null;
         }
-
-        innerContainer.anchoredPosition = SlideEndPosition;
+        canvasGroup.alpha = 1;
+        // var innerContainer = transform.GetChild(0).GetComponent<RectTransform>();
+        // innerContainer.anchoredPosition = SlideStartPosition;
+        //
+        // var elapsedTime = 0f;
+        // while (elapsedTime < SlideDuration)
+        // {
+        //     innerContainer.anchoredPosition =
+        //         Vector2.Lerp(SlideStartPosition, SlideEndPosition, elapsedTime / SlideDuration);
+        //     elapsedTime += Time.deltaTime;
+        //     yield return null;
+        // }
+        //
+        // innerContainer.anchoredPosition = SlideEndPosition;
     }
 
     private IEnumerator FadeOut(Color color)

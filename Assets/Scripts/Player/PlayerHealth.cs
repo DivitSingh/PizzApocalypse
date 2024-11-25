@@ -3,18 +3,18 @@ using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour
 {
-    [SerializeField] public float startingHealth = 100f;
+    [SerializeField] private float startingHealth = 100f;
 
-    public float currentHealth;
-    private float CurrentHpPct => Mathf.Max(0, CurrentHealth / startingHealth);
-
-    private float CurrentHealth
+    private float currentHealth;
+    public float CurrentHpPct => Mathf.Max(0, CurrentHealth / startingHealth);
+    public float CurrentHealth
     {
         get => currentHealth;
-        set
+        private set
         {
-            currentHealth = value;
+            currentHealth = Mathf.Min(value, startingHealth);
             OnHpPctChanged?.Invoke(CurrentHpPct);
+            OnHealthChanged?.Invoke(CurrentHealth);
             if (currentHealth <= 0)
             {
                 OnDeath?.Invoke();
@@ -23,13 +23,15 @@ public class PlayerHealth : MonoBehaviour
     }
 
     public event Action<float> OnHpPctChanged;
+    public event Action<float> OnHealthChanged;
     public event Action OnDamageTaken;
     public event Action OnDeath;
 
-    public void Start()
+    private void Start()
     {
         currentHealth = startingHealth;
         OnHpPctChanged?.Invoke(CurrentHpPct);
+        OnHealthChanged?.Invoke(CurrentHealth);
         GameManager.Instance.OnRoundStarting += () => CurrentHealth = startingHealth;
     }
 
@@ -42,7 +44,5 @@ public class PlayerHealth : MonoBehaviour
     public void Heal(float amount)
     {
         CurrentHealth += amount;
-        if (currentHealth > startingHealth)
-            currentHealth = startingHealth;
     }
 }

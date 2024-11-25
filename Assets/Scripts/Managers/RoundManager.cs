@@ -91,7 +91,7 @@ public class RoundManager : MonoBehaviour
             else if (currentTutorialState == TutorialState.RecoverHealth)
             {
                 tutorialText.text = "You can eat a pizza using the eat key to recover health. Mushroom pizzas have a heal-over-time effect, while the other two give a one-time heal. Eat a pizza to get back to full health.";
-                if (GameObject.Find("Player").GetComponent<PlayerHealth>().currentHealth == GameObject.Find("Player").GetComponent<PlayerHealth>().startingHealth)
+                if (Mathf.Approximately(GameObject.Find("Player").GetComponent<PlayerHealth>().CurrentHpPct, 1))
                 {
                     customerSpawner.SpawnAngryCustomer();
                     currentTutorialState = TutorialState.AngryCustomer;

@@ -7,6 +7,7 @@ using TMPro;
 public class PlayerInventory : MonoBehaviour
 {
     public int money = 0;
+    public event Action<int> OnBalanceChanged;
 
     // Maximum ammo limit
     [SerializeField] private int maxAmmo = 25;
@@ -38,6 +39,7 @@ public class PlayerInventory : MonoBehaviour
     private void Awake()
     {
         GameManager.Instance.OnRoundStarting += RestockPizzas;
+        OnBalanceChanged?.Invoke(money);
     }
 
     public void InitializeInventory()
@@ -175,6 +177,7 @@ public class PlayerInventory : MonoBehaviour
     public void IncreaseMoney(int amount)
     {
         money += amount;
+        OnBalanceChanged?.Invoke(money);
     }
 
     public bool PizzasAreFull()

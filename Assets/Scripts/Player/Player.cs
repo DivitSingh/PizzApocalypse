@@ -14,7 +14,6 @@ public class Player : MonoBehaviour
     [SerializeField] private Transform attackPoint;
     [SerializeField] private GameObject pizzaSlicePrefab;
     [SerializeField] private GameObject pizzaBoxPrefab;
-    [SerializeField] private TextMeshProUGUI moneyText;
     private Animator animator;
     public bool IsGamePaused { get; private set; } = false;
 
@@ -120,7 +119,6 @@ public class Player : MonoBehaviour
         playerCam.position = transform.position + new Vector3(0, 0.5f, 0);
         if (Time.timeScale == 0) return;
         Look();
-        moneyText.text = "$" + playerInventory.money.ToString();
     }
 
     private void FirePerformed(InputAction.CallbackContext context)

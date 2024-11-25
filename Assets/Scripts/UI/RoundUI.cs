@@ -24,8 +24,6 @@ public class RoundUI : MonoBehaviour
         roundManager.OnTimeRemainingChanged += UpdateTimer;
         roundManager.OnProgressChanged += UpdateProgress;
         roundManager.OnNewRound += UpdateRound;
-        roundManager.OnRoundEnd += (_ => Hide());
-        GameManager.Instance.OnGameOver += Hide;
     }
 
     private void UpdateTimer(float timeRemaining)
@@ -43,7 +41,7 @@ public class RoundUI : MonoBehaviour
 
     private void UpdateProgress(int score, int passScore)
     {
-        progressText.text = $"{score} / {passScore}";
+        progressText.text = $"{score}/{passScore}";
         var progress = Mathf.InverseLerp(0, passScore, score);
         progressSlider.value = progress;
 
@@ -64,10 +62,5 @@ public class RoundUI : MonoBehaviour
     {
         gameObject.SetActive(true);
         roundText.text = $"Round {round}";
-    }
-
-    public void Hide()
-    {
-        gameObject.SetActive(false);
     }
 }

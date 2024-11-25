@@ -18,6 +18,10 @@ public class OrderBarUI : MonoBehaviour
         customersManager.OnCustomerAdded += AddOrder;
         customersManager.OnOrderStatusChanged += RemoveOrder;
         customersManager.OnReset += Reset;
+    }
+
+    private void Start()
+    {
         GameManager.Instance.OnGameOver += Reset;
     }
 
