@@ -26,7 +26,7 @@ public class Customer : MonoBehaviour
         set
         {
             _health = value;
-            customerUI.UpdateHealthBar((float) Health / maxHealth);
+            customerUI.UpdateHealthBar((float)Health / maxHealth);
             if (Health <= 0)
             {
                 GameObject.Find("Audio Source").GetComponent<AudioSource>().PlayOneShot(dieSound);
@@ -35,16 +35,15 @@ public class Customer : MonoBehaviour
             }
         }
     }
-    
+
     private float attackDamage;
     public float Patience { get; private set; }
     private State state = State.Hungry;
     public Order Order { get; private set; }
     private List<IEffect> activeEffects = new List<IEffect>();
     private ParticleSystem poisonParticles;
-    
+
     [SerializeField] private CustomerUI customerUI;
-    [SerializeField] private Sprite angryMarker;
 
     [Header("Audio")]
     [SerializeField] private AudioClip rageSound;
@@ -122,7 +121,7 @@ public class Customer : MonoBehaviour
 
         Patience = 0;
         // yield return new WaitForSeconds(Patience);
-        customerUI.timerImage.gameObject.SetActive(false);
+        customerUI.timerSlider.gameObject.SetActive(false);
         BecomeAngry();
     }
 
@@ -170,7 +169,6 @@ public class Customer : MonoBehaviour
         GetComponentInChildren<SkinnedMeshRenderer>().material.mainTexture = walkTexture;
         customerUI.orderPanel.SetActive(false);
         GameObject.Find("Audio Source").GetComponent<AudioSource>().PlayOneShot(rageSound);
-        transform.Find("Marker").GetComponent<SpriteRenderer>().sprite = angryMarker;
         customerUI.healthBar.gameObject.SetActive(true);
         Destroy(GetComponent<CustomerIndicator>());
         Chase();
@@ -241,8 +239,8 @@ public class Customer : MonoBehaviour
             if (customerUI.healthBar != null)
                 customerUI.healthBar.gameObject.SetActive(false);
 
-            if (customerUI.timerImage != null)
-                customerUI.timerImage.gameObject.SetActive(false);
+            if (customerUI.timerSlider != null)
+                customerUI.timerSlider.gameObject.SetActive(false);
         }
 
         yield return new WaitForSeconds(1.2f);
