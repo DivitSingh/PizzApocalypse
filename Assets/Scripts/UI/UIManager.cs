@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -6,34 +7,47 @@ using UnityEngine;
 /// </summary>
 public class UIManager : MonoBehaviour
 {
-    [Header("UI Elements")]
+    [Header("HUD")]
     [SerializeField] private GameObject roundUI;
-    [SerializeField] private GameObject shopUI;
     [SerializeField] private GameObject playerStatsUI;
     [SerializeField] private GameObject ammoUI;
+    [SerializeField] private GameObject orderBarUI;
+    
+    
+    [Header("Screens")]
     [SerializeField] private GameOverScreen gameOverScreen;
+    [SerializeField] private GameObject shopUI;
+
+    private List<GameObject> hudElements;
+
+    private void Awake()
+    {
+        hudElements = new List<GameObject> { roundUI, playerStatsUI, ammoUI, orderBarUI };
+    }
 
     public void HandleNewRound()
     {
         shopUI.SetActive(false);
-        roundUI.SetActive(true);
-        ammoUI.SetActive(true);
-        playerStatsUI.SetActive(true);
+        ToggleHUD();
     }
     
     public void HandleRoundPassed()
     {
-        roundUI.SetActive(false);
-        ammoUI.SetActive(false);
-        playerStatsUI.SetActive(false);
+        ToggleHUD();
         shopUI.SetActive(true);
     }
 
     public void HandleGameOver(int round)
     {
-        roundUI.SetActive(false);
-        ammoUI.SetActive(false);
-        playerStatsUI.SetActive(false);
+        ToggleHUD();
         gameOverScreen.Show(round);
+    }
+
+    private void ToggleHUD()
+    {
+        foreach (var elem in hudElements)
+        {
+            elem.SetActive(!elem.activeSelf);
+        }
     }
 }

@@ -6,6 +6,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+// TODO: Handle different texture types
 /// <summary>
 /// Handles the UI for an active order in the order bar.
 /// </summary>
@@ -73,6 +74,7 @@ public class OrderUI : MonoBehaviour
             for (int i = 0; i < amount; i++)
             {
                 var slot = Instantiate(itemSlot, itemsGrid.transform);
+                slot.transform.SetSiblingIndex(0);
                 var image = slot.GetComponent<Image>();
                 image.sprite = iconMap[pizzaType];
                 image.preserveAspect = true;
@@ -82,6 +84,7 @@ public class OrderUI : MonoBehaviour
 
     private void Update()
     {
+        Debug.Log($"Customer = {customer}, initialPatience = {initialPatience}");
         UpdateSlider(customer.Patience, initialPatience);
     }
 
@@ -108,19 +111,29 @@ public class OrderUI : MonoBehaviour
     #region Animations
     private IEnumerator PlaySlideAnimation()
     {
-        var innerContainer = transform.GetChild(0).GetComponent<RectTransform>();
-        innerContainer.anchoredPosition = SlideStartPosition;
-
+        // NOTE: Temporarily replaced as fade animation
         var elapsedTime = 0f;
+        canvasGroup.alpha = 0;
         while (elapsedTime < SlideDuration)
         {
-            innerContainer.anchoredPosition =
-                Vector2.Lerp(SlideStartPosition, SlideEndPosition, elapsedTime / SlideDuration);
+            canvasGroup.alpha = elapsedTime / SlideDuration;
             elapsedTime += Time.deltaTime;
             yield return null;
         }
-
-        innerContainer.anchoredPosition = SlideEndPosition;
+        canvasGroup.alpha = 1;
+        // var innerContainer = transform.GetChild(0).GetComponent<RectTransform>();
+        // innerContainer.anchoredPosition = SlideStartPosition;
+        //
+        // var elapsedTime = 0f;
+        // while (elapsedTime < SlideDuration)
+        // {
+        //     innerContainer.anchoredPosition =
+        //         Vector2.Lerp(SlideStartPosition, SlideEndPosition, elapsedTime / SlideDuration);
+        //     elapsedTime += Time.deltaTime;
+        //     yield return null;
+        // }
+        //
+        // innerContainer.anchoredPosition = SlideEndPosition;
     }
 
     private IEnumerator FadeOut(Color color)
