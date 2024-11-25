@@ -19811,13 +19811,13 @@ MonoBehaviour:
   money: 0
   maxAmmo: 25
   pizzaIcon: {fileID: 868828812}
-  pizzaIconUnequipped_2: {fileID: 1510422126}
-  pizzaIconUnequipped_3: {fileID: 520221792}
+  pizzaIconUnequipped_2: {fileID: 520221792}
+  pizzaIconUnequipped_3: {fileID: 1510422126}
   pizzaReticule: {fileID: 723722952}
   ammoText: {fileID: 1734131923}
-  cheeseIcon: {fileID: 21300000, guid: 8bf43028875eef945b89849d61a16996, type: 3}
-  pineappleIcon: {fileID: 21300000, guid: 663598d69e164854e908a576ae024a9a, type: 3}
-  mushroomIcon: {fileID: 21300000, guid: a666c327e4621974fb754cda700e34e8, type: 3}
+  cheeseIcon: {fileID: -647972526, guid: a3e84b12e8935428fbef381eb78140f6, type: 3}
+  pineappleIcon: {fileID: -241113967, guid: a3e84b12e8935428fbef381eb78140f6, type: 3}
+  mushroomIcon: {fileID: -1058544554, guid: a3e84b12e8935428fbef381eb78140f6, type: 3}
   cheeseReticule: {fileID: 21300000, guid: 2bdda7a4c5ccf406385fd9e4520efd45, type: 3}
   pineappleReticule: {fileID: 21300000, guid: 1b35dd17388b34e219a383c05982e8b8, type: 3}
   mushroomReticule: {fileID: 21300000, guid: 559823125b9694aeb917bcf55039bb4e, type: 3}
