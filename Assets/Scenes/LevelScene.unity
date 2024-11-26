@@ -19067,7 +19067,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   money: 0
-  maxAmmo: 25
+  maxAmmo: 5
   pizzaIcon: {fileID: 850991629}
   pizzaIconUnequipped_2: {fileID: 534056556}
   pizzaIconUnequipped_3: {fileID: 1043552446}
