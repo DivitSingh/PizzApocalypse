@@ -13,6 +13,7 @@ public class RoundUI : MonoBehaviour
     [SerializeField] private Slider progressSlider;
     [SerializeField] private TMP_Text progressText;
     [SerializeField] private Image progressFill;
+    [SerializeField] private TMP_Text countDownText;
 
     private static readonly Color LowProgressColor = new(238f / 255, 85f / 255, 95f / 225);
     private static readonly Color MidProgressColor = new(254f / 255, 215f / 255, 50f / 255);
@@ -37,6 +38,23 @@ public class RoundUI : MonoBehaviour
         var minutes = Mathf.FloorToInt(timeRemaining / 60);
         var seconds = Mathf.FloorToInt(timeRemaining % 60);
         timerText.text = $"{minutes:0}:{seconds:00}";
+
+            
+        // Define countdown trigger points, show countdown and delete countdown
+        bool showCountdown = 
+            (timeRemaining > 27.02 && timeRemaining < 30.9) ||
+            (timeRemaining > 12.02 && timeRemaining < 15.9) ||
+            (timeRemaining > 0.01 && timeRemaining < 5.9);
+
+        if (showCountdown)
+        {
+            countDownText.gameObject.SetActive(true);
+            countDownText.text = $"Round ends in {seconds:00} seconds.";
+        }
+        else
+        {
+            countDownText.gameObject.SetActive(false);
+        }
     }
 
     private void UpdateProgress(int score, int passScore)
