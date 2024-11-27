@@ -60,7 +60,7 @@ public class OrderUI : MonoBehaviour
     public void Configure(Customer customer)
     {
         var order = customer.Order;
-        moneyLabel.text = $"${order.Value}";
+        moneyLabel.text = $"{order.Value}";
         numberLabel.text = customer.Id.ToString();
         faceImage.sprite = customer.faceSprite;
         ConfigureItems(customer.Order);

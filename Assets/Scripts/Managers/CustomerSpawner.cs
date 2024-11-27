@@ -49,11 +49,13 @@ public class CustomerSpawner : MonoBehaviour
         for (int i = 0; i < spawnConfig.TotalCustomerCount; i++) // Bug here end coroutine, make for loop per wave
         {
             // Spawn amount of customers for wave
+            var spawnPoints = PickSpawnPoints(spawnConfig.CustomerPerWave);
             for (int ii = 0; ii < spawnConfig.CustomerPerWave; ii++)
             {
-                SpawnCustomer(customerConfig, id);
+                SpawnCustomer(customerConfig, spawnPoints[ii], id);
                 id++;
             }
+            
             if (i != spawnConfig.TotalCustomerCount - 1)
             {
                 yield return new WaitForSeconds(spawnConfig.Interval);
@@ -82,12 +84,8 @@ public class CustomerSpawner : MonoBehaviour
 //         }
 //     }
 
-    private void SpawnCustomer(GenerateCustomerConfiguration config, int id)
+    private void SpawnCustomer(GenerateCustomerConfiguration config, Transform spawnPoint, int id)
     {
-        // TODO: Choose spawn point
-        var spawnPoint = PickSpawnPoint();
-        if (spawnPoint == null) return;
-
         // Randomly select a prefab
         var selectedPrefab = customerPrefabs[random.Next(customerPrefabs.Length)];
 
@@ -136,6 +134,11 @@ public class CustomerSpawner : MonoBehaviour
             customer.Initialize(10, 0.1f, 0, order, 2);
             OnSpawned?.Invoke(customer);
         }
+    }
+
+    private Transform[] PickSpawnPoints(int count)
+    {
+        return spawnPoints.OrderBy(x => random.Next()).Take(count).ToArray();
     }
 
     private Transform PickSpawnPoint()
